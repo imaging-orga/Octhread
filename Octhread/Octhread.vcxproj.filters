@@ -13,5 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="INOUT">
+      <UniqueIdentifier>{f9e9aea4-3362-440e-a7b0-1601f4425655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="INOUT\Headers">
+      <UniqueIdentifier>{3213beda-4913-4936-9cc9-b67253747130}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="INOUT\Sources">
+      <UniqueIdentifier>{1e2582ab-98ac-4326-a657-53a99bd2c081}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncRead.cpp">
+      <Filter>INOUT\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncWrite.cpp">
+      <Filter>INOUT\Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SyncWrite.h">
+      <Filter>INOUT\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SyncRead.h">
+      <Filter>INOUT\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
