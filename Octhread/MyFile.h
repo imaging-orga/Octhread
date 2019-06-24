@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <fstream>
+#include <boost/ptr_container/ptr_vector.hpp>
 class MyFile
 {
 public:
@@ -14,10 +15,10 @@ public:
 	void createFile();
 	
 	//read the points from the file to a new vector
-	std::vector<std::shared_ptr<mypt3d>> readFromFile(int numPoints);
+	std::vector<std::unique_ptr<mypt3d>> readFromFile(int numPoints);
 
 	//write points of vectors in the file
-	void writeToFile(std::vector<std::shared_ptr<mypt3d>>& pts);
+	void writeToFile(std::vector<std::unique_ptr<mypt3d>>& pts);
 
 
 

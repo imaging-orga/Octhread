@@ -88,22 +88,21 @@ int main(int argc, char* argv[]) {
 
 	MyFile mf("test.bin");
 
-	std::vector<std::shared_ptr<mypt3d>> pts;
-	int num_points = 1024 * 1024 * 16;
+	std::vector<std::unique_ptr<mypt3d>> pts;
+	int num_points = 1024 * 1024;
 	for (int i = 0; i < num_points; ++i) {
 		float i_ = i / 10.f;
 		int i__ = i % 255;
-		mypt3d pt(i_, i_, i_, i_, i__, i__, i__);
-		pts.push_back(std::make_shared<mypt3d>(pt));
+		//std::unique_ptr<mypt3d> pt = std::make_unique<mypt3d>(i_, i_, i_, i_, i__, i__, i__);
+
+		pts.push_back(std::make_unique<mypt3d>(i_, i_, i_, i_, i__, i__, i__));
 	}
 	mf.createFile();
 	
 	mf.writeToFile(pts);
 
-	std::vector < std::shared_ptr<mypt3d>> readpts;
-	readpts = mf.readFromFile(1024 * 1024 * 16);
-
-	std::cout << readpts.size() << std::endl;
+	std::vector<std::unique_ptr<mypt3d>> readpts;
+	readpts = mf.readFromFile(num_points);
 
 	getchar();
 
