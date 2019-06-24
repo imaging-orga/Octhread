@@ -14,10 +14,10 @@ public:
 	void createFile();
 	
 	//read the points from the file to a new vector
-	vecPoints readFromFile(int numPoints);
+	std::vector<std::shared_ptr<mypt3d>> readFromFile(int numPoints);
 
 	//write points of vectors in the file
-	void writeToFile(vecPoints& pts);
+	void writeToFile(std::vector<std::shared_ptr<mypt3d>>& pts);
 
 
 

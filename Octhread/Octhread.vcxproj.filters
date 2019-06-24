@@ -22,6 +22,15 @@
     <Filter Include="INOUT\Sources">
       <UniqueIdentifier>{1e2582ab-98ac-4326-a657-53a99bd2c081}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Octree">
+      <UniqueIdentifier>{8209ff75-28cf-443c-b72b-6be2e97fbab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Octree\Source Files">
+      <UniqueIdentifier>{1dd9d6f5-4592-4c7d-aa4f-1b41d6696e7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Octree\Header Files">
+      <UniqueIdentifier>{bd2563dd-ecda-4c85-97db-4353104fdbdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -30,6 +39,12 @@
     <ClCompile Include="MyFile.cpp">
       <Filter>INOUT\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Octree\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Octree\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base.hpp">
@@ -37,6 +52,12 @@
     </ClInclude>
     <ClInclude Include="MyFile.h">
       <Filter>INOUT\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Octree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Octree\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
