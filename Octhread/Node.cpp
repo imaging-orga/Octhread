@@ -20,6 +20,7 @@ void Node::addPoint(std::vector<std::unique_ptr<mypt3d>> & pts){
 			createChildren();
 			populateChildren();
 			m_file.emptyFile();
+			m_numPoints = 0;
 		}
 	}
 	else {
@@ -80,5 +81,27 @@ void Node::createTree_(int endDepth)
 			m_children[i].createTree_(endDepth);
 		}
 	}
+}
+
+Node * Node::getNode(std::string name)
+{
+
+	// découper le nom en fonction des nombres qui le compose
+	// 0 => root
+	// 01 => root->m_children[1]
+	// 021 => root->m_children[2]->m_children[1]
+	return nullptr;
+}
+
+void Node::save(std::string name)
+{
+	//Ouvrir le fichier "name" en écriture
+	if (m_isLeaf) {
+		//écrire le nom ainsi que le nombre de fils
+	}
+	else {
+		//Ecrire que c'est pas une leaf ou 0?
+	}
+	//fermer le fichier
 }
 

@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
 	std::uniform_real_distribution<float> dist{ 0, 100 };
 	std::vector<std::unique_ptr<mypt3d>> pts;
-	int num_points = 1024 * 1024;
+	int num_points = 1000;
 	for (int i = 0; i < num_points; ++i) {
 		float x = dist(gen);
 		float y = dist(gen);
@@ -29,20 +29,21 @@ int main(int argc, char* argv[]) {
 	//
 	//mf.writeToFile(pts);
 
-	//std::vector<std::unique_ptr<mypt3d>> readpts;
-	//readpts = mf.readFromFile(num_points);
 	BoundingBox bb;
 	bb.min = pt3d(0., 0., 0.);
 	bb.max = pt3d(100., 100., 100.);
 
 	//todo, comprendre pourquoi ça réagit comme ça pourquoi le fichier 1 est-il encore écrit
-	Octree oct("test", bb, 0, 1024 * 32);
+	Octree oct("test", bb, 0, 1000);
 
 
 	oct.addPoint(pts);
 
 
-
+	MyFile mf("test\\f00");
+	std::vector<std::unique_ptr<mypt3d>> readpts;
+	readpts = mf.readFromFile(num_points);
+	getchar();
 
 	return 0;
 }

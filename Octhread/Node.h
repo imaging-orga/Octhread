@@ -23,7 +23,10 @@ public:
 	//creation of tree with a given depth
 	void createTree_(int endDepth);
 	
+	//Search for the node named "name"
+	Node* getNode(std::string name);
 
+	void save(std::string name);
 private:
 	long int m_numPoints;
 	bool m_isLeaf;
