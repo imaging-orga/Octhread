@@ -43,3 +43,9 @@ void MyFile::writeToFile(std::vector<std::unique_ptr<mypt3d>> & pts)
 	dataFile.close();
 }
 
+void MyFile::emptyFile()
+{
+	std::ofstream file(m_filename, std::ios::out | std::ios::trunc);
+	file.close();
+}
+

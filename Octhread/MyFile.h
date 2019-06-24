@@ -20,7 +20,8 @@ public:
 	//write points of vectors in the file
 	void writeToFile(std::vector<std::unique_ptr<mypt3d>>& pts);
 
-
+	// void the file
+	void emptyFile();
 
 private:
 	std::string m_filename;

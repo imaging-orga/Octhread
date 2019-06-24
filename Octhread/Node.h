@@ -8,11 +8,11 @@ public:
 	~Node() = default;
 
 
-	//Add a point in the current node
-	void addPoint(mypt3d& pt);
+
 	//Add a vector of points in the current node
 	void addPoint(std::vector<std::unique_ptr<mypt3d>>& pts);
 
+	//Create vector for children using pts
 	void dividePoints(std::vector<std::unique_ptr<mypt3d>>& pts);
 
 	//Create the 8 childrens
@@ -20,7 +20,7 @@ public:
 	//Populate the children with points
 	void populateChildren();
 
-
+	//creation of tree with a given depth
 	void createTree_(int endDepth);
 	
 

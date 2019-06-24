@@ -264,3 +264,5 @@ __pycache__/
 *.[Bb]in*
 *.[Rr]aph
 *.[Nin]
+
+test/

@@ -9,9 +9,7 @@ public:
 	~Octree();
 
 
-
-
-
+	void addPoint(std::vector<std::unique_ptr<mypt3d>>& pts);
 private:
 	Node m_root;
 	BoundingBox m_bb;

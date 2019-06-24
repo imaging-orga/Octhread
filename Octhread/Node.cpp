@@ -11,11 +11,6 @@ Node::Node(std::string filename_, pt3d center_, pt3d halfDimension_, int depth_,
 	m_file.createFile();
 }
 
-void Node::addPoint(mypt3d & pt)
-{
-	//todo
-}
-
 void Node::addPoint(std::vector<std::unique_ptr<mypt3d>> & pts){
 	if (m_isLeaf) {
 		m_file.writeToFile(pts);
@@ -24,6 +19,7 @@ void Node::addPoint(std::vector<std::unique_ptr<mypt3d>> & pts){
 		if (m_numPoints >= maxPointsPerNode) {
 			createChildren();
 			populateChildren();
+			m_file.emptyFile();
 		}
 	}
 	else {
