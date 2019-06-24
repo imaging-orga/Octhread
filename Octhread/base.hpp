@@ -65,10 +65,10 @@ public:
 	{}
 
 	pt3d getCenter() {
-		return (max + min) / 2.0f;
+		return (max + min) / 2.0;
 	}
 
 	pt3d getHalfDimension() {
-		return (max - min) / 2.0f;
+		return (max - min) / 2.0;
 	}
 };
