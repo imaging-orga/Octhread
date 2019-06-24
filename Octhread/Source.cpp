@@ -1,4 +1,4 @@
-#include "SyncWrite.h"
+#include "MyFile.h"
 #include <iostream>
 #include <boost\thread.hpp>
 #include <chrono>
@@ -27,31 +27,31 @@
 //Liste des tous les points 
 //On écrit tout le vector d'un coup
 
-long long writetechnique2(std::string name, std::vector<mypt3d>& pts) {
-
-	std::ios_base::sync_with_stdio(false);
-	auto startTime = std::chrono::high_resolution_clock::now();
-
-	std::ofstream data_file;
-	data_file.open(name, std::ios::out | std::ios::binary);
-	data_file.write(reinterpret_cast<char*> (&pts[0]), pts.size() * sizeof(mypt3d));
-	data_file.close();
-	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count();
-}
-
-
-long long readtechnique2(std::string name, std::vector<mypt3d>& pts, int num_points) {
-	std::ifstream data_file;
-	std::vector<mypt3d> ptsRet;
-	auto startTime = std::chrono::high_resolution_clock::now();
-
-	data_file.open("test2.binary", std::ios::in | std::ios::binary);
-	ptsRet.resize(num_points);
-	data_file.read(reinterpret_cast<char*>(&ptsRet[0]), num_points * sizeof(mypt3d));
-	data_file.close();
-	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count();;
-
-}
+//long long writetechnique2(std::string name, std::vector<mypt3d>& pts) {
+//
+//	std::ios_base::sync_with_stdio(false);
+//	auto startTime = std::chrono::high_resolution_clock::now();
+//
+//	std::ofstream data_file;
+//	data_file.open(name, std::ios::out | std::ios::binary);
+//	data_file.write(reinterpret_cast<char*> (&pts[0]), pts.size() * sizeof(mypt3d));
+//	data_file.close();
+//	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count();
+//}
+//
+//
+//long long readtechnique2(std::string name, std::vector<mypt3d>& pts, int num_points) {
+//	std::ifstream data_file;
+//	std::vector<mypt3d> ptsRet;
+//	auto startTime = std::chrono::high_resolution_clock::now();
+//
+//	data_file.open("test2.binary", std::ios::in | std::ios::binary);
+//	ptsRet.resize(num_points);
+//	data_file.read(reinterpret_cast<char*>(&ptsRet[0]), num_points * sizeof(mypt3d));
+//	data_file.close();
+//	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count();;
+//
+//}
 
 
 int main(int argc, char* argv[]) {
@@ -77,23 +77,31 @@ int main(int argc, char* argv[]) {
 	//writ2.close();
 	//std::cout << float(clock() - begin_time2) / CLOCKS_PER_SEC;
 
-	std::vector<mypt3d> pts;
+
+	////long long ret = technique1("test.binary", pts);
+
+	////std::cout << ret << std::endl;
+
+	//std::vector<mypt3d> pts2;
+	//std::cout << writetechnique2("test2.binary", pts) << "\n";
+	//std::cout << readtechnique2("test2.binary", pts2, num_points) << "\n";
+
+	MyFile mf("test.bin");
+
+	vecPoints pts;
 	int num_points = 1024 * 1024 * 16;
 	for (int i = 0; i < num_points; ++i) {
-		float i_ = i / 10;
+		float i_ = i / 10.f;
 		int i__ = i % 255;
 		pts.push_back(mypt3d(i_, i_, i_, i_, i__, i__, i__));
 	}
-	//long long ret = technique1("test.binary", pts);
+	mf.createFile();
+	
+	mf.writeToFile(pts);
+	vecPoints readpts;
+	readpts = mf.readFromFile(1024 * 1024 * 16);
 
-	//std::cout << ret << std::endl;
-
-	std::vector<mypt3d> pts2;
-	std::cout << writetechnique2("test2.binary", pts) << "\n";
-	std::cout << readtechnique2("test2.binary", pts2, num_points) << "\n";
-
-
-
+	std::cout << readpts.size() << std::endl;
 
 	getchar();
 

@@ -120,14 +120,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MyFile.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="SyncRead.cpp" />
-    <ClCompile Include="SyncWrite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base.hpp" />
-    <ClInclude Include="SyncRead.h" />
-    <ClInclude Include="SyncWrite.h" />
+    <ClInclude Include="MyFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

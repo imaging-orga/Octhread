@@ -1,5 +1,5 @@
 #pragma once
-
+#include <vector>
 class pt3d {
 public:
 	float x, y, z;
@@ -20,3 +20,5 @@ public:
 		: x(x_), y(y_), z(z_), intens(intens_), r(r_), g(g_), b(b_)
 	{}
 };
+
+typedef std::vector<mypt3d> vecPoints;

@@ -27,22 +27,16 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SyncRead.cpp">
-      <Filter>INOUT\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SyncWrite.cpp">
+    <ClCompile Include="MyFile.cpp">
       <Filter>INOUT\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SyncWrite.h">
-      <Filter>INOUT\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SyncRead.h">
-      <Filter>INOUT\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="base.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFile.h">
+      <Filter>INOUT\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
