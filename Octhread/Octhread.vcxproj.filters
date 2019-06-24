@@ -41,5 +41,8 @@
     <ClInclude Include="SyncRead.h">
       <Filter>INOUT\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="base.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

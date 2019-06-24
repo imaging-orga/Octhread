@@ -125,6 +125,7 @@
     <ClCompile Include="SyncWrite.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base.hpp" />
     <ClInclude Include="SyncRead.h" />
     <ClInclude Include="SyncWrite.h" />
   </ItemGroup>
