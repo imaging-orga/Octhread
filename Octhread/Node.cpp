@@ -11,40 +11,65 @@ Node::Node(std::string filename_, pt3d center_, pt3d halfDimension_, int depth_,
 	m_file.createFile();
 }
 
-void Node::addPoint(std::vector<std::unique_ptr<mypt3d>> & pts){
-	if (m_isLeaf) {
+void Node::addPoint(std::vector<mypt3d>& pts ){
+	if (!m_isLeaf) {
+		dividePoints(pts);
+	}
+	else{ //leaf
 		m_file.writeToFile(pts);
-		m_numPoints += (long)pts.size();
+		m_numPoints += pts.size();
+
+
+		if (m_numPoints >= maxPointsPerNode) {
+			std::vector<mypt3d> ptFromFile = m_file.readFromFile(m_numPoints);
+			m_file.emptyFile();
+			m_numPoints = 0;
+			createChildren();
+			dividePoints(ptFromFile);
+		}
+	}
+
+
+
+
+
+
+	/*if (m_isLeaf) {
+
+		m_file.writeToFile(pts);
+		m_numPoints += pts.size();
 
 		if (m_numPoints >= maxPointsPerNode) {
 			createChildren();
 			populateChildren();
+
 			m_file.emptyFile();
 			m_numPoints = 0;
 		}
 	}
 	else {
 		dividePoints(pts);
-	}
+	}*/
+
 }
 
-void Node::dividePoints(std::vector<std::unique_ptr<mypt3d>>& pts) {
+void Node::dividePoints(std::vector<mypt3d>& pts ) {
 
-	std::vector<std::vector<std::unique_ptr<mypt3d>>> childVecs;
+	std::vector<std::vector<mypt3d>> childVecs;
 	childVecs.resize(8);
 
 
-	#pragma omp parallel for 
+	//#pragma omp parallel for 
 	for (int i = 0; i < pts.size(); ++i) {
 		int index = 0;
 		auto& pt = pts[i];
-		index += (pt->x > m_center.x) ? 4 : 0;
-		index += (pt->y > m_center.y) ? 2 : 0;
-		index += (pt->z > m_center.z) ? 1 : 0;
-		childVecs[index].push_back(std::move(pts[i]));
+		index += (pt.x > m_center.x) ? 4 : 0;
+		index += (pt.y > m_center.y) ? 2 : 0;
+		index += (pt.z > m_center.z) ? 1 : 0;
+		childVecs[index].push_back(pts[i]);
 	}
 
-	#pragma omp parallel for
+	//#pragma omp parallel for
 	for (int i = 0; i < 8; ++i) {
 		m_children[i].addPoint(childVecs[i]);
 	}
@@ -66,11 +91,18 @@ void Node::createChildren()
 void Node::populateChildren()
 {
 	//we read the file and create a pointcloud with
-	std::vector<std::unique_ptr<mypt3d>> pts = m_file.readFromFile(m_numPoints);
+	std::vector<mypt3d> pts = m_file.readFromFile(m_numPoints);
 
 	dividePoints(pts);
 	
 }
+
+
+
+
+
+
+
 
 void Node::createTree_(int endDepth)
 {
@@ -95,13 +127,20 @@ Node * Node::getNode(std::string name)
 
 void Node::save(std::string name)
 {
-	//Ouvrir le fichier "name" en écriture
 	if (m_isLeaf) {
-		//écrire le nom ainsi que le nombre de fils
+		std::ofstream file(name, std::ios::out | std::ios::app);
+		file << m_name << " " << m_numPoints << "\n";
+		file.close();
+
+		
 	}
 	else {
-		//Ecrire que c'est pas une leaf ou 0?
+		std::ofstream file(name, std::ios::out | std::ios::app);
+		file << m_name << " " << 0 << "\n";
+		file.close();
+		for (auto& child : m_children) {
+			child.save(name);
+		}
 	}
-	//fermer le fichier
 }
 

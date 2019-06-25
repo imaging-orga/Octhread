@@ -15,10 +15,10 @@ public:
 	void createFile();
 	
 	//read the points from the file to a new vector
-	std::vector<std::unique_ptr<mypt3d>> readFromFile(int numPoints);
+	std::vector<mypt3d> readFromFile(int numPoints);
 
 	//write points of vectors in the file
-	void writeToFile(std::vector<std::unique_ptr<mypt3d>>& pts);
+	void writeToFile(std::vector<mypt3d>& pts);
 
 	// void the file
 	void emptyFile();

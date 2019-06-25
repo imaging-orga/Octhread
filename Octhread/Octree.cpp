@@ -18,9 +18,9 @@ Octree::~Octree()
 
 void Octree::save()
 {
-	std::string filename_ = m_name + "\\OcSave";
-	//Todo :
-	//Creer un systeme pour sauvegarder tous les nodes, pour connaitre leur nombre de points et tout et tout.
+	std::string filename_ = m_name + "\\.OcSave";
+	std::ofstream file(filename_, std::ios::out);
+	file.close();
 	m_root.save(filename_);
 }
 
@@ -29,7 +29,7 @@ Node * Octree::getNode(std::string name)
 	return m_root.getNode(name);
 }
 
-void Octree::addPoint(std::vector<std::unique_ptr<mypt3d>>& pts)
+void Octree::addPoint(std::vector<mypt3d>& pts)
 {
 	m_root.addPoint(pts);
 }

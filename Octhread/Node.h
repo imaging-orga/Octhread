@@ -10,10 +10,10 @@ public:
 
 
 	//Add a vector of points in the current node
-	void addPoint(std::vector<std::unique_ptr<mypt3d>>& pts);
+	void addPoint(std::vector<mypt3d>& pts );
 
 	//Create vector for children using pts
-	void dividePoints(std::vector<std::unique_ptr<mypt3d>>& pts);
+	void dividePoints(std::vector<mypt3d>& pts );
 
 	//Create the 8 childrens
 	void createChildren();

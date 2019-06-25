@@ -14,7 +14,7 @@ public:
 	Node* getNode(std::string name);
 
 	//add point cloud vector in point cloud
-	void addPoint(std::vector<std::unique_ptr<mypt3d>>& pts);
+	void addPoint(std::vector<mypt3d>& pts);
 private:
 	Node m_root;
 	BoundingBox m_bb;
