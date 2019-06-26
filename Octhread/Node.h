@@ -9,6 +9,8 @@ public:
 
 
 
+	void Destroy();
+
 	//Add a vector of points in the current node
 	void addPoint(std::vector<mypt3d>& pts );
 

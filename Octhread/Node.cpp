@@ -11,6 +11,12 @@ Node::Node(std::string filename_, pt3d center_, pt3d halfDimension_, int depth_,
 	m_file.createFile();
 }
 
+
+
+void Node::Destroy() {
+	m_numPoints = 0;
+	remove(m_name.c_str());
+}
 void Node::addPoint(std::vector<mypt3d>& pts ){
 	if (!m_isLeaf) {
 		dividePoints(pts);
@@ -22,8 +28,7 @@ void Node::addPoint(std::vector<mypt3d>& pts ){
 
 		if (m_numPoints >= maxPointsPerNode) {
 			std::vector<mypt3d> ptFromFile = m_file.readFromFile(m_numPoints);
-			m_file.emptyFile();
-			m_numPoints = 0;
+			Destroy();
 			createChildren();
 			dividePoints(ptFromFile);
 		}
