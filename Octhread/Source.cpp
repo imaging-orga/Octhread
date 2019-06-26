@@ -51,30 +51,30 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "1 fini\n";
 
-	for (int i = 0; i < num_points; ++i) {
-		float x = dist(gen);
-		float y = dist(gen);
-		float z = dist(gen);
+	//for (int i = 0; i < num_points; ++i) {
+	//	float x = dist(gen);
+	//	float y = dist(gen);
+	//	float z = dist(gen);
 
 
-		pts2.push_back(mypt3d(x, y, z, x, i, i, i));
-	}
+	//	pts2.push_back(mypt3d(x, y, z, x, i, i, i));
+	//}
 
-	oct.addPoint(pts2);
-	std::cout << "2 fini\n";
+	//oct.addPoint(pts2);
+	//std::cout << "2 fini\n";
 
 	
 
-	for (int i = 0; i < num_points; ++i) {
-		float x = dist(gen);
-		float y = dist(gen);
-		float z = dist(gen);
+	//for (int i = 0; i < num_points; ++i) {
+	//	float x = dist(gen);
+	//	float y = dist(gen);
+	//	float z = dist(gen);
 
-		//mypt3d pt = std::make_unique<mypt3d>(i_, i_, i_, i_, i__, i__, i__);
+	//	//mypt3d pt = std::make_unique<mypt3d>(i_, i_, i_, i_, i__, i__, i__);
 
-		pts3.push_back(mypt3d(x, y, z, x, i, i, i));
-	}
-	oct.addPoint(pts3);
+	//	pts3.push_back(mypt3d(x, y, z, x, i, i, i));
+	//}
+	//oct.addPoint(pts3);
 
 
 	pts2.clear();
@@ -84,6 +84,11 @@ int main(int argc, char* argv[]) {
 	//std::cout << " 3 fini\n";
 
 	oct.save();
+
+
+
+
+	Node* n = oct.getNode("012");
 	getchar();
 
 

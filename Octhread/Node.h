@@ -17,6 +17,7 @@ public:
 
 	//Create the 8 childrens
 	void createChildren();
+
 	//Populate the children with points
 	void populateChildren();
 

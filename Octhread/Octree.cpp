@@ -24,12 +24,15 @@ void Octree::save()
 	m_root.save(filename_);
 }
 
-Node * Octree::getNode(std::string name)
-{
-	return m_root.getNode(name);
-}
 
 void Octree::addPoint(std::vector<mypt3d>& pts)
 {
 	m_root.addPoint(pts);
+}
+
+Node* Octree::getNode(std::string name) {
+	if (name == "0")
+		return &m_root;
+	else
+		return m_root.getNode(name);
 }

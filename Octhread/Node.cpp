@@ -118,11 +118,15 @@ void Node::createTree_(int endDepth)
 Node * Node::getNode(std::string name)
 {
 
-	// découper le nom en fonction des nombres qui le compose
-	// 0 => root
-	// 01 => root->m_children[1]
-	// 021 => root->m_children[2]->m_children[1]
-	return nullptr;
+	std::vector<char> data(name.begin(), name.end());
+	if (data.size() == 1) {
+		return this;
+	}
+	else {
+		data.erase(data.begin());
+		std::string new_name = std::string(data.begin(), data.end());
+		return m_children[(int)(data[0]) - '0'].getNode(new_name);
+	}
 }
 
 void Node::save(std::string name)
@@ -131,8 +135,6 @@ void Node::save(std::string name)
 		std::ofstream file(name, std::ios::out | std::ios::app);
 		file << m_name << " " << m_numPoints << "\n";
 		file.close();
-
-		
 	}
 	else {
 		std::ofstream file(name, std::ios::out | std::ios::app);

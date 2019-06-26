@@ -15,6 +15,8 @@ public:
 
 	//add point cloud vector in point cloud
 	void addPoint(std::vector<mypt3d>& pts);
+
+	//get a node with a specific name (just in case)
 private:
 	Node m_root;
 	BoundingBox m_bb;
