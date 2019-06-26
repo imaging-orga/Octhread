@@ -31,6 +31,15 @@
     <Filter Include="Octree\Header Files">
       <UniqueIdentifier>{bd2563dd-ecda-4c85-97db-4353104fdbdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenableFiles">
+      <UniqueIdentifier>{1be24179-e8fd-40de-838f-3a70c6764be3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenableFiles\Header Files">
+      <UniqueIdentifier>{7d9fcc97-0ffd-4ac6-8f74-a203938fd980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenableFiles\Source Files">
+      <UniqueIdentifier>{652ced47-3504-49bc-91a7-247696e554db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -45,6 +54,12 @@
     <ClCompile Include="Node.cpp">
       <Filter>Octree\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpenableFile.cpp">
+      <Filter>OpenableFiles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="e57File.cpp">
+      <Filter>OpenableFiles\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base.hpp">
@@ -58,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>Octree\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenableFile.h">
+      <Filter>OpenableFiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57File.h">
+      <Filter>OpenableFiles\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

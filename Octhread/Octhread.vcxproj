@@ -121,16 +121,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="e57File.cpp" />
     <ClCompile Include="MyFile.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Octree.cpp" />
+    <ClCompile Include="OpenableFile.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base.hpp" />
+    <ClInclude Include="e57File.h" />
     <ClInclude Include="MyFile.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Octree.h" />
+    <ClInclude Include="OpenableFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

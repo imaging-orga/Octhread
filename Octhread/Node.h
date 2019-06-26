@@ -4,6 +4,7 @@
 class Node
 {
 public:
+	Node();
 	Node(std::string filename_, pt3d center_, pt3d halfDimension_, int actualDepth, long int maxPointsPerNode_ );
 	~Node() = default;
 
