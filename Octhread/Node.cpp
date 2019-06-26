@@ -18,43 +18,41 @@ void Node::Destroy() {
 	remove(m_name.c_str());
 }
 void Node::addPoint(std::vector<mypt3d>& pts ){
-	if (!m_isLeaf) {
-		dividePoints(pts);
-	}
-	else{ //leaf
-		m_file.writeToFile(pts);
-		m_numPoints += pts.size();
+	//if (!m_isLeaf) {
+	//	dividePoints(pts);
+	//}
+	//else{ //leaf
+	//	m_file.writeToFile(pts);
+	//	m_numPoints += pts.size();
 
 
-		if (m_numPoints >= maxPointsPerNode) {
-			std::vector<mypt3d> ptFromFile = m_file.readFromFile(m_numPoints);
+	//	if (m_numPoints >= maxPointsPerNode) {
+	//		std::vector<mypt3d> ptFromFile = m_file.readFromFile(m_numPoints);
+	//		Destroy();
+	//		createChildren();
+	//		dividePoints(ptFromFile);
+	//	}
+	//}
+	//Tester  le fait de pas écrire si on va dépasser le nombre
+	
+	if (m_isLeaf){
+		if (m_numPoints + pts.size() >= maxPointsPerNode){
+			createChildren();
+			dividePoints(pts);
+			std::vector<mypt3d> ptsFromFile = m_file.readFromFile(m_numPoints);
 			Destroy();
-			createChildren();
-			dividePoints(ptFromFile);
+			dividePoints(ptsFromFile);
+		}
+		else{
+			m_file.writeToFile(pts);
+			m_numPoints += pts.size();
 		}
 	}
-
-
-
-
-
-
-	/*if (m_isLeaf) {
-
-		m_file.writeToFile(pts);
-		m_numPoints += pts.size();
-
-		if (m_numPoints >= maxPointsPerNode) {
-			createChildren();
-			populateChildren();
-
-			m_file.emptyFile();
-			m_numPoints = 0;
-		}
-	}
-	else {
+	else { //non leaf
 		dividePoints(pts);
-	}*/
+	}
+	
+	
 
 }
 
@@ -101,13 +99,6 @@ void Node::populateChildren()
 	dividePoints(pts);
 	
 }
-
-
-
-
-
-
-
 
 void Node::createTree_(int endDepth)
 {
