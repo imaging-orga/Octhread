@@ -47,7 +47,7 @@ void Node::addPoint(std::vector<mypt3d>& pts ){
 		}
 		else{
 			m_file.writeToFile(pts);
-			m_numPoints += pts.size();
+			m_numPoints += (long)pts.size();
 		}
 	}
 	else { //non leaf

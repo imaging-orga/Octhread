@@ -1,6 +1,8 @@
 #pragma once
 #include "OpenableFile.h"
 
+#include "e57/E57Simple.h"
+#include "e57/E57Foundation.h"
 
 enum E57_TYPE { NON_UNIFIED = 0, UNIFIED };
 class e57File : public OpenableFile

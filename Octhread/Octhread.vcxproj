@@ -87,8 +87,13 @@
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>E57RefImpl-d.lib;xerces-c_3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -113,17 +118,23 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <OpenMPSupport>true</OpenMPSupport>
-      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+      <OpenMPSupport>false</OpenMPSupport>
+      <AdditionalIncludeDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>E57RefImpl.lib;xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="e57File.cpp" />
+    <ClCompile Include="e57\E57Simple.cpp" />
+    <ClCompile Include="e57\E57SimpleImpl.cpp" />
+    <ClCompile Include="e57\time_conversion.c" />
     <ClCompile Include="MyFile.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Octree.cpp" />
@@ -133,6 +144,10 @@
   <ItemGroup>
     <ClInclude Include="base.hpp" />
     <ClInclude Include="e57File.h" />
+    <ClInclude Include="e57\E57Foundation.h" />
+    <ClInclude Include="e57\E57Simple.h" />
+    <ClInclude Include="e57\E57SimpleImpl.h" />
+    <ClInclude Include="e57\time_conversion.h" />
     <ClInclude Include="MyFile.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Octree.h" />

@@ -60,6 +60,15 @@
     <ClCompile Include="e57File.cpp">
       <Filter>OpenableFiles\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="e57\E57Simple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="e57\E57SimpleImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="e57\time_conversion.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base.hpp">
@@ -79,6 +88,18 @@
     </ClInclude>
     <ClInclude Include="e57File.h">
       <Filter>OpenableFiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57\E57Foundation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57\E57Simple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57\E57SimpleImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57\time_conversion.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
