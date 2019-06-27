@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 	std::vector<mypt3d> pts;
 	std::vector<mypt3d> pts2;
 	std::vector<mypt3d> pts3;
-	int num_points = 1024 * 1024 * 8;
+	int num_points = 1024 * 1024 * 128;
 
 
 
@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
 
 
 
+	std::cout << "Ici on fini" << std::endl;
 
 	BoundingBox bb;
 	bb.min = pt3d(0., 0., 0.);
@@ -42,7 +43,7 @@ int main(int argc, char* argv[]) {
 
 	
 	Octree oct;
-	oct = Octree("test", bb, 0, 1024 * 512);
+	oct = Octree("test", bb, 0, 1024 * 1024 * 16);
 
 	oct.addPoint(pts);
 
@@ -85,10 +86,6 @@ int main(int argc, char* argv[]) {
 
 	oct.save();
 
-
-
-
-	Node* n = oct.getNode("012");
 	getchar();
 
 

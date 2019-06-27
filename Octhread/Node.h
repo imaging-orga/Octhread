@@ -30,7 +30,7 @@ public:
 	//Search for the node named "name"
 	Node* getNode(std::string name);
 
-	void save(std::string name);
+	void save(std::string dirname, std::string filename);
 private:
 	long int m_numPoints;
 	bool m_isLeaf;

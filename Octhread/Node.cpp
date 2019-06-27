@@ -9,7 +9,8 @@ Node::Node(std::string filename_, pt3d center_, pt3d halfDimension_, int depth_,
 	m_name(filename_), m_center(center_), m_halfDimension(halfDimension_), m_depth(depth_), maxPointsPerNode(maxPointsPerNode_), m_isLeaf(true), m_numPoints(0),
 	m_file(filename_)
 {
-	m_file.createFile();
+	if (m_isLeaf)
+		m_file.createFile();
 }
 
 
@@ -126,19 +127,23 @@ Node * Node::getNode(std::string name)
 	}
 }
 
-void Node::save(std::string name)
+void Node::save(std::string dirname, std::string filename)
 {
+	std::string new_name = m_name.erase(0, dirname.size() + 1 /*on enleves le "\" aussi*/);
+
 	if (m_isLeaf) {
-		std::ofstream file(name, std::ios::out | std::ios::app);
-		file << m_name << " " << m_numPoints << "\n";
+
+		std::ofstream file(filename, std::ios::out | std::ios::app);
+
+		file << new_name << " " << m_numPoints << "\n";
 		file.close();
 	}
 	else {
-		std::ofstream file(name, std::ios::out | std::ios::app);
-		file << m_name << " " << 0 << "\n";
+		std::ofstream file(filename, std::ios::out | std::ios::app);
+		file << new_name << " " << 0 << "\n";
 		file.close();
 		for (auto& child : m_children) {
-			child.save(name);
+			child.save(dirname, filename);
 		}
 	}
 }

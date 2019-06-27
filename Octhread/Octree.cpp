@@ -21,7 +21,7 @@ void Octree::save()
 	std::string filename_ = m_name + "\\.OcSave";
 	std::ofstream file(filename_, std::ios::out);
 	file.close();
-	m_root.save(filename_);
+	m_root.save(m_name, filename_);
 }
 
 
