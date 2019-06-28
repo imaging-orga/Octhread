@@ -1,55 +1,60 @@
 #include "Node.h"
 #include <functional>
+#include <iostream>
 
 
-
+Node::Node() {}
 
 Node::Node(std::string filename_, pt3d center_, pt3d halfDimension_, int depth_, long int maxPointsPerNode_) :
 	m_name(filename_), m_center(center_), m_halfDimension(halfDimension_), m_depth(depth_), maxPointsPerNode(maxPointsPerNode_), m_isLeaf(true), m_numPoints(0),
 	m_file(filename_)
 {
-	m_file.createFile();
+	if (m_isLeaf)
+		m_file.createFile();
 }
 
+
+
+void Node::Destroy() {
+	m_numPoints = 0;
+	remove(m_name.c_str());
+}
 void Node::addPoint(std::vector<mypt3d>& pts ){
-	if (!m_isLeaf) {
-		dividePoints(pts);
-	}
-	else{ //leaf
-		m_file.writeToFile(pts);
-		m_numPoints += pts.size();
+	//if (!m_isLeaf) {
+	//	dividePoints(pts);
+	//}
+	//else{ //leaf
+	//	m_file.writeToFile(pts);
+	//	m_numPoints += pts.size();
 
 
-		if (m_numPoints >= maxPointsPerNode) {
-			std::vector<mypt3d> ptFromFile = m_file.readFromFile(m_numPoints);
-			m_file.emptyFile();
-			m_numPoints = 0;
+	//	if (m_numPoints >= maxPointsPerNode) {
+	//		std::vector<mypt3d> ptFromFile = m_file.readFromFile(m_numPoints);
+	//		Destroy();
+	//		createChildren();
+	//		dividePoints(ptFromFile);
+	//	}
+	//}
+	//Tester  le fait de pas écrire si on va dépasser le nombre
+	
+	if (m_isLeaf){
+		if (m_numPoints + pts.size() >= maxPointsPerNode){
 			createChildren();
-			dividePoints(ptFromFile);
+			dividePoints(pts);
+			std::vector<mypt3d> ptsFromFile = m_file.readFromFile(m_numPoints);
+			Destroy();
+			dividePoints(ptsFromFile);
+		}
+		else{
+			m_file.writeToFile(pts);
+			m_numPoints += (long)pts.size();
 		}
 	}
-
-
-
-
-
-
-	/*if (m_isLeaf) {
-
-		m_file.writeToFile(pts);
-		m_numPoints += pts.size();
-
-		if (m_numPoints >= maxPointsPerNode) {
-			createChildren();
-			populateChildren();
-
-			m_file.emptyFile();
-			m_numPoints = 0;
-		}
-	}
-	else {
+	else { //non leaf
 		dividePoints(pts);
-	}*/
+	}
+	
+	
 
 }
 
@@ -97,13 +102,6 @@ void Node::populateChildren()
 	
 }
 
-
-
-
-
-
-
-
 void Node::createTree_(int endDepth)
 {
 	if (m_depth < endDepth) {
@@ -118,28 +116,50 @@ void Node::createTree_(int endDepth)
 Node * Node::getNode(std::string name)
 {
 
-	// découper le nom en fonction des nombres qui le compose
-	// 0 => root
-	// 01 => root->m_children[1]
-	// 021 => root->m_children[2]->m_children[1]
-	return nullptr;
-}
-
-void Node::save(std::string name)
-{
-	if (m_isLeaf) {
-		std::ofstream file(name, std::ios::out | std::ios::app);
-		file << m_name << " " << m_numPoints << "\n";
-		file.close();
-
-		
+	std::vector<char> data(name.begin(), name.end());
+	if (data.size() == 1) {
+		return this;
 	}
 	else {
-		std::ofstream file(name, std::ios::out | std::ios::app);
-		file << m_name << " " << 0 << "\n";
+		data.erase(data.begin());
+		std::string new_name = std::string(data.begin(), data.end());
+		return m_children[(int)(data[0]) - '0'].getNode(new_name);
+	}
+}
+
+void Node::save(std::string dirname, std::string filename)
+{
+	
+	std::string prev_name = m_name;
+	std::string new_name = prev_name.erase(0, dirname.size() + 1 /*on enleves le "\" aussi*/);
+
+	if (m_isLeaf) {
+
+		std::ofstream file(filename, std::ios::out | std::ios::app);
+
+		file << new_name << " " << m_numPoints << "\n";
+		file.close();
+	}
+	else {
+		std::ofstream file(filename, std::ios::out | std::ios::app);
+		file << new_name << " " << 0 << "\n";
 		file.close();
 		for (auto& child : m_children) {
-			child.save(name);
+			child.save(dirname, filename);
+		}
+	}
+	std::cout << m_name << std::endl;
+}
+
+void Node::clean()
+{
+	if (m_numPoints == 0) {
+		std::cout << "Rencontre :  " << m_name << std::endl;
+			remove(m_name.c_str());
+	}
+	if (!m_isLeaf) {
+		for (int i = 0; i < 8; ++i) {
+			m_children[i].clean();
 		}
 	}
 }

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="OpenableFiles">
+      <UniqueIdentifier>{4974a54a-93ea-486d-ae1e-49b22181f068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenableFiles\Header Files">
+      <UniqueIdentifier>{124e1470-ef57-4933-bb6f-dc992a04bacc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenableFiles\Source Files">
+      <UniqueIdentifier>{ce53cd59-ec40-4c12-bff4-d64849548854}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenableFile.cpp">
+      <Filter>OpenableFiles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="e57\E57SimpleImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="e57\E57Simple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="e57\time_conversion.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="e57File.cpp">
+      <Filter>OpenableFiles\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="e57\E57Foundation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57\E57Simple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57\E57SimpleImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57\time_conversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenableFile.h">
+      <Filter>OpenableFiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="e57File.h">
+      <Filter>OpenableFiles\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

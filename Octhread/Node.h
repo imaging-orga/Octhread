@@ -4,10 +4,13 @@
 class Node
 {
 public:
+	Node();
 	Node(std::string filename_, pt3d center_, pt3d halfDimension_, int actualDepth, long int maxPointsPerNode_ );
 	~Node() = default;
 
 
+
+	void Destroy();
 
 	//Add a vector of points in the current node
 	void addPoint(std::vector<mypt3d>& pts );
@@ -17,6 +20,7 @@ public:
 
 	//Create the 8 childrens
 	void createChildren();
+
 	//Populate the children with points
 	void populateChildren();
 
@@ -26,7 +30,9 @@ public:
 	//Search for the node named "name"
 	Node* getNode(std::string name);
 
-	void save(std::string name);
+	void save(std::string dirname, std::string filename);
+
+	void clean();
 private:
 	long int m_numPoints;
 	bool m_isLeaf;

@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+MyFile::MyFile() {}
+
 MyFile::MyFile(std::string filename_) : m_filename(filename_)
 {
 }

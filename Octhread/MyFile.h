@@ -8,6 +8,7 @@
 class MyFile
 {
 public:
+	MyFile();
 	MyFile(std::string filename);
 	~MyFile();
 
