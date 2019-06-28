@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 	std::vector<mypt3d> pts;
 	std::vector<mypt3d> pts2;
 	std::vector<mypt3d> pts3;
-	int num_points = 1024 * 1024 * 128;
+	int num_points = 1024 * 1024;
 
 
 
@@ -53,13 +53,13 @@ int main(int argc, char* argv[]) {
 
 	std::cout << "1 fini\n";
 
-	for (int i = 0; i < num_points; ++i) {
-		float x = dist(gen);
-		float y = dist(gen);
-		float z = dist(gen);
+	//for (int i = 0; i < num_points; ++i) {
+	//	float x = dist(gen);
+	//	float y = dist(gen);
+	//	float z = dist(gen);
 
-		pts2.push_back(mypt3d(x, y/4, z/8, x, i, i, i));
-	}
+	//	pts2.push_back(mypt3d(x, y/4, z/8, x, i, i, i));
+	//}
 
 	oct.addPoint(pts2);
 	std::cout << "2 fini\n";

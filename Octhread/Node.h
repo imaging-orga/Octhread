@@ -31,6 +31,8 @@ public:
 	Node* getNode(std::string name);
 
 	void save(std::string dirname, std::string filename);
+
+	void clean();
 private:
 	long int m_numPoints;
 	bool m_isLeaf;

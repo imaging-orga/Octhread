@@ -1,6 +1,6 @@
 #include "Node.h"
 #include <functional>
-
+#include <iostream>
 
 
 Node::Node() {}
@@ -129,7 +129,9 @@ Node * Node::getNode(std::string name)
 
 void Node::save(std::string dirname, std::string filename)
 {
-	std::string new_name = m_name.erase(0, dirname.size() + 1 /*on enleves le "\" aussi*/);
+	
+	std::string prev_name = m_name;
+	std::string new_name = prev_name.erase(0, dirname.size() + 1 /*on enleves le "\" aussi*/);
 
 	if (m_isLeaf) {
 
@@ -144,6 +146,20 @@ void Node::save(std::string dirname, std::string filename)
 		file.close();
 		for (auto& child : m_children) {
 			child.save(dirname, filename);
+		}
+	}
+	std::cout << m_name << std::endl;
+}
+
+void Node::clean()
+{
+	if (m_numPoints == 0) {
+		std::cout << "Rencontre :  " << m_name << std::endl;
+			remove(m_name.c_str());
+	}
+	if (!m_isLeaf) {
+		for (int i = 0; i < 8; ++i) {
+			m_children[i].clean();
 		}
 	}
 }

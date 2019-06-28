@@ -16,6 +16,7 @@ Octree::~Octree()
 {
 }
 
+
 void Octree::save()
 {
 	std::string filename_ = m_name + "\\.OcSave";
@@ -28,6 +29,11 @@ void Octree::save()
 void Octree::addPoint(std::vector<mypt3d>& pts)
 {
 	m_root.addPoint(pts);
+}
+
+void Octree::clean()
+{
+	m_root.clean();
 }
 
 Node* Octree::getNode(std::string name) {

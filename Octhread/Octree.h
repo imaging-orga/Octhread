@@ -18,6 +18,7 @@ public:
 	void addPoint(std::vector<mypt3d>& pts);
 
 	//get a node with a specific name (just in case)
+	void clean();
 private:
 	Node m_root;
 	BoundingBox m_bb;
