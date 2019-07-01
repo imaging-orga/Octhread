@@ -8,10 +8,10 @@
 
 
 
-void add(MyFile mf, std::vector<mypt3d>& pts, int &numpts) {
-	mf.writeToFile(pts);
-	numpts += (long)pts.size();
-}
+//void add(MyFile mf, std::vector<mypt3d>& pts, int &numpts) {
+//	mf.writeToFile(pts);
+//	numpts += (long)pts.size();
+//}
 int main(int argc, char* argv[]) {
 
 	std::random_device dev;

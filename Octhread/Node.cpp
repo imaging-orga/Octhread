@@ -158,8 +158,7 @@ void Node::save(std::string dirname, std::string filename)
 void Node::clean()
 {
 	if (m_numPoints == 0) {
-		std::cout << "Rencontre :  " << m_name << std::endl;
-			remove(m_name.c_str());
+		remove(m_name.c_str());
 	}
 	if (!m_isLeaf) {
 		for (int i = 0; i < 8; ++i) {

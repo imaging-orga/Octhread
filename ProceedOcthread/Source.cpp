@@ -52,7 +52,6 @@ int main(int argc, char* argv[]) {
 
 		}
 		fileRet.close();
-
 	}
 	getchar();
 	return 0;
