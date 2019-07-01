@@ -41,13 +41,17 @@ void Node::addPoint(std::vector<mypt3d>& pts ){
 		if (m_numPoints + pts.size() >= maxPointsPerNode){
 			createChildren();
 			dividePoints(pts);
-			std::vector<mypt3d> ptsFromFile = m_file.readFromFile(m_numPoints);
+			if (m_numPoints > 0) {
+				std::vector<mypt3d> ptsFromFile = m_file.readFromFile(m_numPoints);
+				dividePoints(ptsFromFile);
+			}
 			Destroy();
-			dividePoints(ptsFromFile);
 		}
 		else{
-			m_file.writeToFile(pts);
-			m_numPoints += (long)pts.size();
+			if (pts.size() > 0) {
+				m_file.writeToFile(pts);
+				m_numPoints += (long)pts.size();
+			}
 		}
 	}
 	else { //non leaf
@@ -162,5 +166,10 @@ void Node::clean()
 			m_children[i].clean();
 		}
 	}
+}
+
+std::vector<mypt3d> Node::getPts()
+{
+	return m_file.readFromFile(m_numPoints);
 }
 

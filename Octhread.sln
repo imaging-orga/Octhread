@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Octhread", "Octhread\Octhre
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProceedOcthread", "ProceedOcthread\ProceedOcthread.vcxproj", "{B449DA95-33EC-4FD0-8A49-E908ACB1BEB9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Filtering", "Filtering\Filtering.vcxproj", "{DA7C3031-C500-4B68-8C9E-DC8543B7952D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{B449DA95-33EC-4FD0-8A49-E908ACB1BEB9}.Release|x64.Build.0 = Release|x64
 		{B449DA95-33EC-4FD0-8A49-E908ACB1BEB9}.Release|x86.ActiveCfg = Release|Win32
 		{B449DA95-33EC-4FD0-8A49-E908ACB1BEB9}.Release|x86.Build.0 = Release|Win32
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Debug|x64.ActiveCfg = Debug|x64
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Debug|x64.Build.0 = Debug|x64
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Debug|x86.ActiveCfg = Debug|Win32
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Debug|x86.Build.0 = Debug|Win32
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Release|x64.ActiveCfg = Release|x64
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Release|x64.Build.0 = Release|x64
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Release|x86.ActiveCfg = Release|Win32
+		{DA7C3031-C500-4B68-8C9E-DC8543B7952D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

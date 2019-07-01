@@ -307,6 +307,7 @@ void e57File::read_Unified()
 
 	while (size = dataReader.read()) {
 		std::vector<mypt3d> pts;
+		pts.resize(size);
 		for (int64_t i = 0; i < size; ++i) {
 			if (columnIndex.data())
 				col = columnIndex[i];
@@ -324,10 +325,10 @@ void e57File::read_Unified()
 			pt.z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
 			if (bIntens) {         //Normalize intensity to 0 - 1.
 				double intensity = (intData[i] - intOffset) / intRange;
-				pt.intens = intensity;
+				pt.intensity = intensity;
 			}
 			else {
-				pt.intens = 0.5;
+				pt.intensity = 0.5;
 			}
 
 			if (bColor) {                     //Normalize color to 0 - 255
@@ -339,11 +340,14 @@ void e57File::read_Unified()
 				pt.b = blue;
 			}
 			else {
-				pt.r = pt.intens * 255;
-				pt.r = pt.intens * 255;
-				pt.r = pt.intens * 255;
+				pt.r = pt.intensity * 255;
+				pt.r = pt.intensity * 255;
+				pt.r = pt.intensity * 255;
 			}
-			pts.push_back(pt);
+			pt.rgba = 0;
+			pt.rgb = 0;
+			//pts.push_back(pt);
+			pts[i] = pt;
 			count++;
 		}
 
@@ -539,10 +543,10 @@ void e57File::read_NonUnified()
 				pt.z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
 				if (bIntens) {         //Normalize intensity to 0 - 1.
 					double intensity = (intData[i] - intOffset) / intRange;
-					pt.intens = intensity;
+					pt.intensity = intensity;
 				}
 				else {
-					pt.intens = 0.5;
+					pt.intensity = 0.5;
 				}
 
 				if (bColor) {                     //Normalize color to 0 - 255
@@ -554,9 +558,9 @@ void e57File::read_NonUnified()
 					pt.b = blue;
 				}
 				else {
-					pt.r = pt.intens * 255;
-					pt.r = pt.intens * 255;
-					pt.r = pt.intens * 255;
+					pt.r = pt.intensity * 255;
+					pt.r = pt.intensity * 255;
+					pt.r = pt.intensity * 255;
 				}
 				pts.push_back(pt);
 				count++;
