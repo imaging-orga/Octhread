@@ -13,5 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="SavableFiles">
+      <UniqueIdentifier>{5caba758-0f01-41aa-8e1f-db625bfb373e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SavableFiles\Header Files">
+      <UniqueIdentifier>{122d8130-ba55-4e55-99dd-88423eb73cb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SavableFiles\Source Files">
+      <UniqueIdentifier>{d32e7b9b-0003-4b4d-b9e1-13e625f3a848}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SavableFile.h">
+      <Filter>SavableFiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveE57.h">
+      <Filter>SavableFiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveFactor.hpp">
+      <Filter>SavableFiles\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SavableFile.cpp">
+      <Filter>SavableFiles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveE57.cpp">
+      <Filter>SavableFiles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

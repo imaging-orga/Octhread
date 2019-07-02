@@ -1,8 +1,5 @@
 #include "SaveE57.h"
 
-
-
-
 SaveE57::SaveE57(std::string _filename) : SavableFile(_filename)
 {
 }

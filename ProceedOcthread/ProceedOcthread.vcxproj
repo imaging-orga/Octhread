@@ -134,7 +134,6 @@
     <ClCompile Include="e57\time_conversion.c" />
     <ClCompile Include="OpenableFile.cpp" />
     <ClCompile Include="Proceed.cpp" />
-    <ClCompile Include="SavableFiles.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,7 +144,6 @@
     <ClInclude Include="e57\time_conversion.h" />
     <ClInclude Include="OpenableFile.h" />
     <ClInclude Include="Proceed.h" />
-    <ClInclude Include="SavableFiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
