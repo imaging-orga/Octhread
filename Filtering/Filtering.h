@@ -1,6 +1,5 @@
 #pragma once
 #include "Filtre.hpp"
-#include "../ProceedOcthread/SavableFiles.h"
 class Filtering
 {
 public:
@@ -11,6 +10,5 @@ public:
 	~Filtering();
 
 private:
-	SavableFiles saveFile;
 };
 

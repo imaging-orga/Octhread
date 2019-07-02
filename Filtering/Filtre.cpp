@@ -47,7 +47,6 @@ void FILTRE::downSample(pcl::PointCloud<mypt3d>::Ptr pointcloud, float x, float 
 			}
 			*pointcloud = *filtered_cloud;
 
-
 		}
 	}
 }
