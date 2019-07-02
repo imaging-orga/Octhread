@@ -33,6 +33,8 @@ public:
 	void save(std::string dirname, std::string filename);
 
 	void clean();
+
+	std::vector<mypt3d> getPts();
 private:
 	long int m_numPoints;
 	bool m_isLeaf;

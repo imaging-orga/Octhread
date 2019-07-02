@@ -8,10 +8,10 @@
 
 
 
-void add(MyFile mf, std::vector<mypt3d>& pts, int &numpts) {
-	mf.writeToFile(pts);
-	numpts += (long)pts.size();
-}
+//void add(MyFile mf, std::vector<mypt3d>& pts, int &numpts) {
+//	mf.writeToFile(pts);
+//	numpts += (long)pts.size();
+//}
 int main(int argc, char* argv[]) {
 
 	std::random_device dev;
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 
 	
 	Octree oct;
-	oct = Octree("test", bb, 0, 1024 * 1024 * 16);
+	oct = Octree("test", bb, 0, 1024 * 512);
 
 	oct.addPoint(pts);
 
@@ -61,8 +61,8 @@ int main(int argc, char* argv[]) {
 	//	pts2.push_back(mypt3d(x, y/4, z/8, x, i, i, i));
 	//}
 
-	oct.addPoint(pts2);
-	std::cout << "2 fini\n";
+	//oct.addPoint(pts2);
+	//std::cout << "2 fini\n";
 
 	
 
@@ -85,6 +85,10 @@ int main(int argc, char* argv[]) {
 	//std::cout << " 3 fini\n";
 
 	oct.save();
+
+
+	std::vector<mypt3d> ptsRET = oct.getNode("01")->getPts();
+
 
 	getchar();
 

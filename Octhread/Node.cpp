@@ -41,13 +41,17 @@ void Node::addPoint(std::vector<mypt3d>& pts ){
 		if (m_numPoints + pts.size() >= maxPointsPerNode){
 			createChildren();
 			dividePoints(pts);
-			std::vector<mypt3d> ptsFromFile = m_file.readFromFile(m_numPoints);
+			if (m_numPoints > 0) {
+				std::vector<mypt3d> ptsFromFile = m_file.readFromFile(m_numPoints);
+				dividePoints(ptsFromFile);
+			}
 			Destroy();
-			dividePoints(ptsFromFile);
 		}
 		else{
-			m_file.writeToFile(pts);
-			m_numPoints += (long)pts.size();
+			if (pts.size() > 0) {
+				m_file.writeToFile(pts);
+				m_numPoints += (long)pts.size();
+			}
 		}
 	}
 	else { //non leaf
@@ -154,13 +158,17 @@ void Node::save(std::string dirname, std::string filename)
 void Node::clean()
 {
 	if (m_numPoints == 0) {
-		std::cout << "Rencontre :  " << m_name << std::endl;
-			remove(m_name.c_str());
+		remove(m_name.c_str());
 	}
 	if (!m_isLeaf) {
 		for (int i = 0; i < 8; ++i) {
 			m_children[i].clean();
 		}
 	}
+}
+
+std::vector<mypt3d> Node::getPts()
+{
+	return m_file.readFromFile(m_numPoints);
 }
 
