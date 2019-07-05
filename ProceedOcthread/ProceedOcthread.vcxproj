@@ -112,6 +112,9 @@
       <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>E57RefImpl-d.lib;xerces-c_3D.lib;OcthreadD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -128,20 +131,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Octhreade57\E57Simple.cpp" />
+    <ClCompile Include="..\Octhreade57\E57SimpleImpl.cpp" />
+    <ClCompile Include="..\Octhreade57\time_conversion.c" />
     <ClCompile Include="e57File.cpp" />
-    <ClCompile Include="e57\E57Simple.cpp" />
-    <ClCompile Include="e57\E57SimpleImpl.cpp" />
-    <ClCompile Include="e57\time_conversion.c" />
     <ClCompile Include="OpenableFile.cpp" />
     <ClCompile Include="Proceed.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\e57\E57Foundation.h" />
+    <ClInclude Include="..\e57\E57Simple.h" />
+    <ClInclude Include="..\Octhreade57\E57SimpleImpl.h" />
+    <ClInclude Include="..\Octhreade57\time_conversion.h" />
     <ClInclude Include="e57File.h" />
-    <ClInclude Include="e57\E57Foundation.h" />
-    <ClInclude Include="e57\E57Simple.h" />
-    <ClInclude Include="e57\E57SimpleImpl.h" />
-    <ClInclude Include="e57\time_conversion.h" />
     <ClInclude Include="OpenableFile.h" />
     <ClInclude Include="Proceed.h" />
   </ItemGroup>

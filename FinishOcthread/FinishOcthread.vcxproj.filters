@@ -33,6 +33,18 @@
     <ClInclude Include="SaveFactor.hpp">
       <Filter>SavableFiles\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Octhreade57\E57Foundation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Octhreade57\E57Simple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Octhreade57\E57SimpleImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Octhreade57\time_conversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SavableFile.cpp">
@@ -42,6 +54,15 @@
       <Filter>SavableFiles\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Octhreade57\E57Simple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Octhreade57\E57SimpleImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Octhreade57\time_conversion.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,12 +1,13 @@
 #pragma once
 #include <string>
-
+#include "../Octhread/base.hpp"
 class SavableFile
 {
 public:
 	SavableFile(std::string _name);
-	virtual void write() = 0;
-	virtual void writeHeader() = 0;
+	virtual int write(std::vector<mypt3d>& pts) = 0;
+	virtual int writeHeader() = 0;
+	virtual int writeFooter() = 0;
 	~SavableFile();
 
 protected:
@@ -15,11 +16,3 @@ protected:
 
 
 
-
-
-/*
-SavableFiles sf(trucMuch.e57);
-sf->write 
-	
-
-*/
