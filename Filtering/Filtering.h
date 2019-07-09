@@ -1,5 +1,6 @@
 #pragma once
 #include "Filtre.hpp"
+#include "../FinishOcthread/SaveFactor.hpp"
 class Filtering
 {
 public:
@@ -10,5 +11,7 @@ public:
 	~Filtering();
 
 private:
+	std::string m_name;
+	SavableFile* save;
 };
 

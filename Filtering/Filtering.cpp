@@ -2,8 +2,11 @@
 
 
 
-Filtering::Filtering(std::string _filename) : saveFile(_filename)
+Filtering::Filtering(std::string _filename) : m_name(_filename)
 {
+	//Trouver le nombre de points max
+	//Chercher la bounding box
+
 }
 
 
@@ -15,7 +18,6 @@ void Filtering::filter()
 	//	pts = applyfilters();
 	// num += saveFile.write();
 	//}
-	saveFile.finishWriting();
 
 }
 
