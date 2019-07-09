@@ -2,8 +2,89 @@
 #include <random>
 
 
+using namespace e57;
+using namespace std;
+
+int writeME3(e57::CompressedVectorWriter* writer, int size_writer, std::vector<mypt3d>& pts,
+	std::vector<double>& cartesianX, std::vector<double>& cartesianY, std::vector<double>& cartesianZ,
+	std::vector<double>& cartesianInvalidState,
+	std::vector<double>& intensity,
+	std::vector<int>& red, std::vector<int>& green, std::vector<int> blue) {
+	long int count = 0;
+	while (count < pts.size()) {
+		int i = 0;
+		while (i < size_writer && count < pts.size()) {
+			cartesianX[i] = pts[count].x;
+			cartesianY[i] = pts[count].y;
+			cartesianZ[i] = pts[count].z;
+			red[i] = pts[count].r;
+			green[i] = pts[count].g;
+			blue[i] = pts[count].b;
+			intensity[i] = pts[count].intensity;
+			cartesianInvalidState[i] = 0;
+			count++;
+			++i;
+		}
+		if (i != 0)
+			writer->write(i);
+	}
+	return count;
+}
 
 
+int writeME(e57::CompressedVectorWriter writer, int size_writer, std::vector<mypt3d>& pts,
+	std::vector<double>& cartesianX, std::vector<double>& cartesianY, std::vector<double>& cartesianZ,
+	std::vector<double>& cartesianInvalidState,
+	std::vector<double>& intensity,
+	std::vector<int>& red, std::vector<int>& green, std::vector<int> blue) {
+	long int count = 0;
+	while (count < pts.size()) {
+		int i = 0;
+		while (i < size_writer && count < pts.size()) {
+			cartesianX[i] = pts[count].x;
+			cartesianY[i] = pts[count].y;
+			cartesianZ[i] = pts[count].z;
+			red[i] = pts[count].r;
+			green[i] = pts[count].g;
+			blue[i] = pts[count].b;
+			intensity[i] = pts[count].intensity;
+			cartesianInvalidState[i] = 0;
+			count++;
+			++i;
+		}
+		if (i != 0)
+			writer.write(i);
+	}
+	return count;
+}
+
+int writeME2(vector<SourceDestBuffer>& sourceBuffers, CompressedVectorNode& points, int size_writer, std::vector<mypt3d>& pts,
+	std::vector<double>& cartesianX, std::vector<double>& cartesianY, std::vector<double>& cartesianZ,
+	std::vector<double>& cartesianInvalidState,
+	std::vector<double>& intensity,
+	std::vector<int>& red, std::vector<int>& green, std::vector<int> blue) {
+	CompressedVectorWriter writer = points.writer(sourceBuffers);
+	long int count = 0;
+	while (count < pts.size()) {
+		int i = 0;
+		while (i < size_writer && count < pts.size()) {
+			cartesianX[i] = pts[count].x;
+			cartesianY[i] = pts[count].y;
+			cartesianZ[i] = pts[count].z;
+			red[i] = pts[count].r;
+			green[i] = pts[count].g;
+			blue[i] = pts[count].b;
+			intensity[i] = pts[count].intensity;
+			cartesianInvalidState[i] = 0;
+			count++;
+			++i;
+		}
+		if (i != 0)
+			writer.write(i);
+	}
+	writer.close();
+	return count;
+}
 
 
 std::string createGUID(){
@@ -17,8 +98,6 @@ std::string createGUID(){
 	return strGuid;
 }
 
-using namespace e57;
-using namespace std;
 void printSomePoints(ImageFile& imf, CompressedVectorNode& points);
 int processE57(std::string _nameIn) {
 		e57::Reader eReader(_nameIn);
@@ -201,34 +280,14 @@ int processE57(std::string _nameIn) {
 					//std::cout << index << std::endl;
 					mypt3d& pt = pts->points[i];
 					if (true) { // les points doivent être modifiés car on va les assembler, on va donc perdre l'information du centre du scan.
-						if (bInvalidState) {
-							if (isInvalidData_r[i] == 0) {
-								pt.x = xData_r[i] * r00 + yData_r[i] * r10 + zData_r[i] * r20 + xTrans;
-								pt.y = xData_r[i] * r01 + yData_r[i] * r11 + zData_r[i] * r21 + yTrans;
-								pt.z = xData_r[i] * r02 + yData_r[i] * r12 + zData_r[i] * r22 + zTrans;
-							}
-						}
-						else
-						{
 							pt.x = xData_r[i] * r00 + yData_r[i] * r10 + zData_r[i] * r20 + xTrans;
 							pt.y = xData_r[i] * r01 + yData_r[i] * r11 + zData_r[i] * r21 + yTrans;
 							pt.z = xData_r[i] * r02 + yData_r[i] * r12 + zData_r[i] * r22 + zTrans;
-						}
 					}
 					else { //On va pas changer 
-						if (bInvalidState) {
-							if (isInvalidData_r[i] == 0) {
-								pt.x = xData_r[i];
-								pt.y = yData_r[i];
-								pt.z = zData_r[i];
-							}
-						}
-						else
-						{
-							pt.x = xData_r[i];
-							pt.y = yData_r[i];
-							pt.z = zData_r[i];
-						}
+						pt.x = xData_r[i];
+						pt.y = yData_r[i];
+						pt.z = zData_r[i];
 					}
 					if (bIntens) {         //Normalize intensity to 0 - 1.
 						double intensity = (intData_r[i] - intOffset) / intRange;
@@ -250,406 +309,213 @@ int processE57(std::string _nameIn) {
 		}
 	
 }
-//
-//int main(int argc, char* argv[]) {
-//	std::random_device rd;
-//	std::mt19937 mt(rd());
-//	std::uniform_real_distribution<double> dist(0.0, 1000.0);
-//
-//
-//	//SavableFile *file = SaveFactor::get("test.a");
-//	//SavableFile *file = new SaveE57("test.e57");
-//	//file->writeHeader();
-//	
-//	long int size = 1024 * 1024 * 8;
-//	std::vector<mypt3d> pts;
-//
-//	for (int i = 0; i < size; ++i) {
-//		float i_size = i / size;
-//		float imodsize = i % size;
-//		pts.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/0, /*intensity*/i_size, /*r*/imodsize, /*g*/imodsize, /*b*/imodsize));
-//	}
-//
-//	/******************/
-//
-//	std::string p_name = "test.e57";
-//	e57::Writer eWriter(p_name, "");
-//	e57::Data3D scanHeader;
-//	e57WriteData datas;
-//
-//	long int pointCount = 1024 * 1024 * 8;
-//
-//
-//	scanHeader.name = p_name;
-//	scanHeader.description = "e57 file";
-//
-//	/*create GUID*/
-//	GUID guid;
-//	CoCreateGuid((GUID*)&guid);
-//	OLECHAR wbuffer[64];
-//	StringFromGUID2(guid, &wbuffer[0], 64);
-//	size_t converted = 0;
-//	char strGuid[64];
-//	wcstombs_s(&converted, strGuid, wbuffer, 64);
-//	scanHeader.guid = (char*)strGuid;
-//	/*Fin*/
-//	scanHeader.indexBounds.rowMaximum = pointCount;
-//	scanHeader.indexBounds.rowMinimum = 0;
-//	scanHeader.indexBounds.columnMaximum = 0;
-//	scanHeader.indexBounds.columnMinimum = 0;
-//	scanHeader.indexBounds.returnMaximum = 0;
-//	scanHeader.indexBounds.returnMinimum = 0;
-//
-//	scanHeader.pointGroupingSchemes.groupingByLine.groupsSize = 1;
-//	scanHeader.pointGroupingSchemes.groupingByLine.pointCountSize = pointCount;
-//	scanHeader.pointGroupingSchemes.groupingByLine.idElementName = "columnIndex";
-//
-//	scanHeader.pointsSize = pointCount;
-//
-//	scanHeader.pose.rotation.w = 1;
-//	scanHeader.pose.rotation.x = 0;
-//	scanHeader.pose.rotation.y = 0;
-//	scanHeader.pose.rotation.z = 0;
-//	scanHeader.pose.translation.x = 0;
-//	scanHeader.pose.translation.y = 0;
-//	scanHeader.pose.translation.z = 0;
-//
-//	scanHeader.pointFields.cartesianXField = true;
-//	scanHeader.pointFields.cartesianYField = true;
-//	scanHeader.pointFields.cartesianZField = true;
-//	scanHeader.pointFields.cartesianInvalidStateField = true;
-//
-//	scanHeader.pointFields.colorRedField = true;
-//	scanHeader.pointFields.colorGreenField = true;
-//	scanHeader.pointFields.colorBlueField = true;
-//
-//	scanHeader.colorLimits.colorRedMinimum = e57::E57_UINT8_MIN;
-//	scanHeader.colorLimits.colorRedMaximum = e57::E57_UINT8_MAX;
-//	scanHeader.colorLimits.colorGreenMinimum = e57::E57_UINT8_MIN;
-//	scanHeader.colorLimits.colorGreenMaximum = e57::E57_UINT8_MAX;
-//	scanHeader.colorLimits.colorBlueMinimum = e57::E57_UINT8_MIN;
-//	scanHeader.colorLimits.colorBlueMaximum = e57::E57_UINT8_MAX;
-//
-//	scanHeader.pointFields.intensityField = true;
-//
-//	scanHeader.intensityLimits.intensityMinimum = 0.;
-//	scanHeader.intensityLimits.intensityMaximum = 1.;
-//	scanHeader.pointFields.intensityScaledInteger = 0.;
-//
-//	scanHeader.pointsSize = pointCount;
-//	int scanIndex =  eWriter.NewData3D(scanHeader);
-//
-//	datas.xData.resize(pointCount);
-//	datas.yData.resize(pointCount);
-//	datas.zData.resize(pointCount);
-//	datas.isInvalidData.resize(pointCount);
-//	datas.intData.resize(pointCount);
-//	datas.redData.resize(pointCount);
-//	datas.greenData.resize(pointCount);
-//	datas.blueData.resize(pointCount);
-//	int i = 0;
-//
-//	e57::CompressedVectorWriter dataWriter = eWriter.SetUpData3DPointsData(
-//		scanIndex,
-//		pointCount,
-//		datas.xData.data(),
-//		datas.yData.data(),
-//		datas.zData.data(),
-//		datas.isInvalidData.data(),
-//		datas.intData.data(),
-//		NULL,
-//		datas.redData.data(),
-//		datas.greenData.data(),
-//		datas.blueData.data()
-//	);
-//
-//
-//
-//	for (; i < size; ++i) {
-//		mypt3d& pt = pts[i];
-//		datas.xData[i] = pt.x;
-//		datas.yData[i] = pt.y;
-//		datas.zData[i] = pt.z;
-//
-//
-//		if (pt.intensity <= 0)
-//			datas.intData[i] = 0.1;
-//		else if (pt.intensity > 1)
-//			datas.intData[i] = pt.intensity / 255.f;
-//
-//		datas.redData[i] = pt.r;
-//		datas.greenData[i] = pt.g;
-//		datas.blueData[i] = pt.b;
-//
-//		if ((pt.r <= 0 && pt.g <= 0 && pt.b <= 0) || (pt.r >= 255 && pt.g >= 255 && pt.b >= 255)) {
-//			datas.redData[i] = pt.intensity * 255;
-//			datas.greenData[i] = pt.intensity * 255;
-//			datas.blueData[i] = pt.intensity * 255;
-//		}
-//
-//
-//		/*************/
-//		datas.redData[i] = 127;
-//		datas.greenData[i] = 127;
-//		datas.blueData[i] = 127;
-//		datas.intData[i] = 0.5;
-//
-//		datas.isInvalidData[i] = 0;
-//	}
-//	dataWriter.write(i);
-//	dataWriter.close();
-//
-//	std::vector<int64_t> idElementValue_w;
-//	std::vector<int64_t> startPointIndex_w;
-//	std::vector<int64_t> pointCount_w;
-//
-//	idElementValue_w.push_back(0);
-//	startPointIndex_w.push_back(0);
-//	pointCount_w.push_back(pointCount);
-//	eWriter.WriteData3DGroupsData(scanIndex, 1, &idElementValue_w[0], &startPointIndex_w[0], &pointCount_w[0]);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//	///*****************************/
-//	//file->write(pts1);
-//	///*file->write(pts2);
-//	//file->write(pts3);*/
-//	//file->writeFooter();
-//
-//
-//	processE57("test.e57");
-//}
 
-//using namespace e57;
-//using namespace std;
-//
-//int main(int /*argc*/, char** /*argv*/) {
-//	try {
-//		ImageFile imf("temp._e57", "w");
-//		StructureNode root = imf.root();
-//
-//		root.set("greeting", StringNode(imf, "Hello world."));
-//
-//		imf.close(); // don't forget to explicitly close the ImageFile
-//	}
-//	catch (E57Exception& ex) {
-//		ex.report(__FILE__, __LINE__, __FUNCTION__);
-//		return(-1);
-//	}
-//
-//	try {
-//		ImageFile imf("temp._e57", "r");
-//		StructureNode root = imf.root();
-//
-//		StringNode greeting(root.get("greeting"));
-//		cout << "Value of /greeting = " << greeting.value() << endl;
-//
-//		imf.close(); // don't forget to explicitly close the ImageFile
-//	}
-//	catch (E57Exception& ex) {
-//		ex.report(__FILE__, __LINE__, __FUNCTION__);
-//		return(-1);
-//	}
-//	return(0);
-//}
-
-
+ImageFile* imf;
+CompressedVectorWriter * writer;
+CompressedVectorNode *groups;
 int main(int /*argc*/, char** /*argv*/)
 {
 
 	//processE57("context_filtered.e57");
 	//processE57("foo.e57");
 
-
-	std::vector<mypt3d> pts1, pts2;
+	float minX=-1000, maxX=1000;
+	std::vector<mypt3d> pts1, pts2, pts3;
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_real_distribution<double> dist(0.0, 1000.0);
+	std::uniform_real_distribution<double> dist(minX, maxX);
 	
 	
 	//SavableFile *file = SaveFactor::get("test.a");
 	//SavableFile *file = new SaveE57("test.e57");
 	//file->writeHeader();
 		
-	long int size = 1024 * 512;
+	long int size = 1024 * 1024 ;
 	
 	for (int i = 0; i < size; ++i) {
 		float i_size = i / size;
 		int imodsize = i % 255;
-		pts1.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/0, /*intensity*/0.7, /*r*/0, /*g*/imodsize, /*b*/imodsize));
-		pts2.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/100, /*intensity*/0.2, /*r*/imodsize, /*g*/imodsize, /*b*/imodsize));
+		pts1.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/0, /*intensity*/0.33, /*r*/255, /*g*/0, /*b*/0));
+		pts2.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/100, /*intensity*/0.66, /*r*/0, /*g*/255, /*b*/0));
+		pts2.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/100, /*intensity*/0.66, /*r*/0, /*g*/128, /*b*/128));
+		pts3.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/200, /*intensity*/0.99, /*r*/255, /*g*/255, /*b*/255));
+
 	}
 
+	pt3d minpt(minX, minX, minX);
+	pt3d maxpt(maxX, maxX, maxX);
+	BoundingBox bb(minpt, maxpt);
+
+
+	SavableFile *e57file = SaveFactor::get("test1.e57", size*4, bb);
+	e57file->writeHeader();
+	e57file->write(pts1);
+	e57file->write(pts2);
+	e57file->write(pts3);
+	e57file->writeFooter();
+
+	delete e57file;
+	//getchar();
 	try {
 		/// Open new file for writing, get the initialized root node (a Structure).
 		/// Path name: "/"
-		ImageFile imf("foo.e57", "w");
-		StructureNode root = imf.root();
-		imf.extensionsAdd("demo", "http://www.example.com/DemoExtension");
+		imf =  new ImageFile("foo.e57", "w");
+		StructureNode root = imf->root();
+		imf->extensionsAdd("demo", "http://www.example.com/DemoExtension");
 		/// Set per-file properties.
 		/// Path names: "/formatName", "/majorVersion", "/minorVersion", "/coordinateMetadata"
-		root.set("formatName", StringNode(imf, "ASTM E57 3D Imaging Data File"));
-		root.set("guid", StringNode(imf, "3F2504E0-4F89-11D3-9A0C-0305E82C3300"));
+		root.set("formatName", StringNode(*imf, "ASTM E57 3D Imaging Data File"));
+		root.set("guid", StringNode(*imf, "3F2504E0-4F89-11D3-9A0C-0305E82C3300"));
 
 		/// Get ASTM version number supported by library, so can write it into file
 		int astmMajor;
 		int astmMinor;
 		ustring libraryId;
 		E57Utilities().getVersions(astmMajor, astmMinor, libraryId);
-		root.set("versionMajor", IntegerNode(imf, astmMajor));
-		root.set("versionMinor", IntegerNode(imf, astmMinor));
-		root.set("e57LibraryVersion", StringNode(imf, "Octhread"));
+		root.set("versionMajor", IntegerNode(*imf, astmMajor));
+		root.set("versionMinor", IntegerNode(*imf, astmMinor));
+		root.set("e57LibraryVersion", StringNode(*imf, "Octhread"));
 		/// Save a dummy string for coordinate system.
 		/// Really should be a valid WKT string identifying the coordinate reference system (CRS).
-		root.set("coordinateMetadata", StringNode(imf, ""));
+		root.set("coordinateMetadata", StringNode(*imf, ""));
 
 
 		/// Create 3D data area.
 		/// Path name: "/data3D"
-		VectorNode data3D = VectorNode(imf, true);
+		VectorNode data3D = VectorNode(*imf, true);
 		root.set("data3D", data3D);
 
 		/// Add first scan
 		/// Path name: "/data3D/0"
-		StructureNode scan0 = StructureNode(imf);
+		StructureNode scan0 = StructureNode(*imf);
 		data3D.append(scan0);
 
 		/// Add guid to scan0.
 		/// Path name: "/data3D/0/guid".
-		std::string test = createGUID();
 		const char* scanGuid0 = "3F2504E0-4F89-11D3-9A0C-0305E82C3301";
-		scan0.set("guid", StringNode(imf, scanGuid0));
+		scan0.set("guid", StringNode(*imf, scanGuid0));
 
 
 
 		///*Index bound*/
-		StructureNode indexBounds = StructureNode(imf);
+		StructureNode indexBounds = StructureNode(*imf);
 
-		indexBounds.set("columnMaximum", IntegerNode(imf, 1, 0, size * 4));
-		indexBounds.set("columnMinimum", IntegerNode(imf, 0, 0, 0));
-		indexBounds.set("rowMaximum", IntegerNode(imf, size * 2, 0, size * 4));
-		indexBounds.set("rowMinimum", IntegerNode(imf, 0, 0, 0));
+		indexBounds.set("columnMaximum", IntegerNode(*imf, 1, 0, size * 4));
+		indexBounds.set("columnMinimum", IntegerNode(*imf, 0, 0, 0));
+		indexBounds.set("rowMaximum", IntegerNode(*imf, size * 2, 0, size * 4));
+		indexBounds.set("rowMinimum", IntegerNode(*imf, 0, 0, 0));
 		scan0.set("indexBounds", indexBounds);
-
-
 
 
 		/// Make a prototype of datatypes that will be stored in points record.
 		/// This prototype will be used in creating the points CompressedVector.
 		/// Using this proto in a CompressedVector will define path names like:
 		///      "/data3D/0/points/0/cartesianX"
-		StructureNode proto = StructureNode(imf);
-		proto.set("cartesianX", ScaledIntegerNode(imf, 0, 0, 32767, 1, 0));
-		proto.set("cartesianY", ScaledIntegerNode(imf, 0, 0, 32767, 1, 0));
-		proto.set("cartesianZ", ScaledIntegerNode(imf, 0, 0, 32767, 1, 0));
-		proto.set("cartesianInvalidState", IntegerNode(imf, 0, 0, 2));
-		proto.set("intensity", FloatNode(imf, 0.0, E57_SINGLE, 0.0, 1.0));
-		proto.set("colorRed", IntegerNode(imf, 0, 0, 255));
-		proto.set("colorGreen", IntegerNode(imf, 0, 0, 255));
-		proto.set("colorBlue", IntegerNode(imf, 0, 0, 255));
+		StructureNode proto = StructureNode(*imf);
+		proto.set("cartesianX", ScaledIntegerNode(*imf, 0, 0, 32767, 1, 0));
+		proto.set("cartesianY", ScaledIntegerNode(*imf, 0, 0, 32767, 1, 0));
+		proto.set("cartesianZ", ScaledIntegerNode(*imf, 0, 0, 32767, 1, 0));
+		proto.set("cartesianInvalidState", IntegerNode(*imf, 0, 0, 2));
+		proto.set("intensity", FloatNode(*imf, 0.0, E57_SINGLE, 0.0, 1.0));
+		proto.set("colorRed", IntegerNode(*imf, 0, 0, 255));
+		proto.set("colorGreen", IntegerNode(*imf, 0, 0, 255));
+		proto.set("colorBlue", IntegerNode(*imf, 0, 0, 255));
 
 		/// Make empty codecs vector for use in creating points CompressedVector.
 		/// If this vector is empty, it is assumed that all fields will use the BitPack codec.
-		VectorNode codecs = VectorNode(imf, true);
+		VectorNode codecs = VectorNode(*imf, true);
 
 		/// Create CompressedVector for storing points.  Path Name: "/data3D/0/points".
 		/// We use the prototype and empty codecs tree from above.
 		/// The CompressedVector will be filled by code below.
-		CompressedVectorNode points = CompressedVectorNode(imf, proto, codecs);
-		scan0.set("points", points);
+		CompressedVectorNode *points = new CompressedVectorNode(*imf, proto, codecs);
+		scan0.set("points", *points);
 
 		/// Create pose structure for scan.
 		/// Path names: "/data3D/0/pose/rotation/w", etc...
 		///             "/data3D/0/pose/translation/x", etc...
-		StructureNode pose = StructureNode(imf);
+		StructureNode pose = StructureNode(*imf);
 		scan0.set("pose", pose);
-		StructureNode rotation = StructureNode(imf);
+		StructureNode rotation = StructureNode(*imf);
 		pose.set("rotation", rotation);
-		rotation.set("w", FloatNode(imf, 1.0));
-		rotation.set("x", FloatNode(imf, 0.0));
-		rotation.set("y", FloatNode(imf, 0.0));
-		rotation.set("z", FloatNode(imf, 0.0));
-		StructureNode translation = StructureNode(imf);
+		rotation.set("w", FloatNode(*imf, 1.0));
+		rotation.set("x", FloatNode(*imf, 0.0));
+		rotation.set("y", FloatNode(*imf, 0.0));
+		rotation.set("z", FloatNode(*imf, 0.0));
+		StructureNode translation = StructureNode(*imf);
 		pose.set("translation", translation);
-		translation.set("x", FloatNode(imf, 0.0));
-		translation.set("y", FloatNode(imf, 0.0));
-		translation.set("z", FloatNode(imf, 0.0));
+		translation.set("x", FloatNode(*imf, 0.0));
+		translation.set("y", FloatNode(*imf, 0.0));
+		translation.set("z", FloatNode(*imf, 0.0));
 
 		///================
 		/// Add grouping scheme area
 		/// Path name: "/data3D/0/pointGroupingSchemes"
-		StructureNode pointGroupingSchemes = StructureNode(imf);
+		StructureNode pointGroupingSchemes = StructureNode(*imf);
 		scan0.set("pointGroupingSchemes", pointGroupingSchemes);
 
 		/// Add a line grouping scheme
 		/// Path name: "/data3D/0/pointGroupingSchemes/groupingByLine"
-		StructureNode groupingByLine = StructureNode(imf);
+		StructureNode groupingByLine = StructureNode(*imf);
 		pointGroupingSchemes.set("groupingByLine", groupingByLine);
 
 		/// Add idElementName to groupingByLine, specify a line is column oriented
 		/// Path name: "/data3D/0/pointGroupingSchemes/groupingByLine/idElementName"
-		groupingByLine.set("idElementName", StringNode(imf, "columnIndex"));
+		groupingByLine.set("idElementName", StringNode(*imf, "columnIndex"));
 
 		/// Make a prototype of datatypes that will be stored in LineGroupRecord.
 		/// This prototype will be used in creating the groups CompressedVector.
 		/// Will define path names like:
 		///     "/data3D/0/pointGroupingSchemes/groupingByLine/groups/0/idElementValue"
-		StructureNode lineGroupProto = StructureNode(imf);
-		lineGroupProto.set("idElementValue", IntegerNode(imf, 0, 0));
-		lineGroupProto.set("startPointIndex", IntegerNode(imf, 0, 0 ));
-		lineGroupProto.set("pointCount", IntegerNode(imf, 1, 0, size * 10));
+		StructureNode lineGroupProto = StructureNode(*imf);
+		lineGroupProto.set("idElementValue", IntegerNode(*imf, 0, 0, 4));
+		lineGroupProto.set("startPointIndex", IntegerNode(*imf, 0, 0, 4 * size ));
+		lineGroupProto.set("pointCount", IntegerNode(*imf, 1, 0, size * 10));
 
 		/// Add cartesian bounds to line group prototype
 		/// Will define path names like:
 		///     "/data3D/0/pointGroupingSchemes/groupingByLine/groups/0/cartesianBounds/xMinimum"
-		StructureNode lineGroupBbox = StructureNode(imf);
+		StructureNode lineGroupBbox = StructureNode(*imf);
 		lineGroupProto.set("cartesianBounds", lineGroupBbox);
-		lineGroupBbox.set("xMinimum", FloatNode(imf, 0.0));
-		lineGroupBbox.set("xMaximum", FloatNode(imf, 0.0));
-		lineGroupBbox.set("yMinimum", FloatNode(imf, 0.0));
-		lineGroupBbox.set("yMaximum", FloatNode(imf, 0.0));
-		lineGroupBbox.set("zMinimum", FloatNode(imf, 0.0));
-		lineGroupBbox.set("zMaximum", FloatNode(imf, 0.0));
+		lineGroupBbox.set("xMinimum", FloatNode(*imf, 0.0));
+		lineGroupBbox.set("xMaximum", FloatNode(*imf, 0.0));
+		lineGroupBbox.set("yMinimum", FloatNode(*imf, 0.0));
+		lineGroupBbox.set("yMaximum", FloatNode(*imf, 0.0));
+		lineGroupBbox.set("zMinimum", FloatNode(*imf, 0.0));
+		lineGroupBbox.set("zMaximum", FloatNode(*imf, 0.0));
 
 		/// Make empty codecs vector for use in creating groups CompressedVector.
 		/// If this vector is empty, it is assumed that all fields will use the BitPack codec.
-		VectorNode lineGroupCodecs = VectorNode(imf, true);
+		VectorNode lineGroupCodecs = VectorNode(*imf, true);
 
 		/// Create CompressedVector for storing groups.  
 		/// Path Name: "/data3D/0/pointGroupingSchemes/groupingByLine/groups".
 		/// We use the prototype and empty codecs tree from above.
 		/// The CompressedVector will be filled by code below.
-		CompressedVectorNode groups = CompressedVectorNode(imf, lineGroupProto, lineGroupCodecs);
-		groupingByLine.set("groups", groups);
+
 
 
 		/// Add Cartesian bounding box to scan.
 /// Path names: "/data3D/0/cartesianBounds/xMinimum", etc...
-		StructureNode bbox = StructureNode(imf);
-		bbox.set("xMinimum", FloatNode(imf, 0.0));
-		bbox.set("xMaximum", FloatNode(imf, 1000.0));
-		bbox.set("yMinimum", FloatNode(imf, 0.0));
-		bbox.set("yMaximum", FloatNode(imf, 1000.0));
-		bbox.set("zMinimum", FloatNode(imf, 0.0));
-		bbox.set("zMaximum", FloatNode(imf, 1000.0));
+		StructureNode bbox = StructureNode(*imf);
+		bbox.set("xMinimum", FloatNode(*imf, 0.0));
+		bbox.set("xMaximum", FloatNode(*imf, 1000.0));
+		bbox.set("yMinimum", FloatNode(*imf, 0.0));
+		bbox.set("yMaximum", FloatNode(*imf, 1000.0));
+		bbox.set("zMinimum", FloatNode(*imf, 0.0));
+		bbox.set("zMaximum", FloatNode(*imf, 1000.0));
 		scan0.set("cartesianBounds", bbox);
 		///================
 		/// Add name and description to scan
 		/// Path names: "/data3D/0/name", "/data3D/0/description".
-		scan0.set("name", StringNode(imf, "MyTest"));
-		scan0.set("description", StringNode(imf, ""));
+		scan0.set("name", StringNode(*imf, "MyTest"));
+		scan0.set("description", StringNode(*imf, ""));
 
 
 
-		///================VectorNode images2D = VectorNode(imf, true);
+		///================VectorNode images2D = VectorNode(*imf, true);
 
-		VectorNode images2D = VectorNode(imf, true);
+		VectorNode images2D = VectorNode(*imf, true);
 		root.set("images2D", images2D);
 
 		long int size_2 = size / 3;
@@ -663,65 +529,32 @@ int main(int /*argc*/, char** /*argv*/)
 		std::vector<int> blue; blue.resize(size_2);
 
 		vector<SourceDestBuffer> sourceBuffers;
-		sourceBuffers.push_back(SourceDestBuffer(imf, "cartesianX", cartesianX.data(), size_2, true, true));
-		sourceBuffers.push_back(SourceDestBuffer(imf, "cartesianY", cartesianY.data(), size_2, true, true));
-		sourceBuffers.push_back(SourceDestBuffer(imf, "cartesianZ", cartesianZ.data(), size_2, true, true));
-		sourceBuffers.push_back(SourceDestBuffer(imf, "cartesianInvalidState", cartesianInvalidState.data(), size_2, true));
-		sourceBuffers.push_back(SourceDestBuffer(imf, "intensity", intensity.data(), size_2, true));
-		sourceBuffers.push_back(SourceDestBuffer(imf, "colorRed", red.data(), size_2, true));
-		sourceBuffers.push_back(SourceDestBuffer(imf, "colorGreen", green.data(), size_2, true));
-		sourceBuffers.push_back(SourceDestBuffer(imf, "colorBlue", blue.data(), size_2, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "cartesianX", cartesianX.data(), size_2, true, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "cartesianY", cartesianY.data(), size_2, true, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "cartesianZ", cartesianZ.data(), size_2, true, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "cartesianInvalidState", cartesianInvalidState.data(), size_2, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "intensity", intensity.data(), size_2, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "colorRed", red.data(), size_2, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "colorGreen", green.data(), size_2, true));
+		sourceBuffers.push_back(SourceDestBuffer(*imf, "colorBlue", blue.data(), size_2, true));
 		long int count = 0;
+	
+		//e57::CompressedVectorWriter writer = points.writer(sourceBuffers);
 
-		CompressedVectorWriter writer = points.writer(sourceBuffers);
-
-
-		//Pts => size = size
-		//tant que le compte totale qu'on a ajouter n'es pas égale a la taille totale du tableau
-		while (count < pts1.size()) {
-			int i = 0;
-			while (i < size_2 && count < pts1.size()) {
-				cartesianX[i] = pts1[count].x;
-				cartesianY[i] = pts1[count].y;
-				cartesianZ[i] = pts1[count].z;
-				red[i] = pts1[count].r;
-				green[i] = pts1[count].g;
-				blue[i] = pts1[count].b;
-				intensity[i] = pts1[count].intensity;
-
-				cartesianInvalidState[i] = 0;
-
-				count++;
-				++i;
-			}
-			if (i!=0)
-				writer.write(i);
-		}
-
-		long int count2 = 0;
-		while (count2 < pts2.size()) {
-			int i = 0;
-			while (i < size_2 && count2 < pts2.size()) {
-				cartesianX[i] = pts2[count2].x;
-				cartesianZ[i] = pts2[count2].z;
-				cartesianY[i] = pts2[count2].y;
-				red[i] = pts2[count2].r;
-				green[i] = pts2[count2].g;
-				blue[i] = pts2[count2].b;
-				intensity[i] = pts2[count2].intensity;
-
-				cartesianInvalidState[i] = 0;
-
-				count2++;
-				count++;
-				++i;
-			}
-			if (i != 0)
-				writer.write(i);
-		}
+		/**********WRITER************/
+		 writer = new CompressedVectorWriter(points->writer(sourceBuffers));
+		count += writeME3(writer, size_2, pts1, cartesianX, cartesianY, cartesianZ, cartesianInvalidState, intensity, red, green, blue);
+		count += writeME3(writer, size_2, pts2, cartesianX, cartesianY, cartesianZ, cartesianInvalidState, intensity, red, green, blue);
+		writer->close();
 
 
-		writer.close();
+		////////////////////////////
+		
+	/*	long int num2 = writeME2(sourceBuffers, points, size_2, pts2, cartesianX, cartesianY, cartesianZ, cartesianInvalidState, intensity, red, green, blue);
+		long int num1 = writeME2(sourceBuffers, points, size_2, pts1, cartesianX, cartesianY, cartesianZ, cartesianInvalidState, intensity, red, green, blue);*/
+
+		//count += num1 + num2;
+		/***********FOOTER***********/
 
 		/// Write source buffers into CompressedVector
 	
@@ -729,41 +562,42 @@ int main(int /*argc*/, char** /*argv*/)
 		//ça ça marche bien! 
 		//Il suffit de faire des buffers de toujours la même taille et on est bon 
 
-
-
-
 		///================
 		/// Prepare vector of source buffers for writing in the CompressedVector of groups
+
+		groups = new CompressedVectorNode(*imf, lineGroupProto, lineGroupCodecs);
+		groupingByLine.set("groups", *groups);
+
 		const int NG = 1;
 		int32_t idElementValue[NG] = { 0 };		
 		int32_t startPointIndex[NG] = { 0 };
 		int32_t pointCount[NG] = { count };
 		double  xMinimum[NG] = { 0.0 };
-		double  xMaximum[NG] = { 20 };
+		double  xMaximum[NG] = { 1000, };
 		double  yMinimum[NG] = { 0 };
-		double  yMaximum[NG] = { 20 };
+		double  yMaximum[NG] = { 1000 };
 		double  zMinimum[NG] = { 0 };
-		double  zMaximum[NG] = { 20 };
+		double  zMaximum[NG] = { 1000 };
 
 		vector<SourceDestBuffer> groupSDBuffers;
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "idElementValue", idElementValue, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "startPointIndex", startPointIndex, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "pointCount", pointCount, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "cartesianBounds/xMinimum", xMinimum, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "cartesianBounds/xMaximum", xMaximum, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "cartesianBounds/yMinimum", yMinimum, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "cartesianBounds/yMaximum", yMaximum, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "cartesianBounds/zMinimum", zMinimum, NG, true));
-		groupSDBuffers.push_back(SourceDestBuffer(imf, "cartesianBounds/zMaximum", zMaximum, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "idElementValue", idElementValue, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "startPointIndex", startPointIndex, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "pointCount", pointCount, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "cartesianBounds/xMinimum", xMinimum, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "cartesianBounds/xMaximum", xMaximum, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "cartesianBounds/yMinimum", yMinimum, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "cartesianBounds/yMaximum", yMaximum, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "cartesianBounds/zMinimum", zMinimum, NG, true));
+		groupSDBuffers.push_back(SourceDestBuffer(*imf, "cartesianBounds/zMaximum", zMaximum, NG, true));
 
 		/// Write source buffers into CompressedVector
 		{
-			CompressedVectorWriter writer = groups.writer(groupSDBuffers);
+			CompressedVectorWriter writer = groups->writer(groupSDBuffers);
 			writer.write(NG);
 			writer.close();
 		}
 
-		imf.close();
+		imf->close();
 	}
 
 	catch (E57Exception& ex) {
@@ -779,13 +613,7 @@ int main(int /*argc*/, char** /*argv*/)
 	processE57("foo.e57");
 
 
-	//processE57("foo.e57");
 	try {
-
-
-
-
-
 		/// Read file from disk
 		ImageFile imf("foo.e57", "r");
 		StructureNode root = imf.root();
@@ -821,7 +649,7 @@ int main(int /*argc*/, char** /*argv*/)
 			cout << "got:" << points.pathName() << endl;
 
 			/// Call subroutine in this file to print the points
-			printSomePoints(imf, points);
+			//printSomePoints(imf, points);
 		}
 
 		imf.close();
@@ -844,67 +672,67 @@ int main(int /*argc*/, char** /*argv*/)
 }
 
 
-
-
-void printSomePoints(ImageFile& imf, CompressedVectorNode& points)
-{
-	/// Need to figure out if has Cartesian or spherical coordinate system.
-	/// Interrogate the CompressedVector's prototype of its records.
-	StructureNode proto(points.prototype());
-
-	/// The prototype should have a field named either "cartesianX" or "sphericalRange".
-	if (proto.isDefined("cartesianX") && proto.isDefined("cartesianY") && proto.isDefined("cartesianZ")) {
-#if 1  //??? pick one?
-		/// Make a list of buffers to receive the xyz values.
-		const int N = 512;
-		vector<SourceDestBuffer> destBuffers;
-		double x[N];     destBuffers.push_back(SourceDestBuffer(imf, "cartesianX", x, N, true));
-		double y[N];     destBuffers.push_back(SourceDestBuffer(imf, "cartesianY", y, N, true));
-		double z[N];     destBuffers.push_back(SourceDestBuffer(imf, "cartesianZ", z, N, true));
-		//double r[N];     destBuffers.push_back(SourceDestBuffer(imf, "colorRed", r, N, true));
-		//double g[N];     destBuffers.push_back(SourceDestBuffer(imf, "colorGreen", g, N, true));
-		//double b[N];     destBuffers.push_back(SourceDestBuffer(imf, "colorBlue",  b, N, true));
-		double intens[N];     destBuffers.push_back(SourceDestBuffer(imf, "intensity", intens, N, true));
-
-		/// Create a reader of the points CompressedVector, try to read first block of N points
-		/// Each call to reader.read() will fill the xyz buffers until the points are exhausted.
-		CompressedVectorReader reader = points.reader(destBuffers);
-		//unsigned gotCount = reader.read();
-		//cout << "  got first " << gotCount << " points" << endl;
-
-		/// Print the coordinates we got
-		int cpt = 0;
-		while (int size = reader.read()) {/*
-			for (unsigned i = 0; i < size; i++)
-				cout << "  " << i << ". x=" << x[i] << " y=" << y[i] << " z=" << z[i] << endl;*/
-			cpt += size;
-		}
-		std::cout << cpt << std::endl;
-
-
-#else
-		/// Make a list of buffers to receive the xyz values.
-		
-		vector<SourceDestBuffer> destBuffers;
-		int64_t columnIndex[10];     destBuffers.push_back(SourceDestBuffer(imf, "columnIndex", columnIndex, 10, true));
-		double x[10]; destBuffers.push_back(SourceDestBuffer(imf, "cartesianX", x, 10, true));
-		double y[10]; destBuffers.push_back(SourceDestBuffer(imf, "cartesianY", y, 10, true));
-		double z[10]; destBuffers.push_back(SourceDestBuffer(imf, "cartesianZ", z, 10, true));
-
-		/// Create a reader of the points CompressedVector, try to read first block of 4 columnIndex
-		/// Each call to reader.read() will fill the xyz buffers until the points are exhausted.
-		CompressedVectorReader reader = points.reader(destBuffers);
-		unsigned gotCount = reader.read();
-		cout << "  got first " << gotCount << " points" << endl;
-		/// Print the coordinates we got
-		for (unsigned i = 0; i < gotCount; i++)
-			cout << "  " << i << ". columnIndex=" << columnIndex[i] << endl;
-#endif
-		reader.close();
-	}
-	else if (proto.isDefined("sphericalRange")) {
-		//??? not implemented yet
-	}
-	else
-		cout << "Error: couldn't find either Cartesian or spherical points in scan" << endl;
-}
+//
+//
+//void printSomePoints(ImageFile& imf, CompressedVectorNode& points)
+//{
+//	/// Need to figure out if has Cartesian or spherical coordinate system.
+//	/// Interrogate the CompressedVector's prototype of its records.
+//	StructureNode proto(points.prototype());
+//
+//	/// The prototype should have a field named either "cartesianX" or "sphericalRange".
+//	if (proto.isDefined("cartesianX") && proto.isDefined("cartesianY") && proto.isDefined("cartesianZ")) {
+//#if 1  //??? pick one?
+//		/// Make a list of buffers to receive the xyz values.
+//		const int N = 512;
+//		vector<SourceDestBuffer> destBuffers;
+//		double x[N];     destBuffers.push_back(SourceDestBuffer(*imf, "cartesianX", x, N, true));
+//		double y[N];     destBuffers.push_back(SourceDestBuffer(*imf, "cartesianY", y, N, true));
+//		double z[N];     destBuffers.push_back(SourceDestBuffer(*imf, "cartesianZ", z, N, true));
+//		//double r[N];     destBuffers.push_back(SourceDestBuffer(*imf, "colorRed", r, N, true));
+//		//double g[N];     destBuffers.push_back(SourceDestBuffer(*imf, "colorGreen", g, N, true));
+//		//double b[N];     destBuffers.push_back(SourceDestBuffer(*imf, "colorBlue",  b, N, true));
+//		double intens[N];     destBuffers.push_back(SourceDestBuffer(*imf, "intensity", intens, N, true));
+//
+//		/// Create a reader of the points CompressedVector, try to read first block of N points
+//		/// Each call to reader.read() will fill the xyz buffers until the points are exhausted.
+//		CompressedVectorReader reader = points.reader(destBuffers);
+//		//unsigned gotCount = reader.read();
+//		//cout << "  got first " << gotCount << " points" << endl;
+//
+//		/// Print the coordinates we got
+//		int cpt = 0;
+//		while (int size = reader.read()) {/*
+//			for (unsigned i = 0; i < size; i++)
+//				cout << "  " << i << ". x=" << x[i] << " y=" << y[i] << " z=" << z[i] << endl;*/
+//			cpt += size;
+//		}
+//		std::cout << cpt << std::endl;
+//
+//
+//#else
+//		/// Make a list of buffers to receive the xyz values.
+//		
+//		vector<SourceDestBuffer> destBuffers;
+//		int64_t columnIndex[10];     destBuffers.push_back(SourceDestBuffer(*imf, "columnIndex", columnIndex, 10, true));
+//		double x[10]; destBuffers.push_back(SourceDestBuffer(*imf, "cartesianX", x, 10, true));
+//		double y[10]; destBuffers.push_back(SourceDestBuffer(*imf, "cartesianY", y, 10, true));
+//		double z[10]; destBuffers.push_back(SourceDestBuffer(*imf, "cartesianZ", z, 10, true));
+//
+//		/// Create a reader of the points CompressedVector, try to read first block of 4 columnIndex
+//		/// Each call to reader.read() will fill the xyz buffers until the points are exhausted.
+//		CompressedVectorReader reader = points.reader(destBuffers);
+//		unsigned gotCount = reader.read();
+//		cout << "  got first " << gotCount << " points" << endl;
+//		/// Print the coordinates we got
+//		for (unsigned i = 0; i < gotCount; i++)
+//			cout << "  " << i << ". columnIndex=" << columnIndex[i] << endl;
+//#endif
+//		reader.close();
+//	}
+//	else if (proto.isDefined("sphericalRange")) {
+//		//??? not implemented yet
+//	}
+//	else
+//		cout << "Error: couldn't find either Cartesian or spherical points in scan" << endl;
+//}
