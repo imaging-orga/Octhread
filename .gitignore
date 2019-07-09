@@ -268,3 +268,4 @@ __pycache__/
 
 test/
 PointClouds/
+*.e57

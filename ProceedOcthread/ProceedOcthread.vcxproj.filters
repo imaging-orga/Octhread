@@ -22,15 +22,6 @@
     <Filter Include="OpenableFiles\Source Files">
       <UniqueIdentifier>{ce53cd59-ec40-4c12-bff4-d64849548854}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SavableFile">
-      <UniqueIdentifier>{5ed347b1-f316-4fc8-9561-d3ba9da704df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SavableFile\Header Files">
-      <UniqueIdentifier>{4a515763-6715-41aa-b7ef-e0c6b38fb478}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SavableFile\Source Files">
-      <UniqueIdentifier>{e3c2a0f5-4646-4b60-aaef-f187a9aee93f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -39,38 +30,23 @@
     <ClCompile Include="OpenableFile.cpp">
       <Filter>OpenableFiles\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="e57\E57SimpleImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="e57\E57Simple.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="e57\time_conversion.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="e57File.cpp">
       <Filter>OpenableFiles\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Proceed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SavableFiles.cpp">
-      <Filter>SavableFile\Source Files</Filter>
+    <ClCompile Include="..\Octhreade57\E57Simple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Octhreade57\E57SimpleImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Octhreade57\time_conversion.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="e57\E57Foundation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="e57\E57Simple.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="e57\E57SimpleImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="e57\time_conversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OpenableFile.h">
       <Filter>OpenableFiles\Header Files</Filter>
     </ClInclude>
@@ -80,8 +56,17 @@
     <ClInclude Include="Proceed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SavableFiles.h">
-      <Filter>SavableFile\Header Files</Filter>
+    <ClInclude Include="..\e57\E57Foundation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\e57\E57Simple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Octhreade57\E57SimpleImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Octhreade57\time_conversion.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
