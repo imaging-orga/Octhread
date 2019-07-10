@@ -77,7 +77,7 @@ POINT_CLOUD_REGISTER_POINT_STRUCT
 (float, y, y)
 (float, z, z)
 (float, intensity, intensity)
-//(uint32_t, rgba, rgba)
+(uint32_t, rgba, rgba)
 )
 
 class pt3d {

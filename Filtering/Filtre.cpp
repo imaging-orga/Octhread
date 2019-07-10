@@ -64,38 +64,38 @@ void FILTRE::statisticalRemoveOutliers(pcl::PointCloud<mypt3d>::Ptr pointcloud, 
 	}
 }
 
-void FILTRE::EstimateNormals(pcl::PointCloud<mypt3d>::Ptr cloud_in, pcl::PointCloud<pcl::Normal>::Ptr cloud_normals, float radius) {
-	//On va utiliser openMP pour aller plus vite quand même :)
-	pcl::NormalEstimationOMP<mypt3d, pcl::Normal> ne(0);
-	ne.setInputCloud(cloud_in);
-
-	pcl::search::KdTree<mypt3d>::Ptr tree(new pcl::search::KdTree<mypt3d>());
-	ne.setSearchMethod(tree);
-
-	ne.setRadiusSearch(radius);
-	ne.compute(*cloud_normals);
-	std::cout << "Normal estimated" << std::endl;
-}
+//void FILTRE::EstimateNormals(pcl::PointCloud<mypt3d>::Ptr cloud_in, pcl::PointCloud<pcl::Normal>::Ptr cloud_normals, float radius) {
+//	//On va utiliser openMP pour aller plus vite quand même :)
+//	pcl::NormalEstimation<mypt3d, pcl::Normal> ne(0);
+//	ne.setInputCloud(cloud_in);
+//
+//	pcl::search::KdTree<mypt3d>::Ptr tree(new pcl::search::KdTree<mypt3d>());
+//	ne.setSearchMethod(tree);
+//
+//	ne.setRadiusSearch(radius);
+//	ne.compute(*cloud_normals);
+//	std::cout << "Normal estimated" << std::endl;
+//}
 
 #include <pcl/common/common_headers.h>
 #include <pcl/features/normal_3d.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/console/parse.h>
-
-void FILTRE::removeOrthogonalNoise(pcl::PointCloud<mypt3d>::Ptr cloud_in, float radiusSearch, float tolerance) {
-	if (cloud_in->points.size() > 0) {
-		pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal>);
-		EstimateNormals(cloud_in, cloud_normals, radiusSearch);
-
-		pcl::ShadowPoints<mypt3d, pcl::Normal> shadowfilters(true);
-		//sets the source point cloud
-		shadowfilters.setInputCloud(cloud_in);
-		shadowfilters.setNormals(cloud_normals);
-		double shadowThreshold = tolerance;
-		shadowfilters.setThreshold(shadowThreshold);
-		shadowfilters.filter(*cloud_in);
-	}
-}
+//
+//void FILTRE::removeOrthogonalNoise(pcl::PointCloud<mypt3d>::Ptr cloud_in, float radiusSearch, float tolerance) {
+//	if (cloud_in->points.size() > 0) {
+//		pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal>);
+//		EstimateNormals(cloud_in, cloud_normals, radiusSearch);
+//
+//		pcl::ShadowPoints<mypt3d, pcl::Normal> shadowfilters(true);
+//		//sets the source point cloud
+//		shadowfilters.setInputCloud(cloud_in);
+//		shadowfilters.setNormals(cloud_normals);
+//		double shadowThreshold = tolerance;
+//		shadowfilters.setThreshold(shadowThreshold);
+//		shadowfilters.filter(*cloud_in);
+//	}
+//}
 //On utilise la distance au carré, pour gagner un peu de vitesse sur le filtre... C'est dérisoire mais c'est déjà ça. (ça ne modifie pas l'ordre de grandeur)
 //puisque le sqrt est une opération "longue"
 float squaredEuclidianDist(float x, float y, float z, mypt3d& pt) {

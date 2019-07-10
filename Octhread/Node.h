@@ -34,6 +34,8 @@ public:
 
 	void clean();
 
+	BoundingBox getBB();
+
 	std::vector<mypt3d> getPts();
 private:
 	long int m_numPoints;

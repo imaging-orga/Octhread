@@ -12,13 +12,13 @@ public:
 	~e57File() = default;
 
 	BoundingBox getBoundingBox();
-	void read();
+	void read(float distMax = 0) override;
 
 private :
 	E57_TYPE e_type;
-
 	void read_Unified();
-	
-	void read_NonUnified();
+	void read_NonUnified(float distMax);
+
+
 };
 

@@ -7,7 +7,7 @@ class OpenableFile
 public:
 	OpenableFile(std::string name);
 	virtual BoundingBox getBoundingBox() = 0;
-	virtual void read() = 0;
+	virtual void read(float distMax) = 0;
 
 
 protected : 

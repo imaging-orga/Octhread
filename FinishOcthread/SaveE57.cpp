@@ -24,9 +24,9 @@ int SaveE57::writeTe(e57::CompressedVectorWriter* writer, int size_writer, std::
 			cartesianX[i] = pts[count].x;
 			cartesianY[i] = pts[count].y;
 			cartesianZ[i] = pts[count].z;
-			red[i] = pts[count].r;
-			green[i] = pts[count].g;
-			blue[i] = pts[count].b;
+			red[i] = pts[count].r - '0';
+			green[i] = pts[count].g - '0';
+			blue[i] = pts[count].b - '0';
 			intensity[i] = pts[count].intensity;
 			cartesianInvalidState[i] = 0;
 			count++;

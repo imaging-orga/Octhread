@@ -142,12 +142,12 @@ BoundingBox e57File::getBoundingBox()
 }
 
 
-void e57File::read()
+void e57File::read(float distMax)
 {
 	if (e_type == UNIFIED)
 		return read_Unified();
 	else
-		return read_NonUnified();
+		return read_NonUnified(distMax);
 }
 
 void e57File::read_Unified()
@@ -333,7 +333,7 @@ void e57File::read_Unified()
 
 			if (bColor) {                     //Normalize color to 0 - 255
 				int red = (int)(((redData[i] - colorRedOffset) * 255) / colorRedRange);
-				int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorBlueRange);
+				int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorGreenRange);
 				int blue = (int)(((blueData[i] - colorBlueOffset) * 255) / colorBlueRange);
 				pt.r = red;
 				pt.g = green;
@@ -341,12 +341,10 @@ void e57File::read_Unified()
 			}
 			else {
 				pt.r = pt.intensity * 255;
-				pt.r = pt.intensity * 255;
-				pt.r = pt.intensity * 255;
+				pt.g = pt.intensity * 255;
+				pt.b = pt.intensity * 255;
 			}
-			pt.rgba = 0;
-			pt.rgb = 0;
-			//pts.push_back(pt);
+
 			pts[i] = pt;
 			count++;
 		}
@@ -358,8 +356,17 @@ void e57File::read_Unified()
 
 }
 
+//Renvoie la distance au carré, pour eviter de faire la racine carrée qui est une opération plutôt longue
+inline float distance2pts(const mypt3d& pt1, const mypt3d& pt2)  {
+	float D_x = pt2.x - pt1.x;
+	float D_y = pt2.y - pt1.y;
+	float D_z = pt2.z - pt1.z;
 
-void e57File::read_NonUnified()
+	return D_x * D_x + D_y * D_y + D_z * D_z;
+}
+
+
+void e57File::read_NonUnified(float distMax)
 {
 	e57::Reader eReader(p_name);
 	e57::E57Root rootHeader;
@@ -368,6 +375,7 @@ void e57File::read_NonUnified()
 	std::string coordinateMetaData = rootHeader.coordinateMetadata;
 	int numberOfScan = eReader.GetData3DCount();
 	int64_t numberOfPoints = 0;
+	float squaredDist = distMax * distMax;
 	for (int numScan = 0; numScan < numberOfScan; ++numScan) {
 		e57::Data3D scanHeader;
 		eReader.ReadData3D(numScan, scanHeader);
@@ -523,50 +531,103 @@ void e57File::read_NonUnified()
 		size_t col = 0;
 		size_t  row = 0;
 		int64_t count = 0;
+		mypt3d center(xTrans, yTrans, zTrans, 0, 0, 0, 0);
+		//Faire la distinction avec une demande de filtre sur la distance ou non.
+		if (distMax != 0.) {
+			while (size = dataReader.read()) {
+				std::vector<mypt3d> pts;
+				for (int64_t i = 0; i < size; ++i) {
+					if (columnIndex.data())
+						col = columnIndex[i];
+					else
+						col = 0;        //point cloud case
 
-		while (size = dataReader.read()) {
-			std::vector<mypt3d> pts;
-			for (int64_t i = 0; i < size; ++i) {
-				if (columnIndex.data())
-					col = columnIndex[i];
-				else
-					col = 0;        //point cloud case
+					if (rowIndex.data())
+						row = rowIndex[i];
+					else
+						row = count;    //point cloud case
 
-				if (rowIndex.data())
-					row = rowIndex[i];
-				else
-					row = count;    //point cloud case
+					mypt3d pt;
+					pt.x = xData[i] * r00 + yData[i] * r10 + zData[i] * r20 + xTrans;
+					pt.y = xData[i] * r01 + yData[i] * r11 + zData[i] * r21 + yTrans;
+					pt.z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
+					if (distance2pts(center, pt) > squaredDist)// si la distance est plus grande
+						continue;
 
-				mypt3d pt;
-				pt.x = xData[i] * r00 + yData[i] * r10 + zData[i] * r20 + xTrans;
-				pt.y = xData[i] * r01 + yData[i] * r11 + zData[i] * r21 + yTrans;
-				pt.z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
-				if (bIntens) {         //Normalize intensity to 0 - 1.
-					double intensity = (intData[i] - intOffset) / intRange;
-					pt.intensity = intensity;
-				}
-				else {
-					pt.intensity = 0.5;
+					if (bIntens) {         //Normalize intensity to 0 - 1.
+						double intensity = (intData[i] - intOffset) / intRange;
+						pt.intensity = intensity;
+					}
+					else {
+						pt.intensity = 0.5;
+					}
+
+					if (bColor) {                     //Normalize color to 0 - 255
+						int red = (int)(((redData[i] - colorRedOffset) * 255) / colorRedRange);
+						int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorGreenRange);
+						int blue = (int)(((blueData[i] - colorBlueOffset) * 255) / colorBlueRange);
+						pt.r = red;
+						pt.g = green;
+						pt.b = blue;
+					}
+					else {
+						pt.r = pt.intensity * 255;
+						pt.g = pt.intensity * 255;
+						pt.b = pt.intensity * 255;
+					}
+					pts.push_back(pt);
+					count++;
 				}
 
-				if (bColor) {                     //Normalize color to 0 - 255
-					int red = (int)(((redData[i] - colorRedOffset) * 255) / colorRedRange);
-					int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorBlueRange);
-					int blue = (int)(((blueData[i] - colorBlueOffset) * 255) / colorBlueRange);
-					pt.r = red;
-					pt.g = green;
-					pt.b = blue;
-				}
-				else {
-					pt.r = pt.intensity * 255;
-					pt.r = pt.intensity * 255;
-					pt.r = pt.intensity * 255;
-				}
-				pts.push_back(pt);
-				count++;
+				p_oct.addPoint(pts);
 			}
+		}
+		else { //Distmax = 0 donc on s'occupe pas de la distance du tout. Pas besoin de rajouter un if supplémentaire
+			while (size = dataReader.read()) {
+				std::vector<mypt3d> pts;
+				for (int64_t i = 0; i < size; ++i) {
+					if (columnIndex.data())
+						col = columnIndex[i];
+					else
+						col = 0;        //point cloud case
 
-			p_oct.addPoint(pts);
+					if (rowIndex.data())
+						row = rowIndex[i];
+					else
+						row = count;    //point cloud case
+
+					mypt3d pt;
+					pt.x = xData[i] * r00 + yData[i] * r10 + zData[i] * r20 + xTrans;
+					pt.y = xData[i] * r01 + yData[i] * r11 + zData[i] * r21 + yTrans;
+					pt.z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
+
+					if (bIntens) {         //Normalize intensity to 0 - 1.
+						double intensity = (intData[i] - intOffset) / intRange;
+						pt.intensity = intensity;
+					}
+					else {
+						pt.intensity = 0.5;
+					}
+
+					if (bColor) {                     //Normalize color to 0 - 255
+						int red = (int)(((redData[i] - colorRedOffset) * 255) / colorRedRange);
+						int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorGreenRange);
+						int blue = (int)(((blueData[i] - colorBlueOffset) * 255) / colorBlueRange);
+						pt.r = red;
+						pt.g = green;
+						pt.b = blue;
+					}
+					else {
+						pt.r = pt.intensity * 255;
+						pt.g = pt.intensity * 255;
+						pt.b = pt.intensity * 255;
+					}
+					pts.push_back(pt);
+					count++;
+				}
+
+				p_oct.addPoint(pts);
+			}
 		}
 	}
 	p_oct.save();
