@@ -333,7 +333,7 @@ void e57File::read_Unified()
 
 			if (bColor) {                     //Normalize color to 0 - 255
 				int red = (int)(((redData[i] - colorRedOffset) * 255) / colorRedRange);
-				int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorBlueRange);
+				int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorGreenRange);
 				int blue = (int)(((blueData[i] - colorBlueOffset) * 255) / colorBlueRange);
 				pt.r = red;
 				pt.g = green;
@@ -341,12 +341,9 @@ void e57File::read_Unified()
 			}
 			else {
 				pt.r = pt.intensity * 255;
-				pt.r = pt.intensity * 255;
-				pt.r = pt.intensity * 255;
+				pt.g = pt.intensity * 255;
+				pt.b = pt.intensity * 255;
 			}
-			pt.rgba = 0;
-			pt.rgb = 0;
-			//pts.push_back(pt);
 			pts[i] = pt;
 			count++;
 		}
@@ -551,7 +548,7 @@ void e57File::read_NonUnified()
 
 				if (bColor) {                     //Normalize color to 0 - 255
 					int red = (int)(((redData[i] - colorRedOffset) * 255) / colorRedRange);
-					int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorBlueRange);
+					int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorGreenRange);
 					int blue = (int)(((blueData[i] - colorBlueOffset) * 255) / colorBlueRange);
 					pt.r = red;
 					pt.g = green;
@@ -559,8 +556,8 @@ void e57File::read_NonUnified()
 				}
 				else {
 					pt.r = pt.intensity * 255;
-					pt.r = pt.intensity * 255;
-					pt.r = pt.intensity * 255;
+					pt.g = pt.intensity * 255;
+					pt.b = pt.intensity * 255;
 				}
 				pts.push_back(pt);
 				count++;

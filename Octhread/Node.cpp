@@ -136,17 +136,21 @@ void Node::save(std::string dirname, std::string filename)
 	
 	std::string prev_name = m_name;
 	std::string new_name = prev_name.erase(0, dirname.size() + 1 /*on enleves le "\" aussi*/);
-
+	BoundingBox bb = getBB();
 	if (m_isLeaf) {
 
 		std::ofstream file(filename, std::ios::out | std::ios::app);
-
-		file << new_name << " " << m_numPoints << "\n";
+		
+		file << new_name << " " << m_numPoints << " " 
+			<< bb.min.x << " " << bb.min.y << " " << bb.min.z << " "
+			<< bb.max.x << " " << bb.max.y << " " << bb.max.z << "\n";
 		file.close();
 	}
 	else {
 		std::ofstream file(filename, std::ios::out | std::ios::app);
-		file << new_name << " " << 0 << "\n";
+		file << new_name << " " << 0 << " "
+			<< bb.min.x << " " << bb.min.y << " " << bb.min.z << " "
+			<< bb.max.x << " " << bb.max.y << " " << bb.max.z << "\n";
 		file.close();
 		for (auto& child : m_children) {
 			child.save(dirname, filename);
@@ -165,6 +169,15 @@ void Node::clean()
 			m_children[i].clean();
 		}
 	}
+}
+
+BoundingBox Node::getBB()
+{
+
+	pt3d min, max;
+	min = m_center - m_halfDimension;
+	max = m_center + m_halfDimension;
+	return BoundingBox(min, max);
 }
 
 std::vector<mypt3d> Node::getPts()
