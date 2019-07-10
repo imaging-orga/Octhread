@@ -20,23 +20,7 @@ void Node::Destroy() {
 	remove(m_name.c_str());
 }
 void Node::addPoint(std::vector<mypt3d>& pts ){
-	//if (!m_isLeaf) {
-	//	dividePoints(pts);
-	//}
-	//else{ //leaf
-	//	m_file.writeToFile(pts);
-	//	m_numPoints += pts.size();
 
-
-	//	if (m_numPoints >= maxPointsPerNode) {
-	//		std::vector<mypt3d> ptFromFile = m_file.readFromFile(m_numPoints);
-	//		Destroy();
-	//		createChildren();
-	//		dividePoints(ptFromFile);
-	//	}
-	//}
-	//Tester  le fait de pas écrire si on va dépasser le nombre
-	
 	if (m_isLeaf){
 		if (m_numPoints + pts.size() >= maxPointsPerNode){
 			createChildren();

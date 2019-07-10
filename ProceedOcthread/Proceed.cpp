@@ -55,7 +55,6 @@ namespace FileOct {
 			dataFile.open(newName, std::ios::in | std::ios::binary);
 			dataFile.read(reinterpret_cast<char*>(&ptsRet[0]), numPoints * sizeof(mypt3d));
 			dataFile.close();
-		
 		}
 		return ptsRet;
 	}

@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
 
 	OpenableFile* file = new e57File(name2, 1024 * 1024 * 16);
-	file->read();
+	file->read(0.);
 
 	std::string name = "01";
 	std::ifstream dataFile;

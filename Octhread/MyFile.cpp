@@ -19,10 +19,8 @@ void MyFile::createFile()
 	createFile.close();
 }
 
-#define debug 0
 std::vector<mypt3d> MyFile::readFromFile(int numPoints)
 {
-#if !debug
 	std::ifstream dataFile;
 	std::vector<mypt3d> ptsRet;
 
@@ -30,27 +28,9 @@ std::vector<mypt3d> MyFile::readFromFile(int numPoints)
 	ptsRet.resize(numPoints);
 
 	dataFile.read(reinterpret_cast<char*>(&ptsRet[0]), numPoints * sizeof(mypt3d));
-
 	dataFile.close();
 	return ptsRet;
-#else
 
-	std::ifstream datafile;
-	std::vector<mypt3d> ptsret;
-	datafile.open(m_filename, std::ios::in);
-	
-	std::string line;
-	while (std::getline(datafile, line)) {
-		std::istringstream ss(line);
-		float x, y, z, i;
-		int r, g, b;
-		ss >> x >> y >> z >> i >> r >> g >> b;
-		ptsret.push_back(std::make_unique<mypt3d>(x,y,z,i,r,g,b));
-	}
-
-	datafile.close();
-	return ptsret;
-#endif
 }
 
 
