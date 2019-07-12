@@ -211,7 +211,7 @@ void e57File::read_Unified()
 		zData.resize(sizeChunks);
 
 
-	bool bIntens;
+	bool bIntens = false;
 	std::vector<double>intData;
 	double intRange = 0;
 	double intOffset = 0;
@@ -222,7 +222,7 @@ void e57File::read_Unified()
 		intOffset = scanHeader.intensityLimits.intensityMinimum;
 	}
 
-	bool bColor;
+	bool bColor = false;
 	std::vector<uint16_t> redData, greenData, blueData;
 	double colorRedRange = 1;
 	double colorRedOffset = 0;
@@ -324,7 +324,11 @@ void e57File::read_Unified()
 			pt.y = xData[i] * r01 + yData[i] * r11 + zData[i] * r21 + yTrans;
 			pt.z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
 			if (bIntens) {         //Normalize intensity to 0 - 1.
-				double intensity = (intData[i] - intOffset) / intRange;
+				double intensity;
+				if (intRange != 0)
+					intensity = (intData[i] - intOffset) / intRange;
+				else
+					intensity = intData[i];
 				pt.intensity = intensity;
 			}
 			else {
@@ -434,7 +438,7 @@ void e57File::read_NonUnified(float distMax)
 			zData.resize(sizeChunks);
 
 
-		bool bIntens;
+		bool bIntens = false;
 		std::vector<double>intData;
 		double intRange = 0;
 		double intOffset = 0;
@@ -445,7 +449,7 @@ void e57File::read_NonUnified(float distMax)
 			intOffset = scanHeader.intensityLimits.intensityMinimum;
 		}
 
-		bool bColor;
+		bool bColor = false;
 		std::vector<uint16_t> redData, greenData, blueData;
 		double colorRedRange = 1;
 		double colorRedOffset = 0;
@@ -555,7 +559,11 @@ void e57File::read_NonUnified(float distMax)
 						continue;
 
 					if (bIntens) {         //Normalize intensity to 0 - 1.
-						double intensity = (intData[i] - intOffset) / intRange;
+						double intensity;
+						if (intRange != 0)
+							intensity = (intData[i] - intOffset) / intRange;
+						else
+							intensity = intData[i];
 						pt.intensity = intensity;
 					}
 					else {

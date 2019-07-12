@@ -38,6 +38,33 @@ void Filtering::filterParticularFile(std::string _filename) {
 	FILTRE::statisticalRemoveOutliers(m_actualPTS, 20, 1);
 	addPoints();
 }
+
+void Filtering::filterParticularFile(std::string _filename, PARAMS::filter_params & params){
+	std::vector<mypt3d> pts = FileOct::getPtsFromFile(m_folderName, _filename);
+	
+	convert(pts);
+
+	if (pts.size() > 1024) {
+		if (params.do_downSample) {
+			float size = params.downSample_size;
+			FILTRE::downSample(m_actualPTS, size, size, size, true);
+		}
+
+		if (params.do_removeOutliers) {
+			float devMultThresh = params.removeOutliers_devMultThresh;
+			int meanK = params.removeOutliers_meanK;
+			FILTRE::statisticalRemoveOutliers(m_actualPTS, meanK, devMultThresh);
+		}
+
+		if (params.do_correctionGamma) {
+			FILTRE::correctionGamma(m_actualPTS, 0.2, 0.8); //Nombres magiques, mais c'est ce qui est le mieux de ce qu'on a vu pour le moment
+		}
+
+		clean();
+	}
+	addPoints();
+}
+
 void Filtering::addPoints() {
 	std::vector<mypt3d> ptsToWrite = convertBack();
 	save->write(ptsToWrite);
@@ -51,9 +78,23 @@ void Filtering::filter()
 	for (auto& file : fileNon0files) {
 		filterParticularFile(file);
 	}
-	
 }
 
-Filtering::~Filtering()
-{
+void Filtering::clean() {
+	m_actualPTS->points.erase(
+		std::remove_if(m_actualPTS->points.begin(), m_actualPTS->points.end(),
+			[](const mypt3d& pt) {return pt.x == 0.0 && pt.y == 0.0 && pt.z == 0.0; }),
+		m_actualPTS->points.end()
+	);
 }
+
+void Filtering::filter(PARAMS::filter_params & params)
+{
+	std::vector<std::string> fileNon0files = FileOct::nameOfNon0files(m_folderName);
+	int num = fileNon0files.size() - 1;
+	for (auto& file : fileNon0files) {
+		filterParticularFile(file, params);
+		std::cout << "Fichier " << file << " fini... " << num-- << " restant\n"  ;
+	}
+}
+

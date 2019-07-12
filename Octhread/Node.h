@@ -30,8 +30,10 @@ public:
 	//Search for the node named "name"
 	Node* getNode(std::string name);
 
+	//Save in ".OcSave" file the current node
 	void save(std::string dirname, std::string filename);
 
+	//Clean everything about a node
 	void clean();
 
 	BoundingBox getBB();

@@ -5,36 +5,23 @@
 #include "../Octhread/base.hpp"
 #include "../ProceedOcthread/e57File.h"
 #include "Filtering.h"
-int findNumOfFile(std::string _name) {
-	std::string f = "essai//.OcSave";
-	std::ifstream file(f, std::ios::in);
-	std::string line;
-	int num = -1;
-	while (std::getline(file, line)) {
-		std::istringstream ss(line);
-		std::string filename;
-		ss >> filename;
-		if (filename == _name) {
-			ss >> num;
-		}
-
-	}
-	return num;
-}
+#include "FiltersParam.hpp"
 
 int main(int argc, char* argv[]) {
 	//Lire un fichier et le transformé en 1 fichier Octree (Proceed Octree)
 
-	//std::string name = "../PointClouds/essai.e57";
-	//OpenableFile* file = new e57File(name, 1024 * 1024 * 16);
-	//file->read(0);
+
+	PARAMS::filter_params par(false, 0, 0, true, 0.01, true, 20, 3);
+	std::string name = "../PointClouds/Bains_TS.e57";
+	OpenableFile* file = new e57File(name, 1024 * 1024 * 64);
+	file->read(0);
+	std::cout << "Fin De la création de l'arbre" << std::endl;
 	//Créer un Filtering (Filtering)
 
-	Filtering filter("essai", "essai-f.e57");
+	Filtering filter("Bains_TS", "Bains_TS-f.e57");
 	//filter.filterParticularFile("01");
 	//Qui va filtrer puis sauvegarder le fichier (FinishOcthread)
-	filter.filter();
-
+	filter.filter(par);
 	filter.finish();
 
 }

@@ -6,6 +6,3 @@ SavableFile::SavableFile(std::string _name, long int _numMax, BoundingBox& _bb) 
 }
 
 
-SavableFile::~SavableFile()
-{
-}

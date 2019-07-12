@@ -33,7 +33,10 @@
 #include <pcl/filters/impl/conditional_removal.hpp>
 #include <pcl/filters/impl/shadowpoints.hpp>
 #include <pcl/visualization/impl/pcl_visualizer.hpp>
-//Point personnalisé, qui contient l'info de la couleur et de l'intensité, en plus de la position :)
+/*!
+ * \brief Point personnalisé, qui contient l'info de la couleur et de l'intensité, en plus de la position :)
+ * 
+ */
 struct _MyPoint {
 	PCL_ADD_POINT4D;
 	PCL_ADD_RGB;
@@ -80,6 +83,9 @@ POINT_CLOUD_REGISTER_POINT_STRUCT
 (uint32_t, rgba, rgba)
 )
 
+/*!
+ * \brief contient juste les X,Y,Z
+ */
 class pt3d {
 public:
 	float x, y, z;
@@ -124,17 +130,10 @@ public:
 
 };
 
-//class mypt3d {
-//public:
-//	float x, y, z;
-//	float intens;
-//	int r, g, b;
-//	
-//	mypt3d(float x_ = 0.f, float y_ = 0.f, float z_ = 0.f, float intens_ = 0.f, int r_ = 0, int g_ = 0, int b_ = 0)
-//		: x(x_), y(y_), z(z_), intens(intens_), r(r_), g(g_), b(b_)
-//	{}
-//};
-
+/*!
+ * Class BoundingBox
+ * \brief BoundingBox d'un nuage de points
+ */
 
 class BoundingBox {
 public:
