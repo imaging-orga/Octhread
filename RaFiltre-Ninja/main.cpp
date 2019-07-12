@@ -6,6 +6,7 @@
 #include "NinjaTurtle.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
+#include "../ProceedOcthread/OpenFactor.hpp"
 using namespace boost;
 namespace po = boost::program_options;
 
@@ -77,6 +78,8 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		bool value = vm["correctionGamma"].as<bool>();
 		retParam.do_correctionGamma = value;
 	}
+
+	return retParam;
 }
 
 
@@ -85,7 +88,7 @@ int main(int argc, char* argv[]) {
 	//Necessite d'écrire les paramètres quand on call le programme
 	PARAMS::filter_params par = getParameters(argc, argv);
 	if (par.do_tree) {
-		OpenableFile* file = new e57File(par.nameIn, 1024 * 1024 * 128);
+		OpenableFile* file = OpenFactor::get(par.nameIn, 1024 * 1024 * 128);
 		if (par.do_distance)
 			file->read(par.distance_max);
 		else

@@ -68,5 +68,8 @@
     <ClInclude Include="..\Octhreade57\time_conversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OpenFactor.hpp">
+      <Filter>OpenableFiles\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

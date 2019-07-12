@@ -10,7 +10,7 @@
 class OpenableFile
 {
 public:
-	OpenableFile(std::string name);
+	OpenableFile(std::string name, long MAXPOINTSPERNODE);
 	/*!
 	 * \brief récuperer la BoundingBox du fichier
 	 */

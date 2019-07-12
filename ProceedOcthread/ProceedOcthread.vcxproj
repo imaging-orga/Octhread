@@ -148,6 +148,7 @@
     <ClInclude Include="..\Octhreade57\time_conversion.h" />
     <ClInclude Include="e57File.h" />
     <ClInclude Include="OpenableFile.h" />
+    <ClInclude Include="OpenFactor.hpp" />
     <ClInclude Include="Proceed.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

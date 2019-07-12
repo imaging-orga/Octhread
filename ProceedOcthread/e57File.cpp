@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 
-e57File::e57File(std::string filename_, long MAXPOINTSNUMPERNODE) : OpenableFile(filename_) {
+e57File::e57File(std::string filename_, long MAXPOINTSNUMPERNODE) : OpenableFile(filename_, MAXPOINTSNUMPERNODE) {
 	boost::filesystem::path p(filename_);
 	CreateDirectory(p.stem().string().c_str(), NULL);
 
