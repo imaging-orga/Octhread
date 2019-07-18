@@ -46,7 +46,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -139,6 +139,8 @@
     <ClCompile Include="e57File.cpp" />
     <ClCompile Include="OpenableFile.cpp" />
     <ClCompile Include="Proceed.cpp" />
+    <ClCompile Include="PTSfile.cpp" />
+    <ClCompile Include="PTXfile.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +152,8 @@
     <ClInclude Include="OpenableFile.h" />
     <ClInclude Include="OpenFactor.hpp" />
     <ClInclude Include="Proceed.h" />
+    <ClInclude Include="PTSfile.h" />
+    <ClInclude Include="PTXfile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

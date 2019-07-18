@@ -5,7 +5,8 @@
 #include <sstream>
 #include "OpenableFile.h"
 #include "e57File.h"
-
+#include "PTSfile.h"
+#include "OpenFactor.hpp"
 int findNumOfFile(std::string _name) {
 	std::string f = "essai//.OcSave";
 	std::ifstream file(f, std::ios::in);
@@ -27,10 +28,10 @@ int main(int argc, char* argv[]) {
 
 	
 
-	std::string name2 = "../PointClouds/essai.e57";
+	std::string name2 = "../FinishOcthread/test_000000.pts";
 
 
-	OpenableFile* file = new e57File(name2, 1024 * 1024 * 16);
+	OpenableFile* file = OpenFactor::get(name2, 1024 * 1024 * 16);
 	file->read(0.);
 
 	std::string name = "01";
@@ -53,6 +54,8 @@ int main(int argc, char* argv[]) {
 		}
 		fileRet.close();
 	}
+
+	delete file;
 	getchar();
 	return 0;
 }

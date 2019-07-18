@@ -14,5 +14,8 @@ public:
 	int writeFooter();
 	SavePTX() = delete;
 	~SavePTX();
+
+private:
+	long int m_numTotal;
 };
 

@@ -50,7 +50,7 @@ void Filtering::filterParticularFile(std::string _filename, PARAMS::filter_param
 			FILTRE::downSample(m_actualPTS, size, size, size, true);
 		}
 
-		if (params.do_removeOutliers) {
+		if (params.do_removeOutliers  && m_actualPTS->points.size() > 1024) {
 			float devMultThresh = params.removeOutliers_devMultThresh;
 			int meanK = params.removeOutliers_meanK;
 			FILTRE::statisticalRemoveOutliers(m_actualPTS, meanK, devMultThresh);

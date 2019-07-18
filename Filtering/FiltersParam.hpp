@@ -26,16 +26,16 @@ namespace PARAMS {
 		float distance_min, distance_max;
 		float downSample_size;
 		int removeOutliers_meanK; float removeOutliers_devMultThresh;
-
+		long tree_sizeLeaf;
 		filter_params(
 			bool _distance = false, float _distance_min = 0.0, float _distance_max = 0.0,
 			bool _downSample = false, float _downSample_size = 0.0,
 			bool _removeOutliers = false, int _removeOutliers_meanK = 20, float _removeOutliers_devMultThresh = 1.0,
-			bool _correctionGamma = true, bool _do_tree = true
+			bool _correctionGamma = false, bool _do_tree = false, long _tree_sizeLeaf = 1024 * 1024 * 64
 		) : do_distance(_distance), distance_min(_distance_min), distance_max(_distance_max),
 			do_downSample(_downSample), downSample_size(_downSample_size),
 			do_removeOutliers(_removeOutliers), removeOutliers_meanK(_removeOutliers_meanK), removeOutliers_devMultThresh(_removeOutliers_devMultThresh),
-			do_tree(_do_tree)
+			do_tree(_do_tree), tree_sizeLeaf(_tree_sizeLeaf)
 		{}
 
 		filter_params operator=(const filter_params& other) {  // A faire + rebuild
@@ -50,6 +50,7 @@ namespace PARAMS {
 			distance_min = other.distance_min; distance_max = other.distance_max;
 			downSample_size = other.downSample_size;
 			removeOutliers_meanK = other.removeOutliers_meanK; removeOutliers_devMultThresh = other.removeOutliers_devMultThresh;
+			tree_sizeLeaf = other.tree_sizeLeaf;
 		}
 	};
 }

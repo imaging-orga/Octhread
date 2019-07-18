@@ -23,7 +23,7 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		("downSample,DS", po::value<double>()->multitoken(), "downSample")
 		("removeOutliers,RO", po::value<std::vector<double>>()->multitoken(), "removeOutliers")
 		("correctionGamma, CG", po::value<bool>(), "correctionGamma")
-		("createTree, CT", po::value<bool>(), "createTree")
+		("createTree, CT", po::value<long>(), "createTree")
 		;
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -41,8 +41,9 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		retParam.nameOut = vm["nameOut"].as<std::string>();
 
 	if (vm.count("createTree")){
-		bool value = vm["createTree"].as<bool>();
-		retParam.do_tree = value;
+		long value = vm["createTree"].as<long>();
+		retParam.do_tree = true;
+		retParam.tree_sizeLeaf = value;
 	}
 	if (vm.count("distance")) {
 		if (vm["distance"].as<std::vector<double>>().size() != 2) {
@@ -88,7 +89,7 @@ int main(int argc, char* argv[]) {
 	//Necessite d'écrire les paramètres quand on call le programme
 	PARAMS::filter_params par = getParameters(argc, argv);
 	if (par.do_tree) {
-		OpenableFile* file = OpenFactor::get(par.nameIn, 1024 * 1024 * 128);
+		OpenableFile* file = OpenFactor::get(par.nameIn, par.tree_sizeLeaf);
 		if (par.do_distance)
 			file->read(par.distance_max);
 		else
