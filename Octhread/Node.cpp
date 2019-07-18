@@ -140,7 +140,6 @@ void Node::save(std::string dirname, std::string filename)
 			child.save(dirname, filename);
 		}
 	}
-	std::cout << m_name << std::endl;
 }
 
 void Node::clean()

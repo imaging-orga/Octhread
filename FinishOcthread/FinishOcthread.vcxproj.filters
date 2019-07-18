@@ -45,6 +45,9 @@
     <ClInclude Include="..\Octhreade57\time_conversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SavePTX.h">
+      <Filter>SavableFiles\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SavableFile.cpp">
@@ -64,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="..\Octhreade57\time_conversion.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SavePTX.cpp">
+      <Filter>SavableFiles\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

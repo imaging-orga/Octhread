@@ -32,5 +32,8 @@
     <ClInclude Include="Filtering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FiltersParam.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

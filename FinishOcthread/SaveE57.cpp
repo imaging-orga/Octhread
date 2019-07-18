@@ -24,16 +24,17 @@ int SaveE57::writeTe(e57::CompressedVectorWriter* writer, int size_writer, std::
 			cartesianX[i] = pts[count].x;
 			cartesianY[i] = pts[count].y;
 			cartesianZ[i] = pts[count].z;
-			red[i] = pts[count].r - '0';
-			green[i] = pts[count].g - '0';
-			blue[i] = pts[count].b - '0';
+			red[i] = pts[count].r/* - '0'*/;
+			green[i] = pts[count].g/* - '0'*/;
+			blue[i] = pts[count].b/* - '0'*/;
 			intensity[i] = pts[count].intensity;
 			cartesianInvalidState[i] = 0;
 			count++;
 			++i;
 		}
-		if (i != 0)
+		if (i != 0) {
 			writer->write(i);
+		}
 	}
 	return count;
 }
@@ -248,7 +249,8 @@ return 1;
 //write va écrire bloc par bloc dans le fichier
 int SaveE57::write(std::vector<mypt3d>& pts) 
 {
-	num_max += writeTe(writer, writerChunckSize, pts, datas.xData, datas.yData, datas.zData, datas.isInvalidData, datas.intData, datas.redData, datas.greenData, datas.blueData);
+	if (pts.size() > 150)
+		num_max += writeTe(writer, writerChunckSize, pts, datas.xData, datas.yData, datas.zData, datas.isInvalidData, datas.intData, datas.redData, datas.greenData, datas.blueData);
 	return 1;
 }
 
@@ -292,7 +294,7 @@ int SaveE57::writeFooter()
 	imf->close();
 	delete groups;
 	delete imf;
-	
+	delete writer;
 	return 1;
 }
 

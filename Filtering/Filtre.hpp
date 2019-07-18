@@ -15,19 +15,12 @@ namespace FILTRE {
 
 	//Statistical Remove Outliers (Voir sur PCL pour plus d'informations)
 	//A utiliser scan par scan, ou sur un groupement de scans
-	void statisticalRemoveOutliers(pcl::PointCloud<mypt3d>::Ptr pointcloud, float meanK, float devMulThresh);
+	void statisticalRemoveOutliers(pcl::PointCloud<mypt3d>::Ptr pointcloud, int meanK, float devMulThresh);
 
-	//Estimation des normales
-	//a utiliser scan par scan, ou sur un groupement de scans
-	void EstimateNormals(pcl::PointCloud<mypt3d>::Ptr cloud_in, pcl::PointCloud<pcl::Normal>::Ptr cloud_normals, float radius);
-
-
-	//Enlever le bruit constitué par la continuité d'un laser sur une surface réflchissante (apres un tuyau par exemple).
-	//A utiliser scan par scan, ou sur un groupement de scans
-	//Il va calculer le produit scalaire de la normal en un point, avec la direction du laser, et si le résultat est égale a 0 (les vecteurs sont perpendiculaires) c'est que le point est sur une arete, ou la continuité d'une arete et donc on le dégage.
-	void removeOrthogonalNoise(pcl::PointCloud<mypt3d>::Ptr cloud_in, float radiusNormals, float tolerance);
-
-	//Enlever les points qui sont en dessous ou au dessus d'un seuil de distance.
+	/*!
+	 * \brief Enlever les points qui sont en dessous ou au dessus d'un seuil de distance.
+	 * 
+	 */
 	void distanceFilter(pcl::PointCloud<mypt3d>::Ptr, float minDist, float maxDist, float Ox, float Oy, float Oz);
 
 	//Modifie l'intensité 
