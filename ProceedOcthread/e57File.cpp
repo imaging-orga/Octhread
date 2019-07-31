@@ -136,8 +136,23 @@ BoundingBox e57File::getBoundingBox()
 		}
 	}
 
-	ret.min = pt3d(xMinFinal, yMinFinal, zMinFinal);
-	ret.max = pt3d(xMaxFinal, yMaxFinal, zMaxFinal);
+	//Si les dimensions sont [-inf, inf] => Lire tous les points une fois pour connaître la taille de la boite englobante
+
+	if (xMinFinal < 10e-6 || yMinFinal < 10e-6 || zMinFinal < 10e-6
+		|| xMaxFinal > 10e6 || yMaxFinal > 10e6 || zMaxFinal > 10e6) {
+		std::pair<pt3d, pt3d> minMax = read_NonUnifiedForBoundingBox();
+		ret.min = minMax.first;
+		ret.max = minMax.second;
+
+	}
+	else {
+
+		ret.min = pt3d(xMinFinal, yMinFinal, zMinFinal);
+		ret.max = pt3d(xMaxFinal, yMaxFinal, zMaxFinal);
+	}
+
+	//std::pair<pt3d, pt3d> minMax = read_NonUnifiedForBoundingBox();
+
 	return ret;
 }
 
@@ -555,8 +570,10 @@ void e57File::read_NonUnified(float distMax)
 					pt.x = xData[i] * r00 + yData[i] * r10 + zData[i] * r20 + xTrans;
 					pt.y = xData[i] * r01 + yData[i] * r11 + zData[i] * r21 + yTrans;
 					pt.z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
-					if (distance2pts(center, pt) > squaredDist)// si la distance est plus grande
+					if (distance2pts(center, pt) > squaredDist) {// si la distance est plus grande
+
 						continue;
+					}
 
 					if (bIntens) {         //Normalize intensity to 0 - 1.
 						double intensity;
@@ -638,7 +655,152 @@ void e57File::read_NonUnified(float distMax)
 			}
 		}
 	}
+	eReader.Close();
 	p_oct.save();
 	p_oct.clean();
 
+}
+
+std::pair<pt3d, pt3d> e57File::read_NonUnifiedForBoundingBox() {
+	e57::Reader eReader(p_name);
+	e57::E57Root rootHeader;
+	eReader.GetE57Root(rootHeader);
+	std::string guid = rootHeader.guid;
+	std::string coordinateMetaData = rootHeader.coordinateMetadata;
+	int numberOfScan = eReader.GetData3DCount();
+	pt3d min(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+	pt3d max(std::numeric_limits<float>::min(), std::numeric_limits<float>::min(), std::numeric_limits<float>::min());
+	for (int numScan = 0; numScan < numberOfScan; ++numScan) {
+		e57::Data3D scanHeader;
+		eReader.ReadData3D(numScan, scanHeader);
+		int64_t sizeChunks = 1024 * 1024 * 128;
+
+		int64_t nColumn = 0;
+		int64_t nRow = 0;
+
+		int64_t nPoints = 0;        //Number of points
+
+		int64_t nGroupsSize = 0;        //Number of groups
+		int64_t nCountSize = 0;         //Number of points per group
+		bool    bColumnIndex = false; //indicates that idElementName is "columnIndex"
+
+		eReader.GetData3DSizes(numScan, nRow, nColumn, nPoints, nGroupsSize, nCountSize, bColumnIndex);
+
+		int64_t nSize = nRow;
+
+		if (nRow == 0 && nColumn == 0) {
+			nRow = nPoints;
+			nColumn = 1;
+
+			nGroupsSize = 1;
+			nGroupsSize = 1;
+			nCountSize = nPoints;
+			bColumnIndex = true;
+		}
+
+		double xTrans = scanHeader.pose.translation.x;
+		double yTrans = scanHeader.pose.translation.y;
+		double zTrans = scanHeader.pose.translation.z;
+
+		double wRot = scanHeader.pose.rotation.w;
+		double xRot = scanHeader.pose.rotation.x;
+		double yRot = scanHeader.pose.rotation.y;
+		double zRot = scanHeader.pose.rotation.z;
+
+		std::vector<double> xData, yData, zData;
+		if (scanHeader.pointFields.cartesianXField)
+			xData.resize(sizeChunks);
+
+		if (scanHeader.pointFields.cartesianYField)
+			yData.resize(sizeChunks);
+
+		if (scanHeader.pointFields.cartesianZField)
+			zData.resize(sizeChunks);
+
+
+		std::vector<int32_t> rowIndex;
+		std::vector<int32_t> columnIndex;
+		if (scanHeader.pointFields.rowIndexField)
+			rowIndex.resize(sizeChunks);
+		if (scanHeader.pointFields.columnIndexField)
+			columnIndex.resize(sizeChunks);
+		e57::CompressedVectorReader dataReader = eReader.SetUpData3DPointsData(
+			numScan,                      //!< data block index given by the NewData3D
+			sizeChunks,                           //!< size of each of the buffers given
+			xData.data(),                          //!< pointer to a buffer with the x data
+			yData.data(),                          //!< pointer to a buffer with the y data
+			zData.data(),                          //!< pointer to a buffer with the z data
+			NULL,          //!< pointer to a buffer with the valid indication
+			NULL,                        //!< pointer to a buffer with the lidar return intesity
+			NULL,
+			NULL,                        //!< pointer to a buffer with the color red data
+			NULL,                      //!< pointer to a buffer with the color green data
+			NULL,                       //!< pointer to a buffer with the color blue data
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			rowIndex.data(),                       //!< pointer to a buffer with the rowIndex
+			columnIndex.data()                     //!< pointer to a buffer with the columnIndex
+		);
+
+
+		double r00, r10, r20;
+		double r01, r11, r21;
+		double r02, r12, r22;
+		r00 = 1. - 2. * yRot * yRot - 2. * zRot * zRot;
+		r10 = 2. *  xRot * yRot - 2. * zRot *  wRot;
+		r20 = 2. *  xRot *  zRot + 2. *  yRot *  wRot;
+
+		r01 = 2. *  xRot * yRot + 2. *  zRot *  wRot;
+		r11 = 1. - 2. *  xRot *  xRot - 2. *  zRot *  zRot;
+		r21 = 2. *  yRot *  zRot - 2. *  xRot *  wRot;
+
+		r02 = 2. *  xRot *  zRot - 2. *  yRot *  wRot;
+		r12 = 2. *  yRot *  zRot + 2. *  xRot *  wRot;
+		r22 = 1. - 2. *  xRot *  xRot - 2. *  yRot *  yRot;
+
+
+		unsigned size = 0;
+		size_t col = 0;
+		size_t  row = 0;
+		int64_t count = 0;
+		mypt3d center(xTrans, yTrans, zTrans, 0, 0, 0, 0);
+		//Faire la distinction avec une demande de filtre sur la distance ou non.
+		while (size = dataReader.read()) {
+			std::vector<mypt3d> pts;
+			for (int64_t i = 0; i < size; ++i) {
+				if (columnIndex.data())
+					col = columnIndex[i];
+				else
+					col = 0;        //point cloud case
+
+				if (rowIndex.data())
+					row = rowIndex[i];
+				else
+					row = count;    //point cloud case
+
+				float x, y, z;
+				x = xData[i] * r00 + yData[i] * r10 + zData[i] * r20 + xTrans;
+				y = xData[i] * r01 + yData[i] * r11 + zData[i] * r21 + yTrans;
+				z = xData[i] * r02 + yData[i] * r12 + zData[i] * r22 + zTrans;
+
+				if (x < min.x)
+					min.x = x;
+				if (x > max.x)
+					max.x = x;
+				if (y < min.y)
+					min.y = y;
+				if (y > max.y)
+					max.y = y;
+				if (z < min.z)
+					min.z = z;
+				if (z > max.z)
+					max.z = z;
+			}
+		}
+	}
+	eReader.Close();
+	return std::pair<pt3d, pt3d>(min, max);
 }

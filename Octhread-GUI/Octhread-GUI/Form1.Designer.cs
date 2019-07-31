@@ -40,6 +40,9 @@
             this.ButtonOpenFile = new System.Windows.Forms.Button();
             this.TextBoxOpen = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
+            this.TextBoxTreeSize = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.ButtonHelpTree = new System.Windows.Forms.Button();
             this.LabelTree = new System.Windows.Forms.Label();
             this.CheckBoxTree = new System.Windows.Forms.CheckBox();
@@ -77,13 +80,12 @@
             this.ButtonReset = new System.Windows.Forms.Button();
             this.ButtonCancel = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.TextBoxTreeSize = new System.Windows.Forms.RichTextBox();
+            this.TextBoxWrite = new System.Windows.Forms.RichTextBox();
             this.GlobalLayout.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel12.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
@@ -92,7 +94,6 @@
             this.tableLayoutPanel10.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
-            this.tableLayoutPanel12.SuspendLayout();
             this.SuspendLayout();
             // 
             // GlobalLayout
@@ -109,6 +110,7 @@
             this.GlobalLayout.Controls.Add(this.tableLayoutPanel6, 0, 9);
             this.GlobalLayout.Controls.Add(this.tableLayoutPanel7, 0, 11);
             this.GlobalLayout.Controls.Add(this.tableLayoutPanel8, 0, 13);
+            this.GlobalLayout.Controls.Add(this.TextBoxWrite, 0, 12);
             this.GlobalLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GlobalLayout.Location = new System.Drawing.Point(0, 0);
             this.GlobalLayout.Name = "GlobalLayout";
@@ -245,6 +247,42 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(715, 44);
             this.tableLayoutPanel3.TabIndex = 2;
+            // 
+            // tableLayoutPanel12
+            // 
+            this.tableLayoutPanel12.ColumnCount = 2;
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel12.Controls.Add(this.TextBoxTreeSize, 0, 0);
+            this.tableLayoutPanel12.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(253, 3);
+            this.tableLayoutPanel12.Name = "tableLayoutPanel12";
+            this.tableLayoutPanel12.RowCount = 1;
+            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(409, 38);
+            this.tableLayoutPanel12.TabIndex = 5;
+            // 
+            // TextBoxTreeSize
+            // 
+            this.TextBoxTreeSize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextBoxTreeSize.Location = new System.Drawing.Point(253, 3);
+            this.TextBoxTreeSize.Name = "TextBoxTreeSize";
+            this.TextBoxTreeSize.Size = new System.Drawing.Size(153, 32);
+            this.TextBoxTreeSize.TabIndex = 4;
+            this.TextBoxTreeSize.Text = "";
+            this.TextBoxTreeSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.refuseLettersInt);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Name = "label1";
+            this.label1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label1.Size = new System.Drawing.Size(244, 20);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Nombre de points par fichier";
             // 
             // ButtonHelpTree
             // 
@@ -709,41 +747,16 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
-            // tableLayoutPanel12
+            // TextBoxWrite
             // 
-            this.tableLayoutPanel12.ColumnCount = 2;
-            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
-            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel12.Controls.Add(this.TextBoxTreeSize, 0, 0);
-            this.tableLayoutPanel12.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel12.Location = new System.Drawing.Point(253, 3);
-            this.tableLayoutPanel12.Name = "tableLayoutPanel12";
-            this.tableLayoutPanel12.RowCount = 1;
-            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(409, 38);
-            this.tableLayoutPanel12.TabIndex = 5;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
-            this.label1.Name = "label1";
-            this.label1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.label1.Size = new System.Drawing.Size(244, 20);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Nombre de points par fichier";
-            // 
-            // TextBoxTreeSize
-            // 
-            this.TextBoxTreeSize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TextBoxTreeSize.Location = new System.Drawing.Point(253, 3);
-            this.TextBoxTreeSize.Name = "TextBoxTreeSize";
-            this.TextBoxTreeSize.Size = new System.Drawing.Size(153, 32);
-            this.TextBoxTreeSize.TabIndex = 4;
-            this.TextBoxTreeSize.Text = "";
-            this.TextBoxTreeSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.refuseLettersInt);
+            this.TextBoxWrite.BackColor = System.Drawing.Color.DarkOrange;
+            this.TextBoxWrite.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.TextBoxWrite.Location = new System.Drawing.Point(4, 466);
+            this.TextBoxWrite.Name = "TextBoxWrite";
+            this.TextBoxWrite.ReadOnly = true;
+            this.TextBoxWrite.Size = new System.Drawing.Size(715, 55);
+            this.TextBoxWrite.TabIndex = 8;
+            this.TextBoxWrite.Text = "";
             // 
             // BackScreen
             // 
@@ -765,6 +778,8 @@
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel12.ResumeLayout(false);
+            this.tableLayoutPanel12.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
             this.tableLayoutPanel9.ResumeLayout(false);
@@ -780,8 +795,6 @@
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
             this.tableLayoutPanel8.ResumeLayout(false);
-            this.tableLayoutPanel12.ResumeLayout(false);
-            this.tableLayoutPanel12.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -839,6 +852,7 @@
         private System.Windows.Forms.RichTextBox TextBoxTreeSize;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.RichTextBox TextBoxWrite;
     }
 }
 

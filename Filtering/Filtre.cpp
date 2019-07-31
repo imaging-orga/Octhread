@@ -98,12 +98,11 @@ void FILTRE::distanceFilter(pcl::PointCloud<mypt3d>::Ptr cloud_in, float minDist
 
 }
 
-//[min,max] => [nMin, nMax]
+//[omin,omax] => [nMin, nMax]
 void FILTRE::correctionGamma(pcl::PointCloud<mypt3d>::Ptr pts, float nMin, float nMax)
 {
 	float oMin = 0;
 	float oMax = 1;
-
 
 	for (int i = 0; i < pts->points.size(); ++i) {
 		float oldValue = pts->points[i].intensity;

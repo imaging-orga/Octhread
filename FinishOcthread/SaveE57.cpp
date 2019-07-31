@@ -12,6 +12,13 @@ SaveE57::SaveE57(std::string _filename, long int _numMax, BoundingBox& bb) : Sav
 	writeHeader();
 }
 
+SaveE57::~SaveE57() {
+	imf->close();
+	delete groups;
+	delete imf;
+	delete writer;
+}
+
 int SaveE57::writeTe(e57::CompressedVectorWriter* writer, int size_writer, std::vector<mypt3d>& pts,
 	std::vector<double>& cartesianX, std::vector<double>& cartesianY, std::vector<double>& cartesianZ,
 	std::vector<double>& cartesianInvalidState,
@@ -290,14 +297,10 @@ int SaveE57::writeFooter()
 		writer.write(NG);
 		writer.close();
 	}
-
+/*
 	imf->close();
 	delete groups;
 	delete imf;
-	delete writer;
+	delete writer;*/
 	return 1;
-}
-
-SaveE57::~SaveE57()
-{
 }

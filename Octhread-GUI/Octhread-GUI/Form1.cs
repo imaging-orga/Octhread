@@ -23,7 +23,7 @@ namespace Octhread_GUI
             /*Tree*/
             CheckBoxTree.Checked = true;
             TextBoxTreeSize.ReadOnly = false;
-            TextBoxTreeSize.Text = "67108864";
+            TextBoxTreeSize.Text = "134217728";
             /*Distance*/
             CheckBoxDistance.Checked = false;
 
@@ -99,7 +99,7 @@ namespace Octhread_GUI
 
         private void ButtonHelpTree_Click(object sender, EventArgs e)
         {
-            string help = "Est-ce que l'arbre à déjà été construit? Si oui, décochez cette case. Sinon, cochez la.\n[nombre de points par fichier] correspond au nombre max de points qui sera contenu par fichier. Par défaut il est a 1024*1024*64 (environ des fichiers de 2Go)";
+            string help = "Est-ce que l'arbre à déjà été construit? Si oui, décochez cette case. Sinon, cochez la.\n[nombre de points par fichier] correspond au nombre max de points qui sera contenu par fichier. Par défaut il est a 1024*1024*128 (environ des fichiers de 4Go)";
             MessageBox.Show(help);
         }
 
@@ -132,7 +132,7 @@ namespace Octhread_GUI
         {
             if (CheckBoxTree.Checked)
             {
-                TextBoxTreeSize.Text = "67108864";
+                TextBoxTreeSize.Text = "134217728";
                 TextBoxTreeSize.ReadOnly = false;
                 TextBoxTreeSize.BackColor = Color.White;
             }
@@ -304,16 +304,17 @@ namespace Octhread_GUI
                 sizeDownSample = toDouble(TextBoxDownSampleSize.Text),
 
                 SODevMultThresh = toDouble(TextBoxSODevMultThresh.Text);
-                
+
             int
-                SOMeanK = toInt(TextBoxSOMeanK.Text);
+                SOMeanK = toInt(TextBoxSOMeanK.Text),
+                TreeSize = toInt(TextBoxTreeSize.Text);
 
 
 
             string CmdArgs = " --nameIn \"" + nameOpen + "\" --nameOut \"" + nameSave + "\"";
             if (do_Tree)
             {
-                CmdArgs += " --createTree true";
+                CmdArgs += " --createTree " + TreeSize;
             }
             if (do_Distance)
             {
@@ -338,7 +339,7 @@ namespace Octhread_GUI
             string CmdCall = "nepascliquer.exe";
             string cmdText = cmdPath + CmdCall + CmdArgs;
             ProcessStartInfo startInfo = new ProcessStartInfo();
-
+            TextBoxWrite.Text = CmdArgs;
             startInfo.FileName = CmdCall;
             startInfo.Arguments = CmdArgs;
             //MessageBox.Show(cmdText);
