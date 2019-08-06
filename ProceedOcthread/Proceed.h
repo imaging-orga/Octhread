@@ -32,7 +32,7 @@ namespace FileOct{
 	 * \brief Récupère le nombre de points total du fichier (l'addition de tous les petits fichiers)
 	 * \param _fileptsName le nom du dossier
 	 */
-	long int getMaxPoints(std::string _fileptsName);
+	unsigned long long int getMaxPoints(std::string _fileptsName);
 
 	/*!
 	 * \brief Récupèrela liste des fichiers qui ont un nombre de point supérieur à 0

@@ -30,7 +30,7 @@ class SaveE57 : public SavableFile
 {
 public:
 
-	SaveE57(std::string _filename, long int _numMax, BoundingBox& _bb);
+	SaveE57(std::string _filename, unsigned long long int _numMax, BoundingBox& _bb);
 
 
 	int write(std::vector<mypt3d>& pts) override;
@@ -40,32 +40,6 @@ public:
 
 
 private:
-
-	/*!
-	 *
-	 * \brief Ecrire dans le compressedVectorWriter ce qui va bien
-	 *
-	 * \param writer
-	 * \param size_writer
-	 * \param pts
-	 * \param cartesianX
-	 * \param cartesianY
-	 * \param cartesianZ
-	 * \param cartesianInvalidState
-	 * \param intensity
-	 * \param red
-	 * \param green
-	 * \param blue
-	 * \return
-	 */
-	int  writeTe(e57::CompressedVectorWriter* writer, int size_writer, std::vector<mypt3d>& pts,
-		std::vector<double>& cartesianX, std::vector<double>& cartesianY, std::vector<double>& cartesianZ,
-		std::vector<double>& cartesianInvalidState,
-		std::vector<double>& intensity,
-		std::vector<int>& red, std::vector<int>& green, std::vector<int>& blue);
-
-
-
 	/*!
 	 *  (ptr)ImageFile du e57 pour y avoir acces partout
 	 * \todo : RAII => utiliser weak_ptr
@@ -103,7 +77,7 @@ private:
 	/*!
 	 * Nombre max de points
 	 */
-	long int pointCount; 
+	unsigned long long int pointCount; 
 
 	/*!
 	 * Taille des buffers d'écriture
@@ -112,8 +86,7 @@ private:
 	long int writerChunckSize;
 
 	/*!
-	 * Nombre max de points?
-	 * \todo : je crois qu'il sert à rien parcequ'on ne l'utilise pas 
+	 * Nombre max de points
 	 */
 	long int num_max = 0;
 };

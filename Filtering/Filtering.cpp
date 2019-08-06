@@ -4,7 +4,7 @@
 Filtering::Filtering(std::string _foldername, std::string _savename) : m_folderName(_foldername), m_saveName(_savename), m_actualPTS(new pcl::PointCloud<mypt3d>)
 {
 	BoundingBox bb = FileOct::findBBFromFile("0", _foldername); //"0" is the root so we take global boundingbox
-	long int maxPoints = FileOct::getMaxPoints(_foldername);
+	unsigned long long int maxPoints = FileOct::getMaxPoints(_foldername);
 	save = SaveFactor::get(_savename, maxPoints, bb);
 	
 }

@@ -29,12 +29,13 @@ namespace GROUP {
 		boost::filesystem::path p(_dir_name);
 
 		std::string just_name = p.stem().string();
-		;
+		if (!boost::filesystem::exists(just_name))
+			boost::filesystem::create_directory(just_name);
 
 		std::vector<std::string> names = FileOct::nameOfNon0files(_dir_name);
 		std::vector<std::string> write_names;
 		for (std::string name : names) {
-			std::string tmp = just_name + "//" + name + "-f.xyz";
+			std::string tmp = just_name + "//" + name + "-f.pts";
 			write_names.push_back(tmp);
 		}
 

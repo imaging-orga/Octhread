@@ -24,7 +24,7 @@ void FILTRE::downSample(pcl::PointCloud<mypt3d>::Ptr pointcloud, float x, float 
 			sor.filter(*pointcloud);
 		}
 		else { //Si on doit diviser
-			// dans PCL, il faut que la taille d'une box soit tel que x*y*z (taille de la box) < 2^32 / 2 (signed)
+			// dans PCL, il faut que la taille d'une box soit tel que x*y*z (taille de la box) < 2^31 (signed)
 			double sizeOfLeaf = ((1290 * x) * 9.) / 10.; //90%
 			pcl::octree::OctreePointCloud<mypt3d> octree(sizeOfLeaf);
 			octree.setInputCloud(pointcloud);
@@ -46,7 +46,6 @@ void FILTRE::downSample(pcl::PointCloud<mypt3d>::Ptr pointcloud, float x, float 
 				}
 			}
 			*pointcloud = *filtered_cloud;
-
 		}
 	}
 }

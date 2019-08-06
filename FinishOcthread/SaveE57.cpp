@@ -1,50 +1,25 @@
 #include "SaveE57.h"
-
+#define E57_MAX_VERBOSE 1
 
 
 
 //On écrit dans un fichier auxiliaire avant de tout réécrire dans le fichier e57?
-SaveE57::SaveE57(std::string _filename, long int _numMax, BoundingBox& bb) : SavableFile(_filename, _numMax, bb), eWriter(_filename, "")
+SaveE57::SaveE57(std::string _filename, unsigned long long int _numMax, BoundingBox& bb) : SavableFile(_filename, _numMax, bb), eWriter(_filename, "")
 {
 	//Bien penser changer pointCount dans le loader
 	pointCount = _numMax/* = 1024 * 512*/;
-	writerChunckSize = std::min((long)1024*1024*8, _numMax / 3);
+	writerChunckSize = std::min((unsigned long long)1024*1024*8, _numMax / 3);
 	writeHeader();
 }
 
 SaveE57::~SaveE57() {
-	imf->close();
-	delete groups;
-	delete imf;
-	delete writer;
+	//imf->close();
+	//delete groups;
+	//delete imf;
+	//delete writer;
 }
 
-int SaveE57::writeTe(e57::CompressedVectorWriter* writer, int size_writer, std::vector<mypt3d>& pts,
-	std::vector<double>& cartesianX, std::vector<double>& cartesianY, std::vector<double>& cartesianZ,
-	std::vector<double>& cartesianInvalidState,
-	std::vector<double>& intensity,
-	std::vector<int>& red, std::vector<int>& green, std::vector<int>& blue) {
-	long int count = 0;
-	while (count < pts.size()) {
-		int i = 0;
-		while (i < size_writer && count < pts.size()) {
-			cartesianX[i] = pts[count].x;
-			cartesianY[i] = pts[count].y;
-			cartesianZ[i] = pts[count].z;
-			red[i] = pts[count].r/* - '0'*/;
-			green[i] = pts[count].g/* - '0'*/;
-			blue[i] = pts[count].b/* - '0'*/;
-			intensity[i] = pts[count].intensity;
-			cartesianInvalidState[i] = 0;
-			count++;
-			++i;
-		}
-		if (i != 0) {
-			writer->write(i);
-		}
-	}
-	return count;
-}
+
 int SaveE57::writeHeader() {
 		using namespace e57;
 
@@ -57,7 +32,8 @@ int SaveE57::writeHeader() {
 			/// Set per-file properties.
 			/// Path names: "/formatName", "/majorVersion", "/minorVersion", "/coordinateMetadata"
 			root.set("formatName", StringNode(*imf, "ASTM E57 3D Imaging Data File"));
-			root.set("guid", StringNode(*imf, "3F2504E0-4F89-11D3-9A0C-0305E82C3300"));
+			root.set("guid", StringNode(*imf, "3F2504E0-4F89-11D3-9A0C-0305E82C3310"));
+			//root.set("guid", StringNode(*imf, "3F2504E0-4F89-11D3-0305E82C3300"));
 
 			/// Get ASTM version number supported by library, so can write it into file
 			int astmMajor;
@@ -84,7 +60,8 @@ int SaveE57::writeHeader() {
 
 			/// Add guid to scan0.
 			/// Path name: "/data3D/0/guid".
-			const char* scanGuid0 = "3F2504E0-4F89-11D3-9A0C-0305E82C3301";
+			const char* scanGuid0 = "3F2504E0-4F89-11D3-9A0C-0305E82C3310";
+			//const char* scanGuid0 = "3F2504E0-4F89-11D3-0305E82C3301";
 			scan0.set("guid", StringNode(*imf, scanGuid0));
 
 
@@ -160,7 +137,7 @@ int SaveE57::writeHeader() {
 			/// Will define path names like:
 			///     "/data3D/0/pointGroupingSchemes/groupingByLine/groups/0/idElementValue"
 			StructureNode lineGroupProto = StructureNode(*imf);
-			lineGroupProto.set("idElementValue", IntegerNode(*imf, 0, 0, 4));
+			lineGroupProto.set("idElementValue", IntegerNode(*imf, 0, 0/*, 4*/));
 			lineGroupProto.set("startPointIndex", IntegerNode(*imf, 0, 0/*, 4 * pointCount*/));
 			lineGroupProto.set("pointCount", IntegerNode(*imf, 1, 0/*, pointCount * 2*/));
 
@@ -256,9 +233,40 @@ return 1;
 //write va écrire bloc par bloc dans le fichier
 int SaveE57::write(std::vector<mypt3d>& pts) 
 {
-	if (pts.size() > 150)
-		num_max += writeTe(writer, writerChunckSize, pts, datas.xData, datas.yData, datas.zData, datas.isInvalidData, datas.intData, datas.redData, datas.greenData, datas.blueData);
-	return 1;
+	try {
+
+		long int count = 0;
+		while (count < pts.size()) {
+			int i = 0;
+			while (i < writerChunckSize && count < pts.size()) {
+				datas.xData[i] = pts[count].x;
+				datas.yData[i] = pts[count].y;
+				datas.zData[i] = pts[count].z;
+				datas.redData[i] = pts[count].r/* - '0'*/;
+				datas.greenData[i] = pts[count].g/* - '0'*/;
+				datas.blueData[i] = pts[count].b/* - '0'*/;
+				datas.intData[i] = pts[count].intensity;
+				datas.isInvalidData[i] = 0;
+				count++;
+				++i;
+			}
+			if (i != 0) {
+				writer->write(i);
+			}
+		}
+		num_max += count;
+
+		return 1;
+	}
+	catch (e57::E57Exception& ex) {
+		ex.report(__FILE__, __LINE__, __FUNCTION__);
+	}
+	catch (std::exception& ex) {
+		cerr << "Got an std::exception, what=" << ex.what() << endl;
+	}
+	catch (...) {
+		cerr << "Got an unknown exception" << endl;
+	}
 }
 
 
@@ -267,40 +275,52 @@ int SaveE57::write(std::vector<mypt3d>& pts)
 
 int SaveE57::writeFooter()
 {
-	writer->close();
+	try {
+		writer->close();
 
-	const int NG = 1;
-	int32_t idElementValue[NG] = { 0 };
-	int32_t startPointIndex[NG] = { 0 };
-	int32_t pointCount[NG] = { num_max };
-	double  xMinimum[NG] = { 0.0 };
-	double  xMaximum[NG] = { 1000, };
-	double  yMinimum[NG] = { 0 };
-	double  yMaximum[NG] = { 1000 };
-	double  zMinimum[NG] = { 0 };
-	double  zMaximum[NG] = { 1000 };
+		const int NG = 1;
+		int32_t idElementValue[NG] = { 0 };
+		int32_t startPointIndex[NG] = { 0 };
+		int64_t pointCount[NG] = { num_max };
+		double  xMinimum[NG] = { 0 };
+		double  xMaximum[NG] = { 1000, };
+		double  yMinimum[NG] = { 0 };
+		double  yMaximum[NG] = { 2000 };
+		double  zMinimum[NG] = { 0 };
+		double  zMaximum[NG] = { 2000 };
 
-	vector<e57::SourceDestBuffer> groupSDBuffers;
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "idElementValue", idElementValue, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "startPointIndex", startPointIndex, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "pointCount", pointCount, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/xMinimum", xMinimum, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/xMaximum", xMaximum, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/yMinimum", yMinimum, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/yMaximum", yMaximum, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/zMinimum", zMinimum, NG, true));
-	groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/zMaximum", zMaximum, NG, true));
+		vector<e57::SourceDestBuffer> groupSDBuffers;
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "idElementValue", idElementValue, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "startPointIndex", startPointIndex, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "pointCount", pointCount, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/xMinimum", xMinimum, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/xMaximum", xMaximum, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/yMinimum", yMinimum, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/yMaximum", yMaximum, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/zMinimum", zMinimum, NG, true));
+		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "cartesianBounds/zMaximum", zMaximum, NG, true));
 
-	/// Write source buffers into CompressedVector
-	{
-		e57::CompressedVectorWriter writer = groups->writer(groupSDBuffers);
-		writer.write(NG);
-		writer.close();
+		/// Write source buffers into CompressedVector
+		{
+			e57::CompressedVectorWriter writer = groups->writer(groupSDBuffers);
+			writer.write(NG);
+			writer.close();
+		}
+		
+		imf->close();
+		delete groups;
+		delete imf;
+		delete writer;
+		return 1;
+		
 	}
-/*
-	imf->close();
-	delete groups;
-	delete imf;
-	delete writer;*/
-	return 1;
+	catch (e57::E57Exception& ex) {
+		ex.report(__FILE__, __LINE__, __FUNCTION__);
+	}
+	catch (std::exception& ex) {
+		cerr << "Got an std::exception, what=" << ex.what() << endl;
+	}
+	catch (...) {
+		cerr << "Got an unknown exception" << endl;
+	}
 }
