@@ -10,7 +10,6 @@
 using namespace boost;
 namespace po = boost::program_options;
 
-
 PARAMS::filter_params getParameters(int argc, char* argv[]) {
 
 	PARAMS::filter_params retParam;
@@ -20,7 +19,7 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		("nameIn,i", po::value<std::string>()->required(), "nameIn")
 		("nameOut,o", po::value<std::string>()->required(), "nameOut")
 		("distance,dist", po::value<std::vector<double>>()->multitoken(), "distance")
-		("downSample,DS", po::value<double>()->multitoken(), "downSample")
+		("downSample,DS", po::value<double>(), "downSample")
 		("removeOutliers,RO", po::value<std::vector<double>>()->multitoken(), "removeOutliers")
 		("correctionGamma, CG", po::value<bool>(), "correctionGamma")
 		("createTree, CT", po::value<long>(), "createTree")

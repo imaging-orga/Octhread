@@ -20,7 +20,7 @@ public:
 	 * \param _bb
 	 * \return 
 	 */
-	static SavableFile* get(std::string _filename, long int _numMax, BoundingBox& _bb) {
+	static SavableFile* get(std::string _filename, unsigned long long int _numMax, BoundingBox& _bb) {
 		std::string ext = boost::filesystem::extension(_filename);
 		std::string lower_ext = boost::to_lower_copy(ext);
 		//for (auto& c : ext)

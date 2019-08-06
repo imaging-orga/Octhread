@@ -16,7 +16,6 @@ namespace FileOct {
 			if (filename == _name) {
 				ss >> num;
 			}
-
 		}
 		return num;
 	}
@@ -59,16 +58,16 @@ namespace FileOct {
 		return ptsRet;
 	}
 
-	long int getMaxPoints(std::string _fileptsName)
+	unsigned long long int getMaxPoints(std::string _fileptsName)
 	{
 		std::string nameOcsave = _fileptsName + "/.OcSave";
 		std::ifstream file(nameOcsave, std::ios::in);
 		std::string line;
-		long int max = 0;
+		unsigned long long int max = 0;
 		while (std::getline(file, line)) {
 			std::istringstream ss(line);
 			std::string tmp;
-			unsigned num;
+			unsigned long long int num;
 			ss >> tmp >> num;
 			max += num;
 		}

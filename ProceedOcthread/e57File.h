@@ -33,6 +33,8 @@ private :
 	 */
 	void read_NonUnified(float distMax);
 
+	std::pair<pt3d, pt3d> read_NonUnifiedForBoundingBox();
+
 
 };
 

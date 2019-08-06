@@ -20,7 +20,37 @@ float getLeicaIntens(int value) {
 
 BoundingBox PTSfile::getBoundingBox()
 {
-	return BoundingBox();
+	//long int bufferSize = 1024 * 1024 * 128;
+	std::ifstream file(p_name, std::ios::in);
+	float minX = std::numeric_limits<float>::max(), minY = std::numeric_limits<float>::max(), minZ = std::numeric_limits<float>::max();
+	float maxX = std::numeric_limits<float>::min(), maxY = std::numeric_limits<float>::min(), maxZ = std::numeric_limits<float>::min();
+	std::string line;
+	std::getline(file, line);
+	long unsigned maxLine = std::atol(line.c_str());
+
+	for (int i = 0; i < maxLine; ++i) {
+		std::getline(file, line);
+		std::istringstream ss(line);
+		float tmpX, tmpY, tmpZ;
+		ss >> tmpX >> tmpY >> tmpZ;
+		if (tmpX < minX)
+			minX = tmpX;
+		if (tmpY < minY)
+			minY = tmpY;
+		if (tmpZ < minZ)
+			minZ = tmpZ;
+
+		if (tmpX > maxX)
+			maxX = tmpX;
+		if (tmpY > maxY)
+			maxY = tmpY;
+		if (tmpZ > maxZ)
+			maxZ = tmpZ;
+	}
+
+	file.close();
+	return BoundingBox(pt3d(minX, minY, minZ), pt3d(maxX, maxY, maxZ));
+	//lire le fichier en entier
 }
 
 void PTSfile::read(float distMax)
@@ -72,7 +102,8 @@ void PTSfile::read_(std::ifstream& file,float distMax, long number) {
 	std::vector<mypt3d> pts;
 	mypt3d zero(0, 0, 0, 0, 0, 0, 0);
 	long int size = std::min(number, maxPointsPerNode);
-	if (!intens && !color) { //Juste X,Y,Z
+	//X, Y, Z
+	if (!intens && !color) { 
 		mypt3d pt;
 		std::istringstream ssb(line);
 		ssb >> pt.x >> pt.y >> pt.z;
@@ -81,34 +112,6 @@ void PTSfile::read_(std::ifstream& file,float distMax, long number) {
 			pt.r = pt.b = pt.r = 128;
 			pts.push_back(pt);
 		}
-
-		//Mettre la taille du pts a size = min[number, MAXPOINTSPERNODE]
-		//On lit le premier et on regarde quel genre de fichier c'est. puis on l'ajoute.
-		// shouldContinue = true;
-		//while(shouldContinue){
-		// int cpt = 0;
-		// int j = 0;
-		//	for (; j < size && shouldContinue; ++j){
-		//      line >> pts[j]
-		//		if ((j + cpt * size) == size_total  - 1){
-		//			shouldContinue = false;
-		//			break;
-	    //		}
-		//	}
-		//	cpt++;
-		//  if (j != size)
-		//		pts.resize(j);
-		//	p_oct->addPoints(pts);
-		//	j = 0;
-		//}
-
-
-
-
-
-
-
-
 		for (int j = 1; j < number; ++j) {
 			std::getline(file, line);
 			ssb = std::istringstream(line);
@@ -120,7 +123,8 @@ void PTSfile::read_(std::ifstream& file,float distMax, long number) {
 			}
 		}
 	}
-	else if (intens && !color) { //X,Y,Z,I
+	//X,Y,Z,I
+	else if (intens && !color) { 
 		mypt3d pt;
 		std::istringstream ssb(line);
 		ssb >> pt.x >> pt.y >> pt.z >> pt.intensity;
@@ -140,7 +144,8 @@ void PTSfile::read_(std::ifstream& file,float distMax, long number) {
 			}
 		}
 	}
-	else { //X,Y,Z,I,R,G,B
+	//X,Y,Z,I,R,G,B
+	else { 
 		mypt3d pt;
 		std::istringstream ssb(line);
 		ssb >> pt.x >> pt.y >> pt.z >> pt.intensity >> pt.r >> pt.g >> pt.b;

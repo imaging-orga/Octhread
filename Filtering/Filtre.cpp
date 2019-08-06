@@ -24,7 +24,7 @@ void FILTRE::downSample(pcl::PointCloud<mypt3d>::Ptr pointcloud, float x, float 
 			sor.filter(*pointcloud);
 		}
 		else { //Si on doit diviser
-			// dans PCL, il faut que la taille d'une box soit tel que x*y*z (taille de la box) < 2^32 / 2 (signed)
+			// dans PCL, il faut que la taille d'une box soit tel que x*y*z (taille de la box) < 2^31 (signed)
 			double sizeOfLeaf = ((1290 * x) * 9.) / 10.; //90%
 			pcl::octree::OctreePointCloud<mypt3d> octree(sizeOfLeaf);
 			octree.setInputCloud(pointcloud);
@@ -46,7 +46,6 @@ void FILTRE::downSample(pcl::PointCloud<mypt3d>::Ptr pointcloud, float x, float 
 				}
 			}
 			*pointcloud = *filtered_cloud;
-
 		}
 	}
 }
@@ -98,12 +97,11 @@ void FILTRE::distanceFilter(pcl::PointCloud<mypt3d>::Ptr cloud_in, float minDist
 
 }
 
-//[min,max] => [nMin, nMax]
+//[omin,omax] => [nMin, nMax]
 void FILTRE::correctionGamma(pcl::PointCloud<mypt3d>::Ptr pts, float nMin, float nMax)
 {
 	float oMin = 0;
 	float oMax = 1;
-
 
 	for (int i = 0; i < pts->points.size(); ++i) {
 		float oldValue = pts->points[i].intensity;
