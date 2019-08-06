@@ -106,6 +106,5 @@ void FILTRE::correctionGamma(pcl::PointCloud<mypt3d>::Ptr pts, float nMin, float
 	for (int i = 0; i < pts->points.size(); ++i) {
 		float oldValue = pts->points[i].intensity;
 		pts->points[i].intensity = (((oldValue - oMin) * (nMax - nMin)) / (oMax - oMin)) + nMin;
-
 	}
 }
