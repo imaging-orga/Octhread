@@ -4,7 +4,7 @@
 
 
 //On écrit dans un fichier auxiliaire avant de tout réécrire dans le fichier e57?
-SaveE57::SaveE57(std::string _filename, unsigned long long int _numMax, BoundingBox& bb) : SavableFile(_filename, _numMax, bb), eWriter(_filename, "")
+SaveE57::SaveE57(std::string _filename, unsigned long long int _numMax, BoundingBox& _bb) : SavableFile(_filename, _numMax, _bb), eWriter(_filename, "")
 {
 	//Bien penser changer pointCount dans le loader
 	pointCount = _numMax/* = 1024 * 512*/;

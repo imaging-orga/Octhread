@@ -45,9 +45,6 @@
     <ClCompile Include="..\Octhreade57\time_conversion.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PTXfile.cpp">
-      <Filter>OpenableFiles\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PTSfile.cpp">
       <Filter>OpenableFiles\Source Files</Filter>
     </ClCompile>
@@ -75,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OpenFactor.hpp">
-      <Filter>OpenableFiles\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PTXfile.h">
       <Filter>OpenableFiles\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PTSfile.h">

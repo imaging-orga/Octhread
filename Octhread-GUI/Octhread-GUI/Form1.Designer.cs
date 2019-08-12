@@ -79,8 +79,8 @@
             this.ButtonApply = new System.Windows.Forms.Button();
             this.ButtonReset = new System.Windows.Forms.Button();
             this.ButtonCancel = new System.Windows.Forms.Button();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.TextBoxWrite = new System.Windows.Forms.RichTextBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.GlobalLayout.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -158,6 +158,7 @@
             this.TextBoxSave.Name = "TextBoxSave";
             this.TextBoxSave.Size = new System.Drawing.Size(509, 26);
             this.TextBoxSave.TabIndex = 3;
+            this.TextBoxSave.TextChanged += new System.EventHandler(this.TextBoxSave_TextChanged);
             // 
             // ButtonSaveFile
             // 
@@ -697,7 +698,7 @@
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 95.2381F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 4.761905F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 151F));
             this.tableLayoutPanel8.Controls.Add(this.ButtonApply, 4, 0);
             this.tableLayoutPanel8.Controls.Add(this.ButtonReset, 2, 0);
             this.tableLayoutPanel8.Controls.Add(this.ButtonCancel, 0, 0);
@@ -712,9 +713,9 @@
             // ButtonApply
             // 
             this.ButtonApply.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonApply.Location = new System.Drawing.Point(567, 3);
+            this.ButtonApply.Location = new System.Drawing.Point(566, 3);
             this.ButtonApply.Name = "ButtonApply";
-            this.ButtonApply.Size = new System.Drawing.Size(145, 38);
+            this.ButtonApply.Size = new System.Drawing.Size(146, 38);
             this.ButtonApply.TabIndex = 0;
             this.ButtonApply.Text = "Appliquer";
             this.ButtonApply.UseVisualStyleBackColor = true;
@@ -723,7 +724,7 @@
             // ButtonReset
             // 
             this.ButtonReset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ButtonReset.Location = new System.Drawing.Point(405, 3);
+            this.ButtonReset.Location = new System.Drawing.Point(404, 3);
             this.ButtonReset.Name = "ButtonReset";
             this.ButtonReset.Size = new System.Drawing.Size(144, 38);
             this.ButtonReset.TabIndex = 1;
@@ -742,11 +743,6 @@
             this.ButtonCancel.UseVisualStyleBackColor = true;
             this.ButtonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Text = "notifyIcon1";
-            this.notifyIcon1.Visible = true;
-            // 
             // TextBoxWrite
             // 
             this.TextBoxWrite.BackColor = System.Drawing.Color.DarkOrange;
@@ -757,6 +753,11 @@
             this.TextBoxWrite.Size = new System.Drawing.Size(715, 55);
             this.TextBoxWrite.TabIndex = 8;
             this.TextBoxWrite.Text = "";
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
             // 
             // BackScreen
             // 

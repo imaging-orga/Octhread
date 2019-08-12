@@ -3,7 +3,7 @@
 #include "SaveE57.h"
 #include "boost/filesystem.hpp"
 #include <boost/algorithm/string.hpp>
-#include "SavePTX.h"
+#include "SavePTS.h"
 /*!
  * Class SaveFactor
  * \brief Factory des Savables file. Récuperer l'extension du fichier, pour savoir ce qu'on va créer
@@ -28,9 +28,11 @@ public:
 		if (lower_ext == ".e57") {
 			return new SaveE57(_filename, _numMax, _bb);
 		}
-		if (lower_ext == ".ptx") {
-			return new SavePTX(_filename, _numMax, _bb);
+		if (lower_ext == ".pts") {
+			return new SavePTS(_filename, _numMax, _bb);
 		}
+		else
+			std::cout << "Je ne comprends le fichier de sortie\n";
 
 		return nullptr;
 	}

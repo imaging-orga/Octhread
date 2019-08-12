@@ -72,7 +72,7 @@ namespace Octhread_GUI
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "./";
-                openFileDialog.Filter = "ptx files|*.ptx|e57 files|*.e57";
+                openFileDialog.Filter = "pts files|*.pts|e57 files|*.e57";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -88,7 +88,7 @@ namespace Octhread_GUI
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            saveFileDialog1.Filter = "ptx files|*.ptx|e57 files|*.e57";
+            saveFileDialog1.Filter = "pts files|*.pts|e57 files|*.e57";
             saveFileDialog1.FilterIndex = 2;
             saveFileDialog1.RestoreDirectory = true;
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
@@ -347,6 +347,11 @@ namespace Octhread_GUI
         }
 
         private void CheckBoxTree_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TextBoxSave_TextChanged(object sender, EventArgs e)
         {
 
         }

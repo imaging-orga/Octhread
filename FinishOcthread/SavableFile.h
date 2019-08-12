@@ -12,7 +12,7 @@
 class SavableFile
 {
 public:
-	SavableFile(std::string _name, long int _numMax, BoundingBox& _bb);
+	SavableFile(std::string _name, unsigned long long int _numMax, BoundingBox& _bb);
 	/*!
 	 * \brief Ecrire les points contenu dans \pts dans le fichier
 	 * 
@@ -43,7 +43,7 @@ protected:
 	/*!
 	 * Le nombre max de point qu'il y aura dans le fichier
 	 */
-	long int p_numMax;
+	unsigned long long int p_numMax;
 
 	/*!
 	 * La bounding box global du nuage 

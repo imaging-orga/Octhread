@@ -2,7 +2,6 @@
 
 #include "OpenableFile.h"
 #include "e57File.h"
-#include "PTXfile.h"
 #include "PTSfile.h"
 #include "boost/filesystem.hpp"
 #include <boost/algorithm/string.hpp>
@@ -20,12 +19,11 @@ public:
 		if (lower_ext == ".e57") {
 			return new e57File(_filename, MAXNUMPERNODE);
 		}
-		else if (lower_ext == ".ptx") {
-			return new PTXfile(_filename, MAXNUMPERNODE);
-		}
 		else if (lower_ext == ".pts") {
 			return new PTSfile(_filename, MAXNUMPERNODE);
 		}
+		else
+			std::cout << "impossible de lire l'extension du fichier";
 		return nullptr;
 	}
 
