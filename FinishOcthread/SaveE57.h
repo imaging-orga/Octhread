@@ -88,6 +88,6 @@ private:
 	/*!
 	 * Nombre max de points
 	 */
-	long int num_max = 0;
+	long long unsigned num_max = 0;
 };
 

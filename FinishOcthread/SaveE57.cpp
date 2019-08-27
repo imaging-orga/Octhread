@@ -26,6 +26,7 @@ int SaveE57::writeHeader() {
 		try {
 			/// Open new file for writing, get the initialized root node (a Structure).
 			/// Path name: "/"
+			
 			imf = new ImageFile(p_name, "w");
 			StructureNode root = imf->root();
 			imf->extensionsAdd("demo", "http://www.example.com/DemoExtension");
@@ -176,10 +177,17 @@ int SaveE57::writeHeader() {
 			bbox.set("zMinimum", FloatNode(*imf, 0.0));
 			bbox.set("zMaximum", FloatNode(*imf, 1000.0));
 			scan0.set("cartesianBounds", bbox);
+
+
 			///================
 			/// Add name and description to scan
 			/// Path names: "/data3D/0/name", "/data3D/0/description".
-			scan0.set("name", StringNode(*imf, "MyTest"));
+			// Changer le nom !!
+
+			boost::filesystem::path p(p_name);
+			std::string scanName = p.stem().string();
+
+			scan0.set("name", StringNode(*imf, scanName));
 			scan0.set("description", StringNode(*imf, ""));
 
 
@@ -281,7 +289,7 @@ int SaveE57::writeFooter()
 		const int NG = 1;
 		int32_t idElementValue[NG] = { 0 };
 		int32_t startPointIndex[NG] = { 0 };
-		int64_t pointCount[NG] = { num_max };
+		int64_t pointCount[NG] = { (int64_t)num_max };
 		double  xMinimum[NG] = { 0 };
 		double  xMaximum[NG] = { 1000, };
 		double  yMinimum[NG] = { 0 };

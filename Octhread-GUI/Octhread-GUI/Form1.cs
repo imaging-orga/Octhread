@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using System.IO;
 namespace Octhread_GUI
 {
     public partial class BackScreen : Form
@@ -286,7 +286,7 @@ namespace Octhread_GUI
                 MessageBox.Show("Fichiers Non spécifiés");
                 return;
             }
-
+            
 
 
 
@@ -310,7 +310,20 @@ namespace Octhread_GUI
                 TreeSize = toInt(TextBoxTreeSize.Text);
 
 
-
+            if (do_Tree)
+            {
+                //Ici, faire la vérification si l'arbre à déjà été créer ou non.
+                string filename = Path.GetFileNameWithoutExtension(nameOpen);
+                if (Directory.Exists(filename))
+                {
+                    DialogResult dialog = MessageBox.Show("Vous êtes sur le point de lancer la création de l'arbre, alors que le dossier \"" + filename + "\" existe déjà.\nC'est possible que l'arbre ai déjà été créer antérieurement.\nVoulez vous quand même continuer?", 
+                        "Continue?", MessageBoxButtons.YesNo);
+                    if (dialog == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
             string CmdArgs = " --nameIn \"" + nameOpen + "\" --nameOut \"" + nameSave + "\"";
             if (do_Tree)
             {
