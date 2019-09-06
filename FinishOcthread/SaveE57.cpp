@@ -70,10 +70,12 @@ int SaveE57::writeHeader() {
 			///*Index bound*/
 			StructureNode indexBounds = StructureNode(*imf);
 
-			indexBounds.set("columnMaximum", IntegerNode(*imf, 1, 0, pointCount));
-			indexBounds.set("columnMinimum", IntegerNode(*imf, 0, 0, 0));
-			indexBounds.set("rowMaximum", IntegerNode(*imf, pointCount, 0, pointCount));
-			indexBounds.set("rowMinimum", IntegerNode(*imf, 0, 0, 0));
+			indexBounds.set("columnMaximum", IntegerNode(*imf, 1, std::numeric_limits<long long int>::min(), pointCount));
+			indexBounds.set("columnMinimum", IntegerNode(*imf, 0, std::numeric_limits<long long int>::min(), std::numeric_limits<long long int>::max()));
+			indexBounds.set("rowMaximum", IntegerNode(*imf, pointCount, std::numeric_limits<long long int>::min(), pointCount));
+			indexBounds.set("rowMinimum", IntegerNode(*imf, 0, std::numeric_limits<long long int>::min(), std::numeric_limits<long long int>::max()));
+			indexBounds.set("returnMinimum", IntegerNode(*imf, 0, std::numeric_limits<long long int>::min(), std::numeric_limits<long long int>::max()));
+			indexBounds.set("returnMaximum", IntegerNode(*imf, 0, std::numeric_limits<long long int>::min(), std::numeric_limits<long long int>::max()));
 			scan0.set("indexBounds", indexBounds);
 
 
@@ -170,11 +172,11 @@ int SaveE57::writeHeader() {
 			/// Add Cartesian bounding box to scan.
 	/// Path names: "/data3D/0/cartesianBounds/xMinimum", etc...
 			StructureNode bbox = StructureNode(*imf);
-			bbox.set("xMinimum", FloatNode(*imf, 0.0));
+			bbox.set("xMinimum", FloatNode(*imf, -1000.0));
 			bbox.set("xMaximum", FloatNode(*imf, 1000.0));
-			bbox.set("yMinimum", FloatNode(*imf, 0.0));
+			bbox.set("yMinimum", FloatNode(*imf, -1000.0));
 			bbox.set("yMaximum", FloatNode(*imf, 1000.0));
-			bbox.set("zMinimum", FloatNode(*imf, 0.0));
+			bbox.set("zMinimum", FloatNode(*imf, -1000.0));
 			bbox.set("zMaximum", FloatNode(*imf, 1000.0));
 			scan0.set("cartesianBounds", bbox);
 
@@ -275,6 +277,8 @@ int SaveE57::write(std::vector<mypt3d>& pts)
 	catch (...) {
 		cerr << "Got an unknown exception" << endl;
 	}
+
+	return 0;
 }
 
 
@@ -290,12 +294,18 @@ int SaveE57::writeFooter()
 		int32_t idElementValue[NG] = { 0 };
 		int32_t startPointIndex[NG] = { 0 };
 		int64_t pointCount[NG] = { (int64_t)num_max };
-		double  xMinimum[NG] = { 0 };
-		double  xMaximum[NG] = { 1000, };
-		double  yMinimum[NG] = { 0 };
-		double  yMaximum[NG] = { 2000 };
-		double  zMinimum[NG] = { 0 };
-		double  zMaximum[NG] = { 2000 };
+		//double  xMinimum[NG] = { 0 };
+		//double  xMaximum[NG] = { 1000, };
+		//double  yMinimum[NG] = { 0 };
+		//double  yMaximum[NG] = { 2000 };
+		//double  zMinimum[NG] = { 0 };
+		//double  zMaximum[NG] = { 2000 };
+		double  xMinimum[NG] = { std::numeric_limits<double>::min() };
+		double  xMaximum[NG] = { std::numeric_limits<double>::max() };
+		double  yMinimum[NG] = { std::numeric_limits<double>::min() };
+		double  yMaximum[NG] = { std::numeric_limits<double>::max() };
+		double  zMinimum[NG] = { std::numeric_limits<double>::min() };
+		double  zMaximum[NG] = { std::numeric_limits<double>::max() };
 
 		vector<e57::SourceDestBuffer> groupSDBuffers;
 		groupSDBuffers.push_back(e57::SourceDestBuffer(*imf, "idElementValue", idElementValue, NG, true));
@@ -331,4 +341,5 @@ int SaveE57::writeFooter()
 	catch (...) {
 		cerr << "Got an unknown exception" << endl;
 	}
+	return 0;
 }

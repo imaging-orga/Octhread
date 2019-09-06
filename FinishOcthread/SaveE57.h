@@ -75,7 +75,7 @@ private:
 	e57WriteData datas;
 
 	/*!
-	 * Nombre max de points
+	 * Nombre max de points qu'on a au début
 	 */
 	unsigned long long int pointCount; 
 
@@ -86,8 +86,8 @@ private:
 	long int writerChunckSize;
 
 	/*!
-	 * Nombre max de points
+	 * Nombre max de points qu'on a ecrit
 	 */
-	long long unsigned num_max = 0;
+	unsigned long long num_max = 0;
 };
 

@@ -16,7 +16,7 @@ void Filtering::convert(std::vector<mypt3d>& pts) {
 	//	m_actualPTS->points[i] = pts[i];
 	//}
 	m_actualPTS->is_dense = true;
-	m_actualPTS->width = pts.size();
+	m_actualPTS->width = (uint32_t)pts.size();
 	m_actualPTS->height = 1;
 }
 

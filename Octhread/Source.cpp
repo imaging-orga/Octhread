@@ -7,6 +7,8 @@
 
 
 
+/*Pas de version multithreader pour le moment car il faut pouvoir bosser à côté.
+Mais faire une version multi threadé peut être un exemple de Todo*/
 
 //void add(MyFile mf, std::vector<mypt3d>& pts, int &numpts) {
 //	mf.writeToFile(pts);

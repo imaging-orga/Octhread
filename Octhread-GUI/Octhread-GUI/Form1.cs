@@ -55,6 +55,12 @@ namespace Octhread_GUI
 
             /*Correction Gamma*/
             CheckBoxGammaCorrection.Checked = true;
+
+            /*Nombre div*/
+            checkBoxNombreFichiers.Checked = false;
+            textBoxNombreFichiers.Text = "";
+            textBoxNombreFichiers.ReadOnly = true;
+            textBoxNombreFichiers.BackColor = Color.PaleVioletRed;
         }
 
         private void BackScreen_Load(object sender, EventArgs e)
@@ -128,6 +134,13 @@ namespace Octhread_GUI
             MessageBox.Show(help);
         }
 
+        private void buttonHelpNombreFichiers_Click(object sender, EventArgs e)
+        {
+            string help = "Divisions.\n On va creer X fichier, X étant le nombre de divisions. Ils seront nommés [Nom]_[0-X]";
+            MessageBox.Show(help);
+        }
+
+
         private void CheckBoxTree_Click(object sender, EventArgs e)
         {
             if (CheckBoxTree.Checked)
@@ -182,7 +195,22 @@ namespace Octhread_GUI
 
             }
         }
+        private void checkBoxNombreFichiers_Click(object sender, EventArgs e)
+        {
+            if (checkBoxNombreFichiers.Checked)
+            {
+                textBoxNombreFichiers.Text = "4";
+                textBoxNombreFichiers.ReadOnly = false;
+                textBoxNombreFichiers.BackColor = Color.White;
+            }
+            else
+            {
+                textBoxNombreFichiers.Text = "";
+                textBoxNombreFichiers.ReadOnly = true;
+                textBoxNombreFichiers.BackColor = Color.PaleVioletRed;
 
+            }
+        }
         private void CheckBoxRemoveOutliers_Click(object sender, EventArgs e)
         {
             if (CheckBoxRemoveOutliers.Checked)
@@ -295,8 +323,8 @@ namespace Octhread_GUI
                 do_Distance = CheckBoxDistance.Checked,
                 do_DownSample = CheckBoxDownSample.Checked,
                 do_RemoveOutliers = CheckBoxRemoveOutliers.Checked,
-                do_GammaCorrection = CheckBoxGammaCorrection.Checked;
-
+                do_GammaCorrection = CheckBoxGammaCorrection.Checked,
+                 do_Div = checkBoxNombreFichiers.Checked;
             double
                 distMin = toDouble(TextBoxDistMin.Text),
                 distMax = toDouble(TextBoxDistMax.Text),
@@ -307,9 +335,9 @@ namespace Octhread_GUI
 
             int
                 SOMeanK = toInt(TextBoxSOMeanK.Text),
-                TreeSize = toInt(TextBoxTreeSize.Text);
-
-
+                TreeSize = toInt(TextBoxTreeSize.Text),
+                division = toInt(textBoxNombreFichiers.Text);
+                
             if (do_Tree)
             {
                 //Ici, faire la vérification si l'arbre à déjà été créer ou non.
@@ -345,6 +373,10 @@ namespace Octhread_GUI
             {
                 CmdArgs += " --correctionGamma true";
             }
+            if (do_Div)
+            {
+                CmdArgs += " --division " + division;
+            }
 
 
             string cmdPath = ".\\" + System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\";
@@ -368,5 +400,103 @@ namespace Octhread_GUI
         {
 
         }
+
+        private void buttonPrevisu_Click(object sender, EventArgs e)
+        {
+            //On ajoute Previsu
+            string nameOpen = TextBoxOpen.Text;
+            string nameSave = TextBoxSave.Text;
+            if (nameOpen.Equals("") || nameSave.Equals(""))
+            {
+                MessageBox.Show("Fichiers Non spécifiés");
+                return;
+            }
+
+
+
+
+            bool
+                do_Tree = CheckBoxTree.Checked,
+                do_Distance = CheckBoxDistance.Checked,
+                do_DownSample = CheckBoxDownSample.Checked,
+                do_RemoveOutliers = CheckBoxRemoveOutliers.Checked,
+                do_GammaCorrection = CheckBoxGammaCorrection.Checked,
+                do_Div = checkBoxNombreFichiers.Checked;
+
+
+            double
+                distMin = toDouble(TextBoxDistMin.Text),
+                distMax = toDouble(TextBoxDistMax.Text),
+
+                sizeDownSample = toDouble(TextBoxDownSampleSize.Text),
+
+                SODevMultThresh = toDouble(TextBoxSODevMultThresh.Text);
+
+            int
+                SOMeanK = toInt(TextBoxSOMeanK.Text),
+                TreeSize = toInt(TextBoxTreeSize.Text),
+                division = toInt(textBoxNombreFichiers.Text);
+
+            if (do_Tree)
+            {
+                //Ici, faire la vérification si l'arbre à déjà été créer ou non.
+                string filename = Path.GetFileNameWithoutExtension(nameOpen);
+                if (Directory.Exists(filename))
+                {
+                    DialogResult dialog = MessageBox.Show("Vous êtes sur le point de lancer la création de l'arbre, alors que le dossier \"" + filename + "\" existe déjà.\nC'est possible que l'arbre ai déjà été créer antérieurement.\nVoulez vous quand même continuer?",
+                        "Continue?", MessageBoxButtons.YesNo);
+                    if (dialog == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
+            string CmdArgs = " --nameIn \"" + nameOpen + "\" --nameOut \"" + nameSave + "\"";
+            if (do_Tree)
+            {
+                CmdArgs += " --createTree " + TreeSize;
+            }
+            if (do_Distance)
+            {
+                CmdArgs += " --distance " + distMin.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture) + " " + distMax.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (do_DownSample)
+            {
+                CmdArgs += " --downSample " + sizeDownSample.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (do_RemoveOutliers)
+            {
+                CmdArgs += " --removeOutliers " + SOMeanK + " " + SODevMultThresh.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            if (do_GammaCorrection)
+            {
+                CmdArgs += " --correctionGamma true";
+            }
+            if (do_Div)
+            {
+                CmdArgs += " --division " + division;
+            }
+
+            CmdArgs += " --previs true";
+
+
+            string cmdPath = ".\\" + System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\";
+
+            string CmdCall = "nepascliquer.exe";
+            string cmdText = cmdPath + CmdCall + CmdArgs;
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            TextBoxWrite.Text = CmdArgs;
+            startInfo.FileName = CmdCall;
+            startInfo.Arguments = CmdArgs;
+            //MessageBox.Show(cmdText);
+            Process.Start(startInfo);
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
     }
 }

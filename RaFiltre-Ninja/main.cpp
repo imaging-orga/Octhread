@@ -7,6 +7,9 @@
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 #include "../ProceedOcthread/OpenFactor.hpp"
+#include "Previsu.h"
+
+#include "Divide.h"
 using namespace boost;
 namespace po = boost::program_options;
 
@@ -23,6 +26,8 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		("removeOutliers,RO", po::value<std::vector<double>>()->multitoken(), "removeOutliers")
 		("correctionGamma, CG", po::value<bool>(), "correctionGamma")
 		("createTree, CT", po::value<long>(), "createTree")
+		("previsu, PV", po::value<bool>(), "previsu")
+		("division, div", po::value<int>(), "division")
 		;
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -74,19 +79,44 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 			retParam.removeOutliers_devMultThresh = values[1];
 		}
 	}
+
+	if (vm.count("division")) {
+		double value = vm["division"].as<int>();
+		retParam.do_div = true;
+		retParam.num_div = value;
+	}
 	if (vm.count("correctionGamma")) {
 		bool value = vm["correctionGamma"].as<bool>();
 		retParam.do_correctionGamma = value;
 	}
 
+	if (vm.count("previsu")) {
+		bool value = vm["previsu"].as<bool>();
+		retParam.previz = value;
+	}
+
+
 	return retParam;
 }
 
 
+std::string TESTTT(bool b) {
+	std::string ret;
+	if (b)
+		ret = "true";
+	else
+		ret = "false";
+	return ret;
+}
 
 int main(int argc, char* argv[]) {
 	//Necessite d'écrire les paramètres quand on call le programme
+
+	//Divide essai("Pilege-PartG", 2);
+	//essai.CutOcsave();
+	//getchar();
 	PARAMS::filter_params par = getParameters(argc, argv);
+
 	if (par.do_tree) {
 		OpenableFile* file = OpenFactor::get(par.nameIn, par.tree_sizeLeaf);
 		if (par.do_distance)
@@ -95,12 +125,56 @@ int main(int argc, char* argv[]) {
 			file->read(0.);
 		std::cout << "Fin De la création de l'arbre" << std::endl;
 	}
-	//Créer un Filtering (Filtering)
-
+	//if (par.previz) {
+	//	Previsu previs(par.nameIn);
+	//	previs.pickWiseFile();
+	//	previs.Visualize();
+	//}
 	
-	Filtering filter(par.nameDir, par.nameOut);
-	filter.filter(par);
-	filter.finish();
+	
+	
+	//Créer un Filtering (Filtering)
+	if (!par.do_div) {
+		Filtering filter(par.nameDir, par.nameOut);
+		filter.filter(par);
+		filter.finish();
+	}
+	else {//Si on doit faire une do_div
+		Divide div(par.nameDir, par.num_div);
+		div.CutOcsave();
+		boost::filesystem::path p(par.nameOut);
+
+		std::string pathName = p.parent_path().string();
+		std::string filename = p.stem().string();
+		std::string extension = p.extension().string();
+
+
+		for (int i = 0; i < par.num_div; ++i) {
+			std::string new_name = pathName + "\\" + filename + "_" + std::to_string(i) + extension;
+			//Remplacer le Ocsave par OcSave_i;
+			std::string newOcsave = par.nameDir + "\\.OcSave_" + std::to_string(i);
+			std::string Ocsave = par.nameDir + "\\.OcSave";
+
+			std::string tmp = par.nameDir + "\\tmp";
+
+			rename(Ocsave.c_str(), tmp.c_str());
+			rename(newOcsave.c_str(), Ocsave.c_str());
+
+
+			//lancer le calcul ici :)
+			Filtering filter(par.nameDir, new_name);
+			filter.filter(par);
+			filter.finish();
+
+			rename(Ocsave.c_str(), newOcsave.c_str());
+			rename(tmp.c_str(), Ocsave.c_str());
+
+
+			std::cout << "Fichier " << i << " Fini :) \n\n"; 
+		}
+		
+	}
+	
 	drawNinja();
 	getchar();
 }

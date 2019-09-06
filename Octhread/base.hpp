@@ -20,6 +20,7 @@
 #include "pcl/common/impl/accumulators.hpp"
 
 #include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/visualization/point_cloud_geometry_handlers.h>
 #include <pcl/filters/voxel_grid_covariance.h>
 #include <pcl/filters/impl/voxel_grid.hpp>
 #include <pcl/filters/impl/voxel_grid_covariance.hpp>
@@ -33,6 +34,7 @@
 #include <pcl/filters/impl/conditional_removal.hpp>
 #include <pcl/filters/impl/shadowpoints.hpp>
 #include <pcl/visualization/impl/pcl_visualizer.hpp>
+#include <pcl/visualization/impl/point_cloud_geometry_handlers.hpp>
 /*!
  * \brief Point personnalisé, qui contient l'info de la couleur et de l'intensité, en plus de la position :)
  * 
@@ -103,7 +105,6 @@ public:
 		return ret;
 	}
 
-
 	pt3d operator-(pt3d& pt) {
 		pt3d ret;
 		ret.x = x - pt.x;
@@ -134,7 +135,6 @@ public:
  * Class BoundingBox
  * \brief BoundingBox d'un nuage de points
  */
-
 class BoundingBox {
 public:
 	pt3d min, max;
