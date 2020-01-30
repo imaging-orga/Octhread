@@ -71,7 +71,7 @@ void PTSfile::read(float distMax)
 	file.close();
 }
 
-inline float distance_non_squared(mypt3d& pt1, mypt3d& pt2) {
+inline float distance_non_rootsquared(mypt3d& pt1, mypt3d& pt2) {
 	float dX = pt2.x - pt1.x;
 	float dY = pt2.y - pt1.y;
 	float dZ = pt2.z - pt1.z;
@@ -111,16 +111,16 @@ void PTSfile::read_(std::ifstream& file,float distMax, long number) {
 		mypt3d pt;
 		std::istringstream ssb(line);
 		ssb >> pt.x >> pt.y >> pt.z;
-		if (distMax != 0.0 && distance_non_squared(pt, zero) < distMax * distMax) {
+		if (distMax != 0.0 && distance_non_rootsquared(pt, zero) < distMax * distMax) {
 			pt.intensity = 0.5;
 			pt.r = pt.b = pt.r = 128;
 			pts.push_back(pt);
 		}
-		for (int j = 1; j < number; ++j) {
+		for (int j = 1; j < size; ++j) {
 			std::getline(file, line);
 			ssb = std::istringstream(line);
 			ssb >> pt.x >> pt.y >> pt.z;
-			if (distMax != 0.0 && distance_non_squared(pt, zero) < distMax * distMax) {
+			if (distMax != 0.0 && distance_non_rootsquared(pt, zero) < distMax * distMax) {
 				pt.intensity = 0.5;
 				pt.r = pt.g = pt.b = 128;
 				pts.push_back(pt);
@@ -132,15 +132,15 @@ void PTSfile::read_(std::ifstream& file,float distMax, long number) {
 		mypt3d pt;
 		std::istringstream ssb(line);
 		ssb >> pt.x >> pt.y >> pt.z >> pt.intensity;
-		if (distMax != 0.0 && distance_non_squared(pt, zero) < distMax * distMax) {
+		if (distMax != 0.0 && distance_non_rootsquared(pt, zero) < distMax * distMax) {
 			pt.r = pt.b = pt.r = 128;
 			pts.push_back(pt);
 		}
-		for (int j = 1; j < number; ++j) {
+		for (int j = 1; j < size; ++j) {
 			std::getline(file, line);
 			ssb = std::istringstream(line);
 			ssb >> pt.x >> pt.y >> pt.z;
-			if (distMax != 0.0 && distance_non_squared(pt, zero) < distMax * distMax) {
+			if (distMax != 0.0 && distance_non_rootsquared(pt, zero) < distMax * distMax) {
 				ssb >> pt.intensity;
 				pt.intensity = getLeicaIntens(pt.intensity);
 				pt.r = pt.g = pt.b = pt.intensity * 255;
@@ -156,14 +156,14 @@ void PTSfile::read_(std::ifstream& file,float distMax, long number) {
 		ssb >> pt.x >> pt.y >> pt.z >> intens >> pt.r >> pt.g >> pt.b;
 
 		pt.intensity = getLeicaIntens(intens);
-		if (distMax == 0.0 || distance_non_squared(pt, zero) < distMax * distMax) {
+		if (distMax == 0.0 || distance_non_rootsquared(pt, zero) < distMax * distMax) {
 			pts.push_back(pt);
 		}
-		for (int j = 1; j < number; ++j) {
+		for (int j = 1; j < size; ++j) {
 			std::getline(file, line);
 			ssb = std::istringstream(line);
 			ssb >> pt.x >> pt.y >> pt.z;
-			if (distMax == 0.0 || distance_non_squared(pt, zero) < distMax * distMax) {
+			if (distMax == 0.0 || distance_non_rootsquared(pt, zero) < distMax * distMax) {
 				intens;
 				ssb >> intens;
 				pt.intensity = getLeicaIntens(intens);

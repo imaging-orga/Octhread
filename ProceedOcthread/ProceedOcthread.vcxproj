@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -138,6 +138,7 @@
     <ClCompile Include="..\Octhreade57\E57SimpleImpl.cpp" />
     <ClCompile Include="..\Octhreade57\time_conversion.c" />
     <ClCompile Include="e57File.cpp" />
+    <ClCompile Include="LASfile.cpp" />
     <ClCompile Include="OpenableFile.cpp" />
     <ClCompile Include="Proceed.cpp" />
     <ClCompile Include="PTSfile.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="..\Octhreade57\E57SimpleImpl.h" />
     <ClInclude Include="..\Octhreade57\time_conversion.h" />
     <ClInclude Include="e57File.h" />
+    <ClInclude Include="LASfile.h" />
     <ClInclude Include="OpenableFile.h" />
     <ClInclude Include="OpenFactor.hpp" />
     <ClInclude Include="Proceed.h" />

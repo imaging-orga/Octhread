@@ -39,7 +39,7 @@ int main(int /*argc*/, char** /*argv*/)
 		int imodsize = i % 255;
 		pts1.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/0, /*intensity*/0.33, /*r*/255, /*g*/0, /*b*/0));
 		pts2.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/100, /*intensity*/0.66, /*r*/0, /*g*/255, /*b*/0));
-		pts2.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/100, /*intensity*/0.66, /*r*/0, /*g*/128, /*b*/128));
+		pts2.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/300, /*intensity*/0.66, /*r*/0, /*g*/128, /*b*/128));
 		pts3.push_back(mypt3d(/*x*/dist(mt) /*random 0 -> 1000*/, /*y*/dist(mt)/*random 0 -> 1000*/, /*z*/200, /*intensity*/0.99, /*r*/255, /*g*/255, /*b*/255));
 
 	}
@@ -49,14 +49,14 @@ int main(int /*argc*/, char** /*argv*/)
 	BoundingBox bb(minpt, maxpt);
 
 
-	SavableFile *e57file = SaveFactor::get("test1.e57", size*4, bb);
-	e57file->writeHeader();
-	e57file->write(pts1);
-	e57file->write(pts2);
-	e57file->write(pts3);
-	e57file->writeFooter();
+	SavableFile *lasfile = SaveFactor::get("test1.las", size*4, bb);
+	lasfile->writeHeader();
+	lasfile->write(pts1);
+	lasfile->write(pts2);
+	lasfile->write(pts3);
+	lasfile->writeFooter();
 
-	delete e57file;
+	delete lasfile;
 
 	return(0);
 }

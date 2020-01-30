@@ -6,7 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-
+*.las
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -269,3 +269,6 @@ __pycache__/
 test/
 PointClouds/
 *.e57
+*.las
+
+*.exe

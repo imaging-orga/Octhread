@@ -48,6 +48,9 @@
     <ClInclude Include="SavePTS.h">
       <Filter>SavableFiles\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SaveLAS.h">
+      <Filter>SavableFiles\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SavableFile.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SavePTS.cpp">
+      <Filter>SavableFiles\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveLAS.cpp">
       <Filter>SavableFiles\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

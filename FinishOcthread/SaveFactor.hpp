@@ -4,6 +4,7 @@
 #include "boost/filesystem.hpp"
 #include <boost/algorithm/string.hpp>
 #include "SavePTS.h"
+#include "SaveLAS.h"
 /*!
  * Class SaveFactor
  * \brief Factory des Savables file. Récuperer l'extension du fichier, pour savoir ce qu'on va créer
@@ -30,6 +31,9 @@ public:
 		}
 		if (lower_ext == ".pts") {
 			return new SavePTS(_filename, _numMax, _bb);
+		}
+		if (lower_ext == ".las") {
+			return new SaveLAS(_filename, _numMax, _bb);
 		}
 		else
 			std::cout << "Je ne comprends le fichier de sortie\n";

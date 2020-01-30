@@ -47,7 +47,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -138,6 +138,7 @@
     <ClInclude Include="SavableFile.h" />
     <ClInclude Include="SaveE57.h" />
     <ClInclude Include="SaveFactor.hpp" />
+    <ClInclude Include="SaveLAS.h" />
     <ClInclude Include="SavePTS.h" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,7 @@
     <ClCompile Include="..\Octhreade57\time_conversion.c" />
     <ClCompile Include="SavableFile.cpp" />
     <ClCompile Include="SaveE57.cpp" />
+    <ClCompile Include="SaveLAS.cpp" />
     <ClCompile Include="SavePTS.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
