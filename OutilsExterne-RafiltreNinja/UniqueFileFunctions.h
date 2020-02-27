@@ -7,5 +7,8 @@
 namespace UNIQUE {
 	void createXYZFromFile(std::string _dir_name, std::string _file_name, std::string _write_name);
 	void createPTSFromFile(std::string _dir_name, std::string _file_name, std::string _write_name);
+	int retrieveInfoe57(std::string _path);
+	int retrieveInfolasz(std::string _path);
+	int retrieveInfopts(std::string _path);
 };
 

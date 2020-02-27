@@ -1,71 +1,110 @@
 #include "LASfile.h"
-#include "liblas/liblas.hpp"
+#include "laszip.hpp"
 #include <fstream>
 LASfile::LASfile(std::string _name, long _MAXPOINTSNUMPERNODE) : OpenableFile(_name, _MAXPOINTSNUMPERNODE), maxPointsPerNode(_MAXPOINTSNUMPERNODE) {
 	boost::filesystem::path p(_name);
 	CreateDirectory(p.stem().string().c_str(), NULL);
 
+	LASreadOpener lasreadopener;
+	lasreadopener.set_file_name(p_name.c_str());
+
+	lasreader = lasreadopener.open();
 	BoundingBox bb = getBoundingBox();
-	p_oct = Octree(p.stem().string().c_str(), bb, 0, _MAXPOINTSNUMPERNODE);
+	std::string test = p.stem().string();
+	p_oct = Octree(p.stem().string(), bb, 0, _MAXPOINTSNUMPERNODE);
+
+
 }
 
 BoundingBox LASfile::getBoundingBox() {
-	std::ifstream ifs;
-	ifs.open(p_name, std::ios::in | std::ios::binary);
 
-	liblas::ReaderFactory f;
-	liblas::Reader reader = f.CreateWithStream(ifs);
+	double minX = lasreader->get_min_x();
+	double minY = lasreader->get_min_y();
+	double minZ = lasreader->get_min_z();
+	double maxX = lasreader->get_max_x();
+	double maxY = lasreader->get_max_y();
+	double maxZ = lasreader->get_max_z();
 
-	liblas::Header const& header = reader.GetHeader();
-	
-	ifs.close();
-	return BoundingBox(pt3d(header.GetMinX(), header.GetMinY(), header.GetMinZ()), pt3d(header.GetMaxX(), header.GetMaxY(), header.GetMaxZ()));
+	if (minX == 0.0 && minY == 0.0 && minZ == 0.0 && maxX == 0.0 && maxY == 0.0 && maxZ == 0.0) { // aucune donnée, on va devoir le calculé...
+
+	//	minX = std::numeric_limits<double>::max();
+	//	minY = std::numeric_limits<double>::max();
+	//	minZ = std::numeric_limits<double>::max();
+
+	//	maxX = std::numeric_limits<double>::min();
+	//	maxY = std::numeric_limits<double>::min();
+	//	maxZ = std::numeric_limits<double>::min();
+	//	while (lasreader->read_point()) { //Long!! mais si la donnée n'est pas calculé, c'est la hess
+	//		LASpoint& laspt = lasreader->point;
+
+	//		if (laspt.get_x() < minX)
+	//			minX = laspt.get_x();
+	//		if (laspt.get_y() < minY)
+	//			minY = laspt.get_y();
+	//		if (laspt.get_z() < minZ)
+	//			minZ = laspt.get_z();
+
+
+	//		if (laspt.get_x() > maxX)
+	//			maxX = laspt.get_x();
+	//		if (laspt.get_y() > maxY)
+	//			maxY = laspt.get_y();
+	//		if (laspt.get_z() > maxZ)
+	//			maxZ = laspt.get_z();
+	//	}
+
+		minX = -1000;
+		minY = -1000;
+		minZ = -1000;
+		maxX = 1000;
+		maxY = 1000;
+		maxZ = 1000;
+	}
+
+	return BoundingBox(pt3d(minX, minY, minZ), pt3d(maxX, maxY, maxZ));
 }
 
-inline float distance_non_rootsquared(mypt3d& pt1, mypt3d& pt2) {
-	float dX = pt2.x - pt1.x;
-	float dY = pt2.y - pt1.y;
-	float dZ = pt2.z - pt1.z;
+//Plus rapide que la version avec le sqrt
+inline float distance_non_rootsquared(LASpoint& pt) {
+
+	float dX = pt.get_x();
+	float dY = pt.get_y();
+	float dZ = pt.get_z();
+
 
 	return dX * dX + dY * dY + dZ * dZ;
 }
 
 //DistMax => filtre de distance
 void LASfile::read(float distMax) {
-	std::ifstream ifs;
-	ifs.open(p_name, std::ios::in | std::ios::binary);
 
-	liblas::ReaderFactory f;
-	liblas::Reader reader = f.CreateWithStream(ifs);
+	LASpoint zero;
+	std::vector<mypt3d> ptsVec;
 
-	liblas::Header const& header = reader.GetHeader();
+	unsigned sizeBuff = 1024 * 1024 * 64;/*Magic value, buffering 67'108'864 rows*/
+	ptsVec.resize(sizeBuff);
+	int cpt = 0;
 
-	long long int numPoints = header.GetPointRecordsCount();
+	while (lasreader->read_point()) {
+		
+		LASpoint& laspt = lasreader->point;
+		if (distance_non_rootsquared(laspt) > distMax * distMax) {
+			/*[0, 65'536] (U16) -> [0, 1]*/
+			mypt3d pt(laspt.get_x(), laspt.get_y(), laspt.get_z(), (float)laspt.get_I() / 65535.0f, laspt.rgb[0] / 255, laspt.rgb[1] / 255, laspt.rgb[1] / 255);
 
-	long int maxPerChuncks = std::min(numPoints, (long long int)maxPointsPerNode);
-	long int cpt = 0;
-	std::vector<mypt3d> pts;
-	mypt3d zero(0, 0, 0, 0, 0, 0, 0);
-	while (reader.ReadNextPoint()) {
-		liblas::Point const& p = reader.GetPoint();
-		mypt3d pt = mypt3d(p.GetX(), p.GetY(), p.GetZ(), p.GetIntensity(), p.GetColor().GetRed(), p.GetColor().GetGreen(), p.GetColor().GetBlue());
-		if (distMax != 0.0 && distance_non_rootsquared(pt, zero) < distMax * distMax) {
-			pts.push_back(pt);
+			ptsVec[cpt] = pt; //faire un vector
 			cpt++;
-			if (cpt >= maxPerChuncks) {
-				p_oct.addPoint(pts);
+			
+			if (cpt == sizeBuff - 1) {
 				cpt = 0;
-				pts.clear();
-				pts.resize(0);
+				p_oct.addPoint(ptsVec);
 			}
 		}
+
 	}
-	if (pts.size() != 0) {
-		p_oct.addPoint(pts);
-	}
+	ptsVec.resize(cpt);
+	p_oct.addPoint(ptsVec);
 
 	p_oct.save();
-	p_oct.clean();
-	ifs.close();
-
+	lasreader->close();
 }

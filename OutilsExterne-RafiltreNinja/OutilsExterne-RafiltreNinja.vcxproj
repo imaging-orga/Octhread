@@ -70,7 +70,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>GetInfo</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -81,12 +83,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>E:\ProjetGIT\LAStools-master\LASzip\src;E:\ProjetGIT\LAStools-master\LASlib\inc;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\x64\Release;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Filtering.lib;FinishOcthread.lib;Octhread.lib;ProceedOcthread.lib;E57RefImpl.lib;xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\x64\Release;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Release;E:\ProjetGIT\Octhread\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Filtering.lib;FinishOcthread.lib;Octhread.lib;ProceedOcthread.lib;E57RefImpl.lib;xerces-c_3.lib;LASlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

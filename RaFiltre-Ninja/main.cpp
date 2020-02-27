@@ -8,7 +8,7 @@
 #include <boost/program_options.hpp>
 #include "../ProceedOcthread/OpenFactor.hpp"
 #include "Previsu.h"
-
+#include <shellapi.h>
 #include "Divide.h"
 using namespace boost;
 namespace po = boost::program_options;
@@ -28,6 +28,7 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		("createTree, CT", po::value<long>(), "createTree")
 		("previsu, PV", po::value<bool>(), "previsu")
 		("division, div", po::value<int>(), "division")
+		("Potree, pot", po::value<bool>(), "Potree")
 		;
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -95,19 +96,14 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		retParam.previz = value;
 	}
 
-
+	if (vm.count("Potree")) {
+		bool value = vm["Potree"].as<bool>();
+		retParam.do_potree = value;
+	}
 	return retParam;
 }
 
 
-std::string TESTTT(bool b) {
-	std::string ret;
-	if (b)
-		ret = "true";
-	else
-		ret = "false";
-	return ret;
-}
 
 int main(int argc, char* argv[]) {
 	//Necessite d'écrire les paramètres quand on call le programme
@@ -138,6 +134,17 @@ int main(int argc, char* argv[]) {
 		Filtering filter(par.nameDir, par.nameOut);
 		filter.filter(par);
 		filter.finish();
+		if (par.do_potree) { //Si on doit faire le potree
+			ShellExecuteA(
+				NULL,
+				"open",
+				"datas\\PotreeConverter.exe",
+				par.nameOut.c_str(),
+				NULL,
+				SW_SHOWNORMAL
+			);
+
+		}
 	}
 	else {//Si on doit faire une do_div
 		Divide div(par.nameDir, par.num_div);
@@ -174,6 +181,7 @@ int main(int argc, char* argv[]) {
 		}
 		
 	}
+
 	
 	drawNinja();
 	getchar();

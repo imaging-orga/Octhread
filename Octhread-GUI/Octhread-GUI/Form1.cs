@@ -61,6 +61,9 @@ namespace Octhread_GUI
             textBoxNombreFichiers.Text = "";
             textBoxNombreFichiers.ReadOnly = true;
             textBoxNombreFichiers.BackColor = Color.PaleVioletRed;
+
+            /*REMOVE*/
+            checkBoxNombreFichiers.Enabled = false;
         }
 
         private void BackScreen_Load(object sender, EventArgs e)
@@ -73,13 +76,103 @@ namespace Octhread_GUI
 
         }
 
+        private void readAndFillInfos(string path)
+        {
+            if (File.Exists(path))
+            {
+                string[] lines = System.IO.File.ReadAllLines(path);
+                LabelFileName.Text = lines[0];
+                LabelScanCount.Text = lines[1];
+                int num = -1;
+                if (Int32.TryParse(lines[1], out num))
+                {
+                    if (num == 1) // 1 unique scan
+                    {
+                        CheckBoxDistance.Enabled = false;
+                    }
+                    else
+                    {
+                        CheckBoxDistance.Enabled = true;
+                    }
+                }
+                else
+                {
+                    CheckBoxDistance.Enabled = true;
+                }
+                long num_points = -1;
+                if (Int64.TryParse(lines[2], out num_points))
+                {
+                    if (num_points == 0)
+                    {
+                        LabelPointCount.Text = "n/a";
+                    }
+                    else
+                    {
+                        LabelPointCount.Text = lines[2];
+                    }
+                }
+                else
+                {
+                    LabelPointCount.Text = "n/a";
+                }
+            }
+            else
+                readAndFillInfosNA();
+        }
+        private void readAndFillInfosNA()
+        {
+            LabelFileName.Text = "n/a";
+            LabelScanCount.Text = "n/a";
+            LabelPointCount.Text = "n/a";
+        }
+
+        private void TextBoxSave_TextChanged(object sender, EventArgs e)
+        {
+            string path = TextBoxSave.Text;
+            string ext = Path.GetExtension(path);
+            
+            if (ext.ToLower() == ".laz")
+            {
+                checkBoxPotree.Enabled = true;
+            }
+            else
+            {
+                checkBoxPotree.Enabled = false;
+            }
+        }
+
+        private void ButtonOpenFile_TextChanged(object sender, EventArgs e)
+        {
+
+            string path = TextBoxOpen.Text; //absolute path of file (D:/Some Files/My file.ext)"
+            string cmdCall = "datas\\GetInfo.exe"; //GetInfo is at the path datas/GetInfos.exe
+            ProcessStartInfo startInfo = new ProcessStartInfo(); 
+
+            startInfo.FileName = cmdCall;
+            startInfo.Arguments = "\"" + path + "\""; //the problem seems to be here
+
+            var proc = Process.Start(startInfo); //start the process 
+            proc.WaitForExit(); //wait for it to finish
+            
+            string fileInfoName = Path.GetFileNameWithoutExtension(path) + ".info";
+            if (proc.ExitCode == 0)
+            {
+                string name = "datas\\" + fileInfoName;
+                readAndFillInfos(name);
+            }
+            else
+            {
+                readAndFillInfosNA();
+            }
+
+        }
         private void ButtonOpenFile_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = "./";
-                openFileDialog.Filter = "pts files|*.pts|e57 files|*.e57";
-                openFileDialog.FilterIndex = 2;
+                openFileDialog.Filter = "All Files(*.pts, *.e57, *.las, *.laz)|*.pts;*.e57;*.laz;*.las;|pts files(*.pts)|*.pts|e57 files(*.e57)|*.e57|las files (*.las, *.laz)|*.las; *.laz";
+                openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -94,15 +187,15 @@ namespace Octhread_GUI
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            saveFileDialog1.Filter = "pts files|*.pts|e57 files|*.e57";
-            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.Filter = "All Files(*.pts, *.e57, *.las, *.laz)|*.pts;*.e57;*.laz;*.las |pts files(*.pts)|*.pts|e57 files(*.e57)|*.e57|las files (*.las, *.laz)|*.las; *.laz";
+            saveFileDialog1.FilterIndex = 1;
             saveFileDialog1.RestoreDirectory = true;
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 TextBoxSave.Text = saveFileDialog1.FileName;
             }
         }
-
+       
         private void ButtonHelpTree_Click(object sender, EventArgs e)
         {
             string help = "Est-ce que l'arbre à déjà été construit? Si oui, décochez cette case. Sinon, cochez la.\n[nombre de points par fichier] correspond au nombre max de points qui sera contenu par fichier. Par défaut il est a 1024*1024*128 (environ des fichiers de 4Go)";
@@ -314,7 +407,7 @@ namespace Octhread_GUI
                 MessageBox.Show("Fichiers Non spécifiés");
                 return;
             }
-            
+
 
 
 
@@ -324,7 +417,9 @@ namespace Octhread_GUI
                 do_DownSample = CheckBoxDownSample.Checked,
                 do_RemoveOutliers = CheckBoxRemoveOutliers.Checked,
                 do_GammaCorrection = CheckBoxGammaCorrection.Checked,
-                 do_Div = checkBoxNombreFichiers.Checked;
+                do_Div = checkBoxNombreFichiers.Checked,
+                do_Potree = checkBoxPotree.Checked;
+
             double
                 distMin = toDouble(TextBoxDistMin.Text),
                 distMax = toDouble(TextBoxDistMax.Text),
@@ -377,11 +472,16 @@ namespace Octhread_GUI
             {
                 CmdArgs += " --division " + division;
             }
+            if (do_Potree)
+            {
+                CmdArgs += " --Potree true";
+            }
+          
 
 
             string cmdPath = ".\\" + System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\";
 
-            string CmdCall = "nepascliquer.exe";
+            string CmdCall = "datas\\nepascliquer.exe";
             string cmdText = cmdPath + CmdCall + CmdArgs;
             ProcessStartInfo startInfo = new ProcessStartInfo();
             TextBoxWrite.Text = CmdArgs;
@@ -395,11 +495,7 @@ namespace Octhread_GUI
         {
 
         }
-
-        private void TextBoxSave_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void buttonPrevisu_Click(object sender, EventArgs e)
         {
@@ -497,6 +593,14 @@ namespace Octhread_GUI
 
         }
 
+        private void tableLayoutPanel15_Paint(object sender, PaintEventArgs e)
+        {
 
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "OpenableFile.h"
+#include "lasreader.hpp"
 class LASfile : public OpenableFile {
 public :
 	LASfile(std::string _name, long MAXPOINTSNUMPERNODE);
@@ -11,4 +12,5 @@ public :
 
 private:
 	long int maxPointsPerNode;
+	LASreader* lasreader;
 };

@@ -30,7 +30,7 @@ class SaveE57 : public SavableFile
 {
 public:
 
-	SaveE57(std::string _filename, unsigned long long int _numMax, BoundingBox& _bb);
+	SaveE57(std::string _filename,  long long int _numMax, BoundingBox& _bb);
 
 
 	int write(std::vector<mypt3d>& pts) override;
@@ -77,7 +77,7 @@ private:
 	/*!
 	 * Nombre max de points qu'on a au début
 	 */
-	unsigned long long int pointCount; 
+	long long int pointCount; 
 
 	/*!
 	 * Taille des buffers d'écriture
@@ -88,6 +88,6 @@ private:
 	/*!
 	 * Nombre max de points qu'on a ecrit
 	 */
-	unsigned long long num_max = 0;
+	long long num_max = 0;
 };
 

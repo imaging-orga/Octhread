@@ -23,7 +23,7 @@ public:
 		else if (lower_ext == ".pts") {
 			return new PTSfile(_filename, MAXNUMPERNODE);
 		}
-		else if (lower_ext == ".las") {
+		else if (lower_ext == ".las" || lower_ext == ".laz") {
 			return new LASfile(_filename, MAXNUMPERNODE);
 		}
 		else

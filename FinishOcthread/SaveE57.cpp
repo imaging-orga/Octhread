@@ -4,11 +4,11 @@
 
 
 //On écrit dans un fichier auxiliaire avant de tout réécrire dans le fichier e57?
-SaveE57::SaveE57(std::string _filename, unsigned long long int _numMax, BoundingBox& _bb) : SavableFile(_filename, _numMax, _bb), eWriter(_filename, "")
+SaveE57::SaveE57(std::string _filename, long long int _numMax, BoundingBox& _bb) : SavableFile(_filename, _numMax, _bb), eWriter(_filename, "")
 {
 	//Bien penser changer pointCount dans le loader
 	pointCount = _numMax/* = 1024 * 512*/;
-	writerChunckSize = std::min((unsigned long long)1024*1024*8, _numMax / 3);
+	writerChunckSize = std::min((long long)1024*1024*8, _numMax / 3);
 	writeHeader();
 }
 
@@ -18,7 +18,24 @@ SaveE57::~SaveE57() {
 	//delete imf;
 	//delete writer;
 }
+const e57::ustring createGUID() {
+	std::string str = "ABCDEF0123456789";
+	std::string ret = "";
+	std::random_device rd{};
+	std::mt19937 engine{ rd() };
 
+	std::uniform_int_distribution<int>dist{ 0, (int)str.length() - 1 };
+	for (int i = 0; i < 36; ++i) {
+		if (i == 8 || i == 13 || i == 18 || i == 23) {
+			ret += "-";
+		}
+		else {
+			int rnd = dist(engine);
+			ret += str[rnd];
+		}
+	}
+	return ret;
+}
 
 int SaveE57::writeHeader() {
 		using namespace e57;
@@ -33,16 +50,18 @@ int SaveE57::writeHeader() {
 			/// Set per-file properties.
 			/// Path names: "/formatName", "/majorVersion", "/minorVersion", "/coordinateMetadata"
 			root.set("formatName", StringNode(*imf, "ASTM E57 3D Imaging Data File"));
-			root.set("guid", StringNode(*imf, "3F2504E0-4F89-11D3-9A0C-0305E82C3310"));
-			//root.set("guid", StringNode(*imf, "3F2504E0-4F89-11D3-0305E82C3300"));
+			const e57::ustring globalGUID = createGUID();
+			//root.set("guid", StringNode(*imf, "3F2504E0-4F89-11D3-9A0C-0305E82C3310"));
+			root.set("guid", StringNode(*imf, globalGUID));
+			
 
 			/// Get ASTM version number supported by library, so can write it into file
 			int astmMajor;
 			int astmMinor;
 			ustring libraryId;
 			E57Utilities().getVersions(astmMajor, astmMinor, libraryId);
-			root.set("versionMajor", IntegerNode(*imf, astmMajor));
-			root.set("versionMinor", IntegerNode(*imf, astmMinor));
+			root.set("versionMajor", IntegerNode(*imf, astmMajor)); 
+			root.set("versionMinor", IntegerNode(*imf, astmMinor)); 
 			root.set("e57LibraryVersion", StringNode(*imf, "Octhread"));
 			/// Save a dummy string for coordinate system.
 			/// Really should be a valid WKT string identifying the coordinate reference system (CRS).
@@ -61,8 +80,8 @@ int SaveE57::writeHeader() {
 
 			/// Add guid to scan0.
 			/// Path name: "/data3D/0/guid".
-			const char* scanGuid0 = "3F2504E0-4F89-11D3-9A0C-0305E82C3310";
-			//const char* scanGuid0 = "3F2504E0-4F89-11D3-0305E82C3301";
+			//const char* scanGuid0 = "3F2504E0-4F89-11D3-9A0C-0305E82C3310";
+			const e57::ustring scanGuid0 = createGUID();
 			scan0.set("guid", StringNode(*imf, scanGuid0));
 
 
@@ -129,11 +148,15 @@ int SaveE57::writeHeader() {
 			/// Add a line grouping scheme
 			/// Path name: "/data3D/0/pointGroupingSchemes/groupingByLine"
 			StructureNode groupingByLine = StructureNode(*imf);
-			pointGroupingSchemes.set("groupingByLine", groupingByLine);
+			groupingByLine.set("groupsSize", IntegerNode(*imf, 1)); //A enelever mayba 
+			groupingByLine.set("pointCountSize", IntegerNode(*imf, pointCount)); //A enlever Mayba
 
 			/// Add idElementName to groupingByLine, specify a line is column oriented
+			/// 
 			/// Path name: "/data3D/0/pointGroupingSchemes/groupingByLine/idElementName"
 			groupingByLine.set("idElementName", StringNode(*imf, "columnIndex"));
+			pointGroupingSchemes.set("groupingByLine", groupingByLine);
+			
 
 			/// Make a prototype of datatypes that will be stored in LineGroupRecord.
 			/// This prototype will be used in creating the groups CompressedVector.
@@ -172,7 +195,7 @@ int SaveE57::writeHeader() {
 			/// Add Cartesian bounding box to scan.
 	/// Path names: "/data3D/0/cartesianBounds/xMinimum", etc...
 			StructureNode bbox = StructureNode(*imf);
-			bbox.set("xMinimum", FloatNode(*imf, -1000.0));
+			bbox.set("xMinimum", FloatNode(*imf, -1000.0)); 
 			bbox.set("xMaximum", FloatNode(*imf, 1000.0));
 			bbox.set("yMinimum", FloatNode(*imf, -1000.0));
 			bbox.set("yMaximum", FloatNode(*imf, 1000.0));
@@ -252,9 +275,9 @@ int SaveE57::write(std::vector<mypt3d>& pts)
 				datas.xData[i] = pts[count].x;
 				datas.yData[i] = pts[count].y;
 				datas.zData[i] = pts[count].z;
-				datas.redData[i] = pts[count].r/* - '0'*/;
-				datas.greenData[i] = pts[count].g/* - '0'*/;
-				datas.blueData[i] = pts[count].b/* - '0'*/;
+				datas.redData[i] = pts[count].r;
+				datas.greenData[i] = pts[count].g;
+				datas.blueData[i] = pts[count].b;
 				datas.intData[i] = pts[count].intensity;
 				datas.isInvalidData[i] = 0;
 				count++;

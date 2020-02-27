@@ -28,7 +28,7 @@ int SavePTS::write(std::vector<mypt3d>& pts) {
 }
 
 int SavePTS::writeHeader() {
-	m_stream << "                   " << std::endl;
+	m_stream << "                   " << std::endl; //On laisse de l'espace pour écrire le nombre de points APRES!
 	return 1;
 }
 

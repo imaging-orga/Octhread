@@ -47,7 +47,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -82,7 +82,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProjetGIT\LAStools-master\LASzip\src;E:\ProjetGIT\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -90,8 +90,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>E57RefImpl.lib;xerces-c_3.lib;Octhread.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>E57RefImpl.lib;xerces-c_3.lib;Octhread.lib;LASlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>LASlib.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,14 +113,18 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProjetGIT\LAStools-master\LASzip\src;E:\ProjetGIT\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>E57RefImpl-d.lib;xerces-c_3D.lib;OcthreadD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>E57RefImpl-d.lib;xerces-c_3D.lib;OcthreadD.lib;LASlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Debug</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalDependencies>LASlibD.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

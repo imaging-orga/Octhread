@@ -84,7 +84,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>	//Qui va filtrer puis sauvegarder le fichier (FinishOcthread)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\ProjetGIT\LAStools-master\LASlib\inc;E:\ProjetGIT\LAStools-master\LASzip\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -92,6 +92,10 @@
       <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\x64\Release;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Release</AdditionalLibraryDirectories>
       <AdditionalDependencies>Octhread.lib;FinishOcthread.lib;ProceedOcthread.lib;E57RefImpl.lib;xerces-c_3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>LASlib.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,11 +113,16 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>E:\ProjetGIT\LAStools-master\LASlib\inc;E:\ProjetGIT\LAStools-master\LASzip\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\x64\Debug;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>OcthreadD.lib;FinishOcthreadD.lib;E57RefImpl-d.lib;xerces-c_3D.lib;ProceedOcthreadD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>LASlibD.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

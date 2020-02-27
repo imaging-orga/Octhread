@@ -48,6 +48,9 @@
     <ClCompile Include="PTSfile.cpp">
       <Filter>OpenableFiles\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LASfile.cpp">
+      <Filter>OpenableFiles\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenableFile.h">
@@ -75,6 +78,9 @@
       <Filter>OpenableFiles\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PTSfile.h">
+      <Filter>OpenableFiles\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LASfile.h">
       <Filter>OpenableFiles\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

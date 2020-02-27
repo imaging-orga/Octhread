@@ -32,7 +32,7 @@ public:
 		if (lower_ext == ".pts") {
 			return new SavePTS(_filename, _numMax, _bb);
 		}
-		if (lower_ext == ".las") {
+		if (lower_ext == ".las" || lower_ext == ".laz") {
 			return new SaveLAS(_filename, _numMax, _bb);
 		}
 		else
@@ -41,3 +41,4 @@ public:
 		return nullptr;
 	}
 };
+

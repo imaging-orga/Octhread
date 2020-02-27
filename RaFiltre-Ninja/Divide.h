@@ -3,6 +3,10 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+
+#include <cstdarg>
+
+
 class Divide
 {
 public:
@@ -14,7 +18,6 @@ public:
 
 	const unsigned numberOfDivision;
 private:
-
 	void addOcsaveFile(std::vector<std::string>& vec);
 	void fillOcsaveN(std::vector<std::ofstream>& filesWrite);
 	bool firstFormat(std::string stringToCompare, std::vector<std::string>& tokens);

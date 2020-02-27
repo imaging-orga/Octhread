@@ -1,7 +1,6 @@
 #pragma once
 #include "SavableFile.h"
-#include "liblas/liblas.hpp"
-
+#include "laswriter.hpp"
 class SaveLAS : public SavableFile
 {
 public:
@@ -15,9 +14,11 @@ public:
 
 private:
 
-	std::ofstream m_stream;
+	//std::ofstream m_stream;
 	long long m_numEffective;
-	liblas::Writer* m_writer;
-	liblas::Header m_header;
+	LASheader lasheader;
+	LASwriter* laswriter;
+
+	int offset_x = 0, offset_y = 0, offset_z = 0;
 };
 

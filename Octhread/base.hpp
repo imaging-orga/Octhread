@@ -90,9 +90,9 @@ POINT_CLOUD_REGISTER_POINT_STRUCT
  */
 class pt3d {
 public:
-	float x, y, z;
+	double x, y, z;
 
-	pt3d(float x_  = 0.f, float y_ = 0.f, float z_ = 0.f) 
+	pt3d(double x_  = 0.f, double y_ = 0.f, double z_ = 0.f)
 		: x(x_), y(y_), z(z_) 
 	{}
 
@@ -113,7 +113,7 @@ public:
 		return ret;
 	}
 
-	pt3d operator/(float k) {
+	pt3d operator/(double k) {
 		pt3d ret;
 		ret.x = x / k;
 		ret.y = y / k;
@@ -121,7 +121,7 @@ public:
 		return ret;
 	}
 
-	pt3d operator*(float k) {
+	pt3d operator*(double k) {
 		pt3d ret;
 		ret.x = x * k;
 		ret.y = y * k;

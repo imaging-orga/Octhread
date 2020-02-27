@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
 	
 
-	std::string name2 = "../FinishOcthread/test_000000.pts";
+	std::string name2 = "BigNuage.e57";
 
 
 	OpenableFile* file = OpenFactor::get(name2, 1024 * 1024 * 16);
