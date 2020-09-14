@@ -74,6 +74,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -84,7 +87,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>E:\ProjetGIT\LAStools-master\LASlib\inc;E:\ProjetGIT\LAStools-master\LASzip\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\ProgramTierce\LAStools-master\LASlib\inc;E:\ProgramTierce\LAStools-master\LASzip\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -94,7 +98,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>LASlib.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -113,14 +117,14 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>E:\ProjetGIT\LAStools-master\LASlib\inc;E:\ProjetGIT\LAStools-master\LASzip\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\ProgramTierce\LAStools-master\LASlib\inc;E:\ProgramTierce\LAStools-master\LASzip\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\x64\Debug;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\lib;E:\ProjetGIT\ProgramTierce\xerces-c-3.2.2\buildx64\src\Debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>OcthreadD.lib;FinishOcthreadD.lib;E57RefImpl-d.lib;xerces-c_3D.lib;ProceedOcthreadD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>LASlibD.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>

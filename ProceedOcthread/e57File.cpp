@@ -196,6 +196,7 @@ void e57File::read_Unified()
 	double xRot = scanHeader.pose.rotation.x;
 	double yRot = scanHeader.pose.rotation.y;
 	double zRot = scanHeader.pose.rotation.z;
+
 	if (nRow == 0 && nColumn == 0) {
 		nRow = nPoints;
 		nColumn = 1;
@@ -245,19 +246,18 @@ void e57File::read_Unified()
 	double colorGreenOffset = 0;
 	double colorBlueRange = 1;
 	double colorBlueOffset = 0;
-	if (scanHeader.pointFields.colorRedField)
-	{
-		bColor = true;
-		redData.resize(sizeChunks);
-		greenData.resize(sizeChunks);
-		blueData.resize(sizeChunks);
-		colorRedRange = scanHeader.colorLimits.colorRedMaximum - scanHeader.colorLimits.colorRedMinimum;
-		colorRedOffset = scanHeader.colorLimits.colorRedMinimum;
-		colorGreenRange = scanHeader.colorLimits.colorGreenMaximum - scanHeader.colorLimits.colorGreenMinimum;
-		colorGreenOffset = scanHeader.colorLimits.colorGreenMinimum;
-		colorBlueRange = scanHeader.colorLimits.colorBlueMaximum - scanHeader.colorLimits.colorBlueMinimum;
-		colorBlueOffset = scanHeader.colorLimits.colorBlueMinimum;
-	}
+	bColor = scanHeader.pointFields.colorRedField;
+	
+	redData.resize(sizeChunks);
+	greenData.resize(sizeChunks);
+	blueData.resize(sizeChunks);
+	colorRedRange = scanHeader.colorLimits.colorRedMaximum - scanHeader.colorLimits.colorRedMinimum;
+	colorRedOffset = scanHeader.colorLimits.colorRedMinimum;
+	colorGreenRange = scanHeader.colorLimits.colorGreenMaximum - scanHeader.colorLimits.colorGreenMinimum;
+	colorGreenOffset = scanHeader.colorLimits.colorGreenMinimum;
+	colorBlueRange = scanHeader.colorLimits.colorBlueMaximum - scanHeader.colorLimits.colorBlueMinimum;
+	colorBlueOffset = scanHeader.colorLimits.colorBlueMinimum;
+	
 
 	std::vector<int64_t> idElementValue;
 	std::vector<int64_t> startPointIndex;
@@ -359,9 +359,18 @@ void e57File::read_Unified()
 				pt.b = blue;
 			}
 			else {
-				pt.r = pt.intensity * 255;
-				pt.g = pt.intensity * 255;
-				pt.b = pt.intensity * 255;
+				unsigned color = (unsigned)(pt.intensity * 255);
+				pt.r = color;
+				pt.g = color;
+				pt.b = color;
+			}
+
+
+			if (pt.r == 0 && pt.g == 0 && pt.b == 0) {
+				unsigned color = (unsigned)(pt.intensity * 255);
+				pt.r = color;
+				pt.g = color;
+				pt.b = color;
 			}
 
 			pts[i] = pt;
@@ -472,19 +481,16 @@ void e57File::read_NonUnified(float distMax)
 		double colorGreenOffset = 0;
 		double colorBlueRange = 1;
 		double colorBlueOffset = 0;
-		if (scanHeader.pointFields.colorRedField)
-		{
-			bColor = true;
-			redData.resize(sizeChunks);
-			greenData.resize(sizeChunks);
-			blueData.resize(sizeChunks);
-			colorRedRange = scanHeader.colorLimits.colorRedMaximum - scanHeader.colorLimits.colorRedMinimum;
-			colorRedOffset = scanHeader.colorLimits.colorRedMinimum;
-			colorGreenRange = scanHeader.colorLimits.colorGreenMaximum - scanHeader.colorLimits.colorGreenMinimum;
-			colorGreenOffset = scanHeader.colorLimits.colorGreenMinimum;
-			colorBlueRange = scanHeader.colorLimits.colorBlueMaximum - scanHeader.colorLimits.colorBlueMinimum;
-			colorBlueOffset = scanHeader.colorLimits.colorBlueMinimum;
-		}
+		bColor = scanHeader.pointFields.colorRedField;
+		redData.resize(sizeChunks);
+		greenData.resize(sizeChunks);
+		blueData.resize(sizeChunks);
+		colorRedRange = scanHeader.colorLimits.colorRedMaximum - scanHeader.colorLimits.colorRedMinimum;
+		colorRedOffset = scanHeader.colorLimits.colorRedMinimum;
+		colorGreenRange = scanHeader.colorLimits.colorGreenMaximum - scanHeader.colorLimits.colorGreenMinimum;
+		colorGreenOffset = scanHeader.colorLimits.colorGreenMinimum;
+		colorBlueRange = scanHeader.colorLimits.colorBlueMaximum - scanHeader.colorLimits.colorBlueMinimum;
+		colorBlueOffset = scanHeader.colorLimits.colorBlueMinimum;
 
 		std::vector<int64_t> idElementValue;
 		std::vector<int64_t> startPointIndex;
@@ -596,9 +602,17 @@ void e57File::read_NonUnified(float distMax)
 						pt.b = blue;
 					}
 					else {
-						pt.r = pt.intensity * 255;
-						pt.g = pt.intensity * 255;
-						pt.b = pt.intensity * 255;
+						unsigned color = (unsigned)(pt.intensity * 255);
+						pt.r = color;
+						pt.g = color;
+						pt.b = color;
+					}
+
+					if (pt.r == 0 && pt.g == 0 && pt.b == 0) {
+						unsigned color = (unsigned)(pt.intensity * 255);
+						pt.r = color;
+						pt.g = color;
+						pt.b = color;
 					}
 					pts.push_back(pt);
 					count++;
@@ -633,7 +647,6 @@ void e57File::read_NonUnified(float distMax)
 					else {
 						pt.intensity = 0.5;
 					}
-
 					if (bColor) {                     //Normalize color to 0 - 255
 						int red = (int)(((redData[i] - colorRedOffset) * 255) / colorRedRange);
 						int green = (int)(((greenData[i] - colorGreenOffset) * 255) / colorGreenRange);
@@ -643,9 +656,17 @@ void e57File::read_NonUnified(float distMax)
 						pt.b = blue;
 					}
 					else {
-						pt.r = pt.intensity * 255;
-						pt.g = pt.intensity * 255;
-						pt.b = pt.intensity * 255;
+						unsigned color = (unsigned)(pt.intensity * 255);
+						pt.r = color;
+						pt.g = color;
+						pt.b = color;
+					}
+
+					if (pt.r == 0 && pt.g == 0 && pt.b == 0) {
+						unsigned color = (unsigned)(pt.intensity * 255);
+						pt.r = color;
+						pt.g = color;
+						pt.b = color;
 					}
 					pts.push_back(pt);
 					count++;
@@ -654,6 +675,7 @@ void e57File::read_NonUnified(float distMax)
 				p_oct.addPoint(pts);
 			}
 		}
+
 	}
 	eReader.Close();
 	p_oct.save();

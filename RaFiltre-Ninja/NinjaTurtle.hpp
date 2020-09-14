@@ -1,9 +1,10 @@
 #ifndef __NINJA_TURTLE_HPP
 #define __NINJA_TURTLE_HPP
 #include <iostream>
-/*!
- * \brief Rien à dire ;)
- */
+
+/// <summary>
+/// Logo du Rafiltre-Ninja
+/// </summary>
 void drawNinja() {
 	std::cout << "                                        _______________________________\n";
 	std::cout << "                  _.---._" << "               |       C'est fini!            |\n";

@@ -74,6 +74,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -82,9 +85,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProjetGIT\LAStools-master\LASzip\src;E:\ProjetGIT\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProgramTierce\LAStools-master\LASlib\inc;E:\ProgramTierce\LAStools-master\LASzip\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -94,7 +98,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>LASlib.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -111,7 +115,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;;E:\ProjetGIT\LAStools-master\LASzip\src;E:\ProjetGIT\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProgramTierce\LAStools-master\LASzip\src;E:\ProgramTierce\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -122,6 +126,9 @@
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <Lib>
+      <AdditionalLibraryDirectories>../lib;</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

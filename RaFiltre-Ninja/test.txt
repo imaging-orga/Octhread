@@ -1,0 +1,1 @@
+--nameIn "C:\Users\r.schimchowitsch\Desktop\Rafiltre-datas\10Scans-f2.e57" --nocut 10.000000 10.000000 10.000000 --overlap 0.001000

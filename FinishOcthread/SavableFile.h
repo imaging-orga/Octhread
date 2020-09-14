@@ -3,51 +3,60 @@
 #include "../Octhread/base.hpp"
 /*!
  * Class SavableFile
- * \brief Classe mère pour la sauvegarde de fichiers.
- * \redefinition nécessaire :
- *	-write(pts)
- *	-writeHeader()
- *	-writeFooter()
+ * \brief 
+ * \
  */
+
+/// <summary>
+/// Classe mère pour la sauvegarde de fichiers.
+/// </summary>
+/// <remark>
+/// redefinition nécessaire :
+/// -write(pts)
+/// -writeHeader()
+/// -writeFooter()
+/// </remark>
 class SavableFile
 {
 public:
 	SavableFile(std::string _name, unsigned long long int _numMax, BoundingBox& _bb);
-	/*!
-	 * \brief Ecrire les points contenu dans \pts dans le fichier
-	 * 
-	 * \param pts : Les points à écrire dans le fichier
-	 * \return Le nombre de points écrit
-	 */
+	 
+	/// <summary>
+	/// Ecrire les points contenu dans \pts dans le fichier
+	/// </summary>
+	/// <param name="pts">Les points à écrire dans le fichier</param>
+	/// <returns>Le nombre de points écrit</returns>
 	virtual int write(std::vector<mypt3d>& pts) = 0;
 
-	/*!
-	 * \brief Ecrire l'header du fichier pour les fichiers qui ont besoin d'un header.
-	 * \return ??? Au cas où ???
-	 */
+	/// <summary>
+	/// Ecrire l'header du fichier pour les fichiers qui ont besoin d'un header.
+	/// </summary>
+	/// <returns>Si besoin est de retourner quelque chose (erreur?)</returns>
 	virtual int writeHeader() = 0;
 
-	/*!
-	 * \brief Ecrire le footer du fichier pour le fermer
-	 * \return ??? Au cas où ???
-	 */
+	/// <summary>
+	/// Ecrire le footer du fichier pour le fermer
+	/// </summary>
+	/// <returns>Si besoin est de retourner quelque chose (erreur?)</returns>
 	virtual int writeFooter() = 0;
+
 	~SavableFile() = default;
 
 protected:
-	/*!
-	 * Le nom du fichier
-	 */
-	std::string p_name;
 
-	/*!
-	 * Le nombre max de point qu'il y aura dans le fichier
-	 */
+	/// <summary>
+	/// Le nom du fichier
+	/// </summary>
+	std::string p_name;
+	
+	/// <summary>
+	///  Le nombre max de point qu'il y aura dans le fichier
+	/// </summary>
 	unsigned long long int p_numMax;
 
-	/*!
-	 * La bounding box global du nuage 
-	 */
+	/// <summary>
+	/// La bounding box global du nuage 
+	/// </summary>
 	BoundingBox p_bb;
 };
 

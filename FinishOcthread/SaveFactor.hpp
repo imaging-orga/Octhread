@@ -5,27 +5,22 @@
 #include <boost/algorithm/string.hpp>
 #include "SavePTS.h"
 #include "SaveLAS.h"
-/*!
- * Class SaveFactor
- * \brief Factory des Savables file. Récuperer l'extension du fichier, pour savoir ce qu'on va créer
- * 
- */
 
+/// <summary>
+///  Factory des Savables file. Récuperer l'extension du fichier, pour savoir ce qu'on va créer
+/// </summary>
 class SaveFactor {
 public:
-	/*!
-	 * \brief get : Récupérer le bon format de fichier et créer le bon constructeur en fonction
-	 * 
-	 * \param _filename
-	 * \param _numMax
-	 * \param _bb
-	 * \return 
-	 */
+	/// <summary>
+	/// Récupérer le bon format de fichier et créer le bon constructeur en fonction
+	/// </summary>
+	/// <param name="_filename"></param>
+	/// <param name="_numMax"></param>
+	/// <param name="_bb"></param>
+	/// <returns></returns>
 	static SavableFile* get(std::string _filename, unsigned long long int _numMax, BoundingBox& _bb) {
 		std::string ext = boost::filesystem::extension(_filename);
 		std::string lower_ext = boost::to_lower_copy(ext);
-		//for (auto& c : ext)
-		//	c = tolower(c);
 		if (lower_ext == ".e57") {
 			return new SaveE57(_filename, _numMax, _bb);
 		}

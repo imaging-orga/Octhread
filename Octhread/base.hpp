@@ -35,10 +35,10 @@
 #include <pcl/filters/impl/shadowpoints.hpp>
 #include <pcl/visualization/impl/pcl_visualizer.hpp>
 #include <pcl/visualization/impl/point_cloud_geometry_handlers.hpp>
-/*!
- * \brief Point personnalisé, qui contient l'info de la couleur et de l'intensité, en plus de la position :)
- * 
- */
+
+/// <summary>
+/// Point personnalisé, qui contient l'info de la couleur et de l'intensité, en plus de la position :)
+/// </summary>
 struct _MyPoint {
 	PCL_ADD_POINT4D;
 	PCL_ADD_RGB;
@@ -85,9 +85,10 @@ POINT_CLOUD_REGISTER_POINT_STRUCT
 (uint32_t, rgba, rgba)
 )
 
-/*!
- * \brief contient juste les X,Y,Z
- */
+
+/// <summary>
+/// contient juste les X,Y,Z
+/// </summary>
 class pt3d {
 public:
 	double x, y, z;
@@ -104,6 +105,14 @@ public:
 		ret.z = z + pt.z;
 		return ret;
 	}
+
+	//pt3d operator+(pt3d pt) {
+	//	pt3d ret;
+	//	ret.x = x + pt.x;
+	//	ret.y = y + pt.y;
+	//	ret.z = z + pt.z;
+	//	return ret;
+	//}
 
 	pt3d operator-(pt3d& pt) {
 		pt3d ret;
@@ -149,6 +158,20 @@ public:
 
 	pt3d getHalfDimension() {
 		return (max - min) / 2.0;
+	}
+
+	float getHalfDimension(int index) {
+		switch (index) {
+		case 0:
+			return (max.x - min.x) / 2.0;
+		case 1:
+			return (max.y - min.y) / 2.0;
+		case 2:
+			return (max.z - min.z) / 2.0;
+		default:
+			std::cout << "Erreur, index doit être compris entre 0 et 3 exclus";
+			return -1;
+		}
 	}
 };
 

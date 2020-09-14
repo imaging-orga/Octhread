@@ -25,6 +25,8 @@ void FILTRE::downSample(pcl::PointCloud<mypt3d>::Ptr pointcloud, float x, float 
 		}
 		else { //Si on doit diviser
 			// dans PCL, il faut que la taille d'une box soit tel que x*y*z (taille de la box) < 2^31 (signed)
+
+
 			double sizeOfLeaf = ((1290 * x) * 9.) / 10.; //90%
 			pcl::octree::OctreePointCloud<mypt3d> octree(sizeOfLeaf);
 			octree.setInputCloud(pointcloud);
@@ -63,6 +65,51 @@ void FILTRE::statisticalRemoveOutliers(pcl::PointCloud<mypt3d>::Ptr pointcloud, 
 	}
 }
 
+inline bool distancePoint(mypt3d& pt, float distance) {
+	return (pt.x * pt.x + pt.y * pt.y + pt.z * pt.z) < distance * distance;
+}
+
+
+//On ne travaillera pas sur les points a une distance du centre superieur a "distance"
+void FILTRE::statisticalRemoveOutliers(pcl::PointCloud<mypt3d>::Ptr pointcloud, int meanK, float devMulThresh, float distance) {
+
+	pcl::PointCloud<mypt3d>::Ptr cloudIn(new pcl::PointCloud<mypt3d>);
+	pcl::PointCloud<mypt3d>::Ptr cloudOut(new pcl::PointCloud<mypt3d>);
+
+	std::vector<int> indexIn;
+	for (int i = 0; i < pointcloud->points.size(); ++i) {
+		mypt3d& pt = pointcloud->points[i];
+
+		if (distancePoint(pt, distance)) {
+			indexIn.push_back(i);
+		}
+	}
+	boost::shared_ptr<std::vector<int>> index_ptr = boost::make_shared<std::vector<int>>(indexIn);
+	pcl::ExtractIndices<mypt3d> extract;
+	extract.setInputCloud(pointcloud);
+	extract.setIndices(index_ptr);
+	extract.setNegative(false);
+	extract.filter(*cloudIn);
+
+	extract.setNegative(true);
+	extract.filter(*cloudOut);
+	std::cout << pointcloud->points.size() << "\n";
+	std::cout << "cloudIn : " << cloudIn->points.size() << " " << cloudIn->points[0].x << " " << cloudIn->points[0].y << " " << cloudIn->points[0].z << "\n";
+	if (cloudOut->points.size() > 0)
+		std::cout << "cloudOut : " << cloudOut->points.size() << " " << cloudOut->points[0].x << " " << cloudOut->points[0].y << " " << cloudOut->points[0].z << "\n\n";
+
+	pcl::StatisticalOutlierRemoval<mypt3d> sor;
+
+	if (meanK > 0.0f)
+		sor.setMeanK(meanK);
+	if (devMulThresh > 0.0f)
+		sor.setStddevMulThresh(devMulThresh);
+
+	sor.setInputCloud(cloudIn);
+	sor.filter(*pointcloud);
+	*pointcloud += *cloudOut;
+}
+
 //On utilise la distance au carré, pour gagner un peu de vitesse sur le filtre... C'est dérisoire mais c'est déjà ça. (ça ne modifie pas l'ordre de grandeur)
 //puisque le sqrt est une opération "longue"
 float squaredEuclidianDist(float x, float y, float z, mypt3d& pt) {
@@ -72,7 +119,6 @@ float squaredEuclidianDist(float x, float y, float z, mypt3d& pt) {
 float squaredEuclidianDistCenter(mypt3d& pt) {
 	return (pt.x * pt.x) + (pt.y * pt.y) + (pt.z * pt.z);
 }
-
 
 void FILTRE::distanceFilter(pcl::PointCloud<mypt3d>::Ptr cloud_in, float minDist, float maxDist, float Ox, float Oy, float Oz) {
 	if (cloud_in->points.size() > 0) {
@@ -94,7 +140,6 @@ void FILTRE::distanceFilter(pcl::PointCloud<mypt3d>::Ptr cloud_in, float minDist
 		extract.setNegative(true);
 		extract.filter(*cloud_in);
 	}
-
 }
 
 //[omin,omax] => [nMin, nMax]

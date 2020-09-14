@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="CutInParts">
+      <UniqueIdentifier>{83d55e7c-8f8c-4f78-adc2-fd8faddf492b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CutFile">
+      <UniqueIdentifier>{6aa85602-255f-4e25-aee7-eda04a155ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QT-GUI">
+      <UniqueIdentifier>{7b95e034-135a-4b45-bf73-67e50936ee8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Optimizer">
+      <UniqueIdentifier>{a1953b50-8d72-41a0-b54c-8878a50ef1b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UniqueFileFunctions.h">
@@ -20,6 +32,18 @@
     </ClInclude>
     <ClInclude Include="SeveralFileFunctions.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CutIntoParts.h">
+      <Filter>CutInParts</Filter>
+    </ClInclude>
+    <ClInclude Include="Part.h">
+      <Filter>CutInParts</Filter>
+    </ClInclude>
+    <ClInclude Include="FichierSansPoints.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Optimizer.h">
+      <Filter>Optimizer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +55,15 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CutIntoParts.cpp">
+      <Filter>CutInParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Part.cpp">
+      <Filter>CutInParts</Filter>
+    </ClCompile>
+    <ClCompile Include="Optimizer.cpp">
+      <Filter>Optimizer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

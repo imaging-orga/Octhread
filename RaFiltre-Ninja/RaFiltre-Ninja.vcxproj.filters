@@ -18,10 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Previsu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Divide.cpp">
+    <ClCompile Include="MultiScan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,10 +26,7 @@
     <ClInclude Include="NinjaTurtle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Previsu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Divide.h">
+    <ClInclude Include="MultiScan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

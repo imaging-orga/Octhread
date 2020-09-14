@@ -6,10 +6,10 @@
 #include "NinjaTurtle.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
+
 #include "../ProceedOcthread/OpenFactor.hpp"
-#include "Previsu.h"
 #include <shellapi.h>
-#include "Divide.h"
+#include "MultiScan.h"
 using namespace boost;
 namespace po = boost::program_options;
 
@@ -29,6 +29,11 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		("previsu, PV", po::value<bool>(), "previsu")
 		("division, div", po::value<int>(), "division")
 		("Potree, pot", po::value<bool>(), "Potree")
+		("nonUnified, nnunif", po::value<int>(), "nonUnified")
+		("cut, c", po::value<std::string>(), "cut")
+		("overlap, overla", po::value<float>(), "overlap")
+		("nocut, nc", po::value<std::vector<double>>()->multitoken(), "nocut")
+
 		;
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -69,7 +74,7 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		retParam.downSample_size = value;
 	}
 	if (vm.count("removeOutliers")) {
-		if (vm["removeOutliers"].as<std::vector<double>>().size() != 2) {
+		if (vm["removeOutliers"].as<std::vector<double>>().size() != 3) {
 			std::cerr << "Error while parsing, removeOutliers need 2 arguments [meanK, devMultThres]\n";
 			return 1;
 		}
@@ -78,14 +83,10 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 			retParam.do_removeOutliers = true;
 			retParam.removeOutliers_meanK = values[0];
 			retParam.removeOutliers_devMultThresh = values[1];
+			retParam.removeOutliers_distance = values[2];
 		}
 	}
 
-	if (vm.count("division")) {
-		double value = vm["division"].as<int>();
-		retParam.do_div = true;
-		retParam.num_div = value;
-	}
 	if (vm.count("correctionGamma")) {
 		bool value = vm["correctionGamma"].as<bool>();
 		retParam.do_correctionGamma = value;
@@ -100,89 +101,99 @@ PARAMS::filter_params getParameters(int argc, char* argv[]) {
 		bool value = vm["Potree"].as<bool>();
 		retParam.do_potree = value;
 	}
+
+	if (vm.count("nonUnified")) {
+		int value = vm["nonUnified"].as<int>();
+		retParam.nonUnified_option = value;
+		retParam.do_nonUnified = true;
+		//retParam.do_nonUnified = value;
+	}
+
+	if (vm.count("cut")) {
+		std::string value = vm["cut"].as<std::string>();
+		retParam.do_cut = true;
+		retParam.cut_fileIn = value;
+	}
+
+	if (vm.count("overlap")) {
+		float value = vm["overlap"].as<float>();
+		retParam.cut_overlap = value;
+	}
+
+	if (vm.count("nocut")) {
+		std::vector<double> values = vm["nocut"].as<std::vector<double>>();
+		retParam.do_nocut = true;
+		retParam.nocut_X = values[0];
+		retParam.nocut_Y = values[1];
+		retParam.nocut_Z = values[2];
+	}
 	return retParam;
 }
 
-
+VOID startup(std::string lpApplicationName, std::string arguments)
+{
+	HINSTANCE hRet = ShellExecute(
+		HWND_DESKTOP, //Parent window
+		"open",       //Operation to perform
+		lpApplicationName.c_str(),       //Path to program
+		arguments.c_str(),         //Parameters
+		NULL,         //Default directory
+		SW_SHOW);     //How to open
+}
 
 int main(int argc, char* argv[]) {
-	//Necessite d'écrire les paramètres quand on call le programme
 
-	//Divide essai("Pilege-PartG", 2);
-	//essai.CutOcsave();
-	//getchar();
 	PARAMS::filter_params par = getParameters(argc, argv);
 
-	if (par.do_tree) {
-		OpenableFile* file = OpenFactor::get(par.nameIn, par.tree_sizeLeaf);
-		if (par.do_distance)
-			file->read(par.distance_max);
-		else
-			file->read(0.);
-		std::cout << "Fin De la création de l'arbre" << std::endl;
+
+	if (par.do_nonUnified) { // Multiple scan
+		MultiScan ms(par.nameIn, par.nameOut);
+		ms.process(par, (FILE_OUT_TYPE)par.nonUnified_option);
 	}
-	//if (par.previz) {
-	//	Previsu previs(par.nameIn);
-	//	previs.pickWiseFile();
-	//	previs.Visualize();
-	//}
-	
-	
-	
-	//Créer un Filtering (Filtering)
-	if (!par.do_div) {
+	else {
+
+		if (par.do_tree) {
+			OpenableFile* file = OpenFactor::get(par.nameIn, par.tree_sizeLeaf);
+			if (par.do_distance)
+				file->read(par.distance_max);
+			else
+				file->read(0.);
+			std::cout << "Fin De la création de l'arbre" << std::endl;
+		}
+		//Créer un Filtering (Filtering)
+		
 		Filtering filter(par.nameDir, par.nameOut);
 		filter.filter(par);
 		filter.finish();
 		if (par.do_potree) { //Si on doit faire le potree
-			ShellExecuteA(
-				NULL,
-				"open",
-				"datas\\PotreeConverter.exe",
-				par.nameOut.c_str(),
-				NULL,
-				SW_SHOWNORMAL
-			);
+			startup("datas\\PotreeConverter.exe", par.nameOut.c_str());
 
-		}
-	}
-	else {//Si on doit faire une do_div
-		Divide div(par.nameDir, par.num_div);
-		div.CutOcsave();
-		boost::filesystem::path p(par.nameOut);
-
-		std::string pathName = p.parent_path().string();
-		std::string filename = p.stem().string();
-		std::string extension = p.extension().string();
-
-
-		for (int i = 0; i < par.num_div; ++i) {
-			std::string new_name = pathName + "\\" + filename + "_" + std::to_string(i) + extension;
-			//Remplacer le Ocsave par OcSave_i;
-			std::string newOcsave = par.nameDir + "\\.OcSave_" + std::to_string(i);
-			std::string Ocsave = par.nameDir + "\\.OcSave";
-
-			std::string tmp = par.nameDir + "\\tmp";
-
-			rename(Ocsave.c_str(), tmp.c_str());
-			rename(newOcsave.c_str(), Ocsave.c_str());
-
-
-			//lancer le calcul ici :)
-			Filtering filter(par.nameDir, new_name);
-			filter.filter(par);
-			filter.finish();
-
-			rename(Ocsave.c_str(), newOcsave.c_str());
-			rename(tmp.c_str(), Ocsave.c_str());
-
-
-			std::cout << "Fichier " << i << " Fini :) \n\n"; 
 		}
 		
-	}
+		if (!par.do_cut && !par.do_nocut) {
+			drawNinja();
+			getchar();
+		}
 
+	}
 	
-	drawNinja();
+	std::cout << par.do_cut << " " << par.do_nocut << std::endl;
+	if (par.do_cut) {
+		std::string arguments = "--nameIn \"" + par.nameOut + "\" --cut \"" + par.cut_fileIn + "\" --overlap " + std::to_string(par.cut_overlap);
+		startup("datas\\OutilsExternes.exe", arguments);
+
+		drawNinja();
+		getchar();
+	}
+	if (par.do_nocut) {
+		std::string arguments = "--nameIn \"" + par.nameOut + "\" --nocut " + std::to_string(par.nocut_X) + " " + std::to_string(par.nocut_Y) + " " + std::to_string(par.nocut_Z) + " --overlap " + std::to_string(par.cut_overlap);
+		startup("datas\\OutilsExternes.exe", arguments);
+
+		drawNinja();
+		getchar();
+	}
+	
+	
 	getchar();
+	
 }

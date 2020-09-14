@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OutilsExterne-RafiltreNinja
 		{055B51D6-BB02-4D6D-9BD4-BF5199AF4B37} = {055B51D6-BB02-4D6D-9BD4-BF5199AF4B37}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NDP_PCL", "NDP_PCL\NDP_PCL\NDP_PCL.vcxproj", "{1AEADDD3-2324-4B14-8182-3A6E43C05164}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -95,6 +97,14 @@ Global
 		{0ADC87F8-279A-450D-9913-FABB50A9612C}.Release|x64.Build.0 = Release|x64
 		{0ADC87F8-279A-450D-9913-FABB50A9612C}.Release|x86.ActiveCfg = Release|Win32
 		{0ADC87F8-279A-450D-9913-FABB50A9612C}.Release|x86.Build.0 = Release|Win32
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Debug|x64.ActiveCfg = Debug|x64
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Debug|x64.Build.0 = Debug|x64
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Debug|x86.ActiveCfg = Debug|Win32
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Debug|x86.Build.0 = Debug|Win32
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Release|x64.ActiveCfg = Release|x64
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Release|x64.Build.0 = Release|x64
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Release|x86.ActiveCfg = Release|Win32
+		{1AEADDD3-2324-4B14-8182-3A6E43C05164}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

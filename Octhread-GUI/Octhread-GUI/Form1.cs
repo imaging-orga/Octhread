@@ -13,6 +13,7 @@ namespace Octhread_GUI
 {
     public partial class BackScreen : Form
     {
+        public string cutterText;
         public BackScreen()
         {
             InitializeComponent();
@@ -20,6 +21,12 @@ namespace Octhread_GUI
 
         private void ButtonReset_Click(object sender, EventArgs e)
         {
+            /*Unified/nonUnified*/
+            CheckBoxOpenUnified.Checked = false;
+            CheckBoxOpenNonUnified.Checked = false;
+            CheckBoxSaveUnified.Checked = false;
+            CheckBoxSaveNonUnified.Checked = false;
+
             /*Tree*/
             CheckBoxTree.Checked = true;
             TextBoxTreeSize.ReadOnly = false;
@@ -53,17 +60,17 @@ namespace Octhread_GUI
             TextBoxSODevMultThresh.Text = "";
             TextBoxSODevMultThresh.BackColor = Color.PaleVioletRed;
 
+            TextBoxSODistance.ReadOnly = true;
+            TextBoxSODistance.Text = "";
+            TextBoxSODistance.BackColor = Color.PaleVioletRed;
             /*Correction Gamma*/
             CheckBoxGammaCorrection.Checked = true;
 
-            /*Nombre div*/
-            checkBoxNombreFichiers.Checked = false;
-            textBoxNombreFichiers.Text = "";
-            textBoxNombreFichiers.ReadOnly = true;
-            textBoxNombreFichiers.BackColor = Color.PaleVioletRed;
+            cutterText = "";
 
-            /*REMOVE*/
-            checkBoxNombreFichiers.Enabled = false;
+            CheckBoxSODISTANCE.Checked = false;
+            
+            
         }
 
         private void BackScreen_Load(object sender, EventArgs e)
@@ -89,15 +96,21 @@ namespace Octhread_GUI
                     if (num == 1) // 1 unique scan
                     {
                         CheckBoxDistance.Enabled = false;
+                        CheckBoxOpenUnified.Checked = true;
+                        CheckBoxSaveUnified.Checked = true;
+                        //CheckBoxUnified.Enabled = false;
                     }
                     else
                     {
                         CheckBoxDistance.Enabled = true;
+                        //CheckBoxUnified.Enabled = true;
+                        CheckBoxOpenNonUnified.Checked = true;
                     }
                 }
                 else
                 {
                     CheckBoxDistance.Enabled = true;
+                    //CheckBoxUnified.Enabled = true;
                 }
                 long num_points = -1;
                 if (Int64.TryParse(lines[2], out num_points))
@@ -115,6 +128,7 @@ namespace Octhread_GUI
                 {
                     LabelPointCount.Text = "n/a";
                 }
+                File.Delete(path);
             }
             else
                 readAndFillInfosNA();
@@ -126,18 +140,30 @@ namespace Octhread_GUI
             LabelPointCount.Text = "n/a";
         }
 
+        private void setToLaz(string path)
+        {
+            string new_path = Path.ChangeExtension(path, ".laz");
+            TextBoxSave.Text = new_path;
+        }
+
         private void TextBoxSave_TextChanged(object sender, EventArgs e)
         {
             string path = TextBoxSave.Text;
             string ext = Path.GetExtension(path);
             
-            if (ext.ToLower() == ".laz")
+            //if (ext.ToLower() == ".laz")
+            //{
+            //    checkBoxPotree.Enabled = true;
+            //}
+            //else
+            //{
+            //    checkBoxPotree.Enabled = false;
+            //}
+
+
+            if (checkBoxPotree.Checked)
             {
-                checkBoxPotree.Enabled = true;
-            }
-            else
-            {
-                checkBoxPotree.Enabled = false;
+                setToLaz(path);
             }
         }
 
@@ -145,15 +171,17 @@ namespace Octhread_GUI
         {
 
             string path = TextBoxOpen.Text; //absolute path of file (D:/Some Files/My file.ext)"
-            string cmdCall = "datas\\GetInfo.exe"; //GetInfo is at the path datas/GetInfos.exe
-            ProcessStartInfo startInfo = new ProcessStartInfo(); 
+            string cmdCall = "datas\\OutilsExternes.exe"; //GetInfo is at the path datas/GetInfos.exe
+            ProcessStartInfo startInfo = new ProcessStartInfo();
 
             startInfo.FileName = cmdCall;
-            startInfo.Arguments = "\"" + path + "\""; //the problem seems to be here
+
+            string CmdArgs = " --nameIn \"" + path + "\"" + " --retrieveInfos true";
+            startInfo.Arguments = CmdArgs;
 
             var proc = Process.Start(startInfo); //start the process 
             proc.WaitForExit(); //wait for it to finish
-            
+
             string fileInfoName = Path.GetFileNameWithoutExtension(path) + ".info";
             if (proc.ExitCode == 0)
             {
@@ -166,6 +194,7 @@ namespace Octhread_GUI
             }
 
         }
+
         private void ButtonOpenFile_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -182,7 +211,7 @@ namespace Octhread_GUI
                 }
             }
         }
-
+        
         private void ButtonSaveFile_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -288,32 +317,39 @@ namespace Octhread_GUI
 
             }
         }
-        private void checkBoxNombreFichiers_Click(object sender, EventArgs e)
-        {
-            if (checkBoxNombreFichiers.Checked)
-            {
-                textBoxNombreFichiers.Text = "4";
-                textBoxNombreFichiers.ReadOnly = false;
-                textBoxNombreFichiers.BackColor = Color.White;
-            }
-            else
-            {
-                textBoxNombreFichiers.Text = "";
-                textBoxNombreFichiers.ReadOnly = true;
-                textBoxNombreFichiers.BackColor = Color.PaleVioletRed;
+        //private void checkBoxNombreFichiers_Click(object sender, EventArgs e)
+        //{
+        //    if (checkBoxNombreFichiers.Checked)
+        //    {
+        //        textBoxNombreFichiers.Text = "4";
+        //        textBoxNombreFichiers.ReadOnly = false;
+        //        textBoxNombreFichiers.BackColor = Color.White;
+        //    }
+        //    else
+        //    {
+        //        textBoxNombreFichiers.Text = "";
+        //        textBoxNombreFichiers.ReadOnly = true;
+        //        textBoxNombreFichiers.BackColor = Color.PaleVioletRed;
 
-            }
-        }
+        //    }
+        //}
         private void CheckBoxRemoveOutliers_Click(object sender, EventArgs e)
         {
             if (CheckBoxRemoveOutliers.Checked)
             {
-                TextBoxSODevMultThresh.Text = "1";
-                TextBoxSOMeanK.Text = "20";
+                TextBoxSODevMultThresh.Text = "3";
+                TextBoxSOMeanK.Text = "50";
                 TextBoxSODevMultThresh.ReadOnly = false;
                 TextBoxSOMeanK.ReadOnly = false;
                 TextBoxSODevMultThresh.BackColor = Color.White;
                 TextBoxSOMeanK.BackColor = Color.White;
+
+                if (CheckBoxOpenNonUnified.Checked && CheckBoxSODISTANCE.Checked)
+                {
+                    TextBoxSODistance.Text = "20.0";
+                    TextBoxSODistance.ReadOnly = false;
+                    TextBoxSODistance.BackColor = Color.White;
+                }
 
             }
             else
@@ -324,6 +360,10 @@ namespace Octhread_GUI
                 TextBoxSOMeanK.ReadOnly = true;
                 TextBoxSODevMultThresh.BackColor = Color.PaleVioletRed;
                 TextBoxSOMeanK.BackColor = Color.PaleVioletRed;
+                TextBoxSODistance.Text = "";
+                TextBoxSODistance.ReadOnly = true;
+                TextBoxSODistance.BackColor = Color.PaleVioletRed;
+                CheckBoxSODISTANCE.Checked = false;
             }
         }
 
@@ -340,6 +380,19 @@ namespace Octhread_GUI
             }
             // If you want, you can allow decimal (float) numbers
             if ((e.KeyChar == '.') && ((sender as RichTextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+        private void refuseLettersDoubleTextBox(object sender, KeyPressEventArgs e)
+        {
+            // Verify that the pressed key isn't CTRL or any non-numeric digit
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+            // If you want, you can allow decimal (float) numbers
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
             {
                 e.Handled = true;
             }
@@ -383,8 +436,6 @@ namespace Octhread_GUI
             Dispose(true);
         }
 
-
-
         public double toDouble(string text)
         {
             if (String.IsNullOrEmpty(text))
@@ -410,6 +461,13 @@ namespace Octhread_GUI
 
 
 
+            bool
+                openUnified = CheckBoxOpenUnified.Checked,
+                openNonUnified = CheckBoxOpenNonUnified.Checked,
+                saveUnified = CheckBoxSaveUnified.Checked,
+                saveNonUnified = CheckBoxSaveNonUnified.Checked,
+                saveNonUnifiedMultiple = CheckBoxMultipleScan.Checked,
+                saveNonUnifiedUnique = CheckBoxUniqueScan.Checked;
 
             bool
                 do_Tree = CheckBoxTree.Checked,
@@ -417,7 +475,6 @@ namespace Octhread_GUI
                 do_DownSample = CheckBoxDownSample.Checked,
                 do_RemoveOutliers = CheckBoxRemoveOutliers.Checked,
                 do_GammaCorrection = CheckBoxGammaCorrection.Checked,
-                do_Div = checkBoxNombreFichiers.Checked,
                 do_Potree = checkBoxPotree.Checked;
 
             double
@@ -427,11 +484,17 @@ namespace Octhread_GUI
                 sizeDownSample = toDouble(TextBoxDownSampleSize.Text),
 
                 SODevMultThresh = toDouble(TextBoxSODevMultThresh.Text);
+            double SODistance;
+            if (TextBoxSODistance.Text == "")
+                SODistance = 0;
+            else
+                SODistance = toDouble(TextBoxSODistance.Text);
+
+
 
             int
                 SOMeanK = toInt(TextBoxSOMeanK.Text),
-                TreeSize = toInt(TextBoxTreeSize.Text),
-                division = toInt(textBoxNombreFichiers.Text);
+                TreeSize = toInt(TextBoxTreeSize.Text);
                 
             if (do_Tree)
             {
@@ -462,22 +525,59 @@ namespace Octhread_GUI
             }
             if (do_RemoveOutliers)
             {
-                CmdArgs += " --removeOutliers " + SOMeanK + " " + SODevMultThresh.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+                CmdArgs += " --removeOutliers " + SOMeanK + " " + SODevMultThresh.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture) + " ";
+                if (CheckBoxOpenNonUnified.Checked && CheckBoxSODISTANCE.Checked)
+                {
+                    CmdArgs += SODistance.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+                }
+                else
+                    CmdArgs += "0.0";
+
             }
+            //if (do_Unified)
+            //{
+            //    CmdArgs += " --nonUnified true";
+            //}
             if (do_GammaCorrection)
             {
                 CmdArgs += " --correctionGamma true";
             }
-            if (do_Div)
-            {
-                CmdArgs += " --division " + division;
-            }
+            //if (do_Div)
+            //{
+            //    CmdArgs += " --division " + division;
+            //}
             if (do_Potree)
             {
                 CmdArgs += " --Potree true";
             }
-          
+            
+            if (saveNonUnified)
+            {
+                CmdArgs += " --nonUnified";
+                if (saveNonUnifiedMultiple)
+                {
+                    CmdArgs += " 1 ";
+                }
+                else if (saveNonUnifiedUnique)
+                {
+                    CmdArgs += " 0 ";
+                }
+            }
 
+            if (cutterText != "")
+            {
+                CmdArgs += cutterText;
+            }
+
+
+
+            //Ecrire un fichier qui a comme nom NameIn+.txt
+            //Ecire Args dedans,
+            string[] lines = new string[1];
+            lines[0]= CmdArgs;
+            // WriteAllLines creates a file, writes a collection of strings to the file,
+            // and then closes the file.  You do NOT need to call Flush() or Close().
+            System.IO.File.AppendAllLines(nameSave + ".txt", lines);
 
             string cmdPath = ".\\" + System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\";
 
@@ -489,116 +589,146 @@ namespace Octhread_GUI
             startInfo.Arguments = CmdArgs;
             //MessageBox.Show(cmdText);
             Process.Start(startInfo);
+
+            cutterText = "";
         }
 
         private void CheckBoxTree_CheckedChanged(object sender, EventArgs e)
         {
 
         }
-        
 
-        private void buttonPrevisu_Click(object sender, EventArgs e)
+        private void checkBoxPotree_CheckedChanged(object sender, EventArgs e)
         {
-            //On ajoute Previsu
-            string nameOpen = TextBoxOpen.Text;
-            string nameSave = TextBoxSave.Text;
-            if (nameOpen.Equals("") || nameSave.Equals(""))
+            if (checkBoxPotree.Checked == true)
             {
-                MessageBox.Show("Fichiers Non spécifiés");
-                return;
+                string path = TextBoxSave.Text;
+                setToLaz(path);
+            }
+        }
+
+
+        private void CheckBoxOpenUnified_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxOpenUnified.Checked)
+            {
+                CheckBoxOpenNonUnified.Checked = false;
+                if (CheckBoxRemoveOutliers.Checked)
+                {
+                    TextBoxSODistance.Text = "";
+                    TextBoxSODistance.ReadOnly = true;
+                    TextBoxSODistance.BackColor = Color.PaleVioletRed;
+                }
+                CheckBoxSODISTANCE.Checked = false;
+                CheckBoxSODISTANCE.Enabled = false;
+            }
+            else
+            {
+                CheckBoxSODISTANCE.Enabled = true;
             }
 
+            
+            
+        }
 
-
-
-            bool
-                do_Tree = CheckBoxTree.Checked,
-                do_Distance = CheckBoxDistance.Checked,
-                do_DownSample = CheckBoxDownSample.Checked,
-                do_RemoveOutliers = CheckBoxRemoveOutliers.Checked,
-                do_GammaCorrection = CheckBoxGammaCorrection.Checked,
-                do_Div = checkBoxNombreFichiers.Checked;
-
-
-            double
-                distMin = toDouble(TextBoxDistMin.Text),
-                distMax = toDouble(TextBoxDistMax.Text),
-
-                sizeDownSample = toDouble(TextBoxDownSampleSize.Text),
-
-                SODevMultThresh = toDouble(TextBoxSODevMultThresh.Text);
-
-            int
-                SOMeanK = toInt(TextBoxSOMeanK.Text),
-                TreeSize = toInt(TextBoxTreeSize.Text),
-                division = toInt(textBoxNombreFichiers.Text);
-
-            if (do_Tree)
+        private void CheckBoxOpenNonUnified_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxOpenNonUnified.Checked)
             {
-                //Ici, faire la vérification si l'arbre à déjà été créer ou non.
-                string filename = Path.GetFileNameWithoutExtension(nameOpen);
-                if (Directory.Exists(filename))
+                CheckBoxOpenUnified.Checked = false;
+                if (CheckBoxRemoveOutliers.Checked && CheckBoxSODISTANCE.Checked)
                 {
-                    DialogResult dialog = MessageBox.Show("Vous êtes sur le point de lancer la création de l'arbre, alors que le dossier \"" + filename + "\" existe déjà.\nC'est possible que l'arbre ai déjà été créer antérieurement.\nVoulez vous quand même continuer?",
-                        "Continue?", MessageBoxButtons.YesNo);
-                    if (dialog == DialogResult.No)
-                    {
-                        return;
-                    }
+                    TextBoxSODistance.Text = "0";
+                    TextBoxSODistance.ReadOnly = false;
+                    TextBoxSODistance.BackColor = Color.White;
                 }
             }
-            string CmdArgs = " --nameIn \"" + nameOpen + "\" --nameOut \"" + nameSave + "\"";
-            if (do_Tree)
-            {
-                CmdArgs += " --createTree " + TreeSize;
-            }
-            if (do_Distance)
-            {
-                CmdArgs += " --distance " + distMin.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture) + " " + distMax.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
-            }
-            if (do_DownSample)
-            {
-                CmdArgs += " --downSample " + sizeDownSample.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
-            }
-            if (do_RemoveOutliers)
-            {
-                CmdArgs += " --removeOutliers " + SOMeanK + " " + SODevMultThresh.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
-            }
-            if (do_GammaCorrection)
-            {
-                CmdArgs += " --correctionGamma true";
-            }
-            if (do_Div)
-            {
-                CmdArgs += " --division " + division;
-            }
 
-            CmdArgs += " --previs true";
-
-
-            string cmdPath = ".\\" + System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase) + "\\";
-
-            string CmdCall = "nepascliquer.exe";
-            string cmdText = cmdPath + CmdCall + CmdArgs;
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            TextBoxWrite.Text = CmdArgs;
-            startInfo.FileName = CmdCall;
-            startInfo.Arguments = CmdArgs;
-            //MessageBox.Show(cmdText);
-            Process.Start(startInfo);
         }
 
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void CheckBoxSaveUnified_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxSaveUnified.Checked)
+            {
+                CheckBoxSaveNonUnified.Checked = false;
+                CheckBoxUniqueScan.Checked = false;
+                CheckBoxMultipleScan.Checked = false;
+                CheckBoxUniqueScan.Enabled = false;
+                CheckBoxMultipleScan.Enabled = false;
+            }
+        }
+
+        private void CheckBoxSaveNonUnified_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxSaveNonUnified.Checked)
+            {
+                CheckBoxSaveUnified.Checked = false;
+                CheckBoxUniqueScan.Enabled = true;
+                CheckBoxMultipleScan.Enabled = true;
+                CheckBoxUniqueScan.Checked = true;
+            }
+        }
+
+        private void ButtonCut_Click(object sender, EventArgs e)
+        {
+            //if (TextBoxOpen.Text != "")
+            //{
+                Cutter cut = new Cutter(TextBoxOpen.Text);
+                var result = cut.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    cutterText = cut.value;
+                }
+            //}
+        }
+
+        private void label11_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void tableLayoutPanel15_Paint(object sender, PaintEventArgs e)
+        private void label12_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void label8_Click(object sender, EventArgs e)
+        private void CheckBoxMultipleScan_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxMultipleScan.Checked)
+            {
+                CheckBoxUniqueScan.Checked = false;
+                CheckBoxSaveUnified.Checked = false;
+                CheckBoxSaveNonUnified.Checked = true;
+            }
+        }
+
+        private void CheckBoxUniqueScan_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxUniqueScan.Checked)
+            {
+                CheckBoxMultipleScan.Checked = false;
+                CheckBoxSaveUnified.Checked = false;
+                CheckBoxSaveNonUnified.Checked = true;
+            }
+        }
+
+        private void CheckBoxSODISTANCE_CheckedChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxSODISTANCE.Checked && CheckBoxOpenNonUnified.Checked)
+            {
+                TextBoxSODistance.BackColor = Color.White;
+                TextBoxSODistance.Text = "20.0";
+                TextBoxSODistance.ReadOnly = false;
+            }
+            else
+            {
+                TextBoxSODistance.BackColor = Color.PaleVioletRed;
+                TextBoxSODistance.Text = "0.0";
+            }
+        }
+
+        private void TextBoxSODistance_TextChanged(object sender, EventArgs e)
         {
 
         }

@@ -7,6 +7,7 @@
 #include "e57File.h"
 #include "PTSfile.h"
 #include "OpenFactor.hpp"
+
 int findNumOfFile(std::string _name) {
 	std::string f = "essai//.OcSave";
 	std::ifstream file(f, std::ios::in);
@@ -25,8 +26,26 @@ int findNumOfFile(std::string _name) {
 }
 
 int main(int argc, char* argv[]) {
+	std::string name = "SDEA-CES.e57";
 
-	
+e57::Reader eReader(name);
+e57::E57Root rootHeader;
+eReader.GetE57Root(rootHeader);
+std::string guid = rootHeader.guid;
+std::string coordinateMetaData = rootHeader.coordinateMetadata;
+int numberOfScan = eReader.GetData3DCount();
+
+for (int i = 0; i < numberOfScan; ++i) {
+	e57::Data3D scanHeader;
+	eReader.ReadData3D(i, scanHeader);
+	std::cout << scanHeader.name << "\n";
+}
+
+int x;
+std::cin >> x;
+
+
+	/*
 
 	std::string name2 = "BigNuage.e57";
 
@@ -57,5 +76,5 @@ int main(int argc, char* argv[]) {
 
 	delete file;
 	getchar();
-	return 0;
+	return 0;*/
 }

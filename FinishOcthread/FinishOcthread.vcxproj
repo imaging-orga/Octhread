@@ -74,6 +74,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)D</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetName>$(ProjectName)</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -82,9 +85,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProjetGIT\LAStools-master\LASzip\src;E:\ProjetGIT\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProgramTierce\LAStools-master\LASzip\src;E:\ProgramTierce\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -96,7 +100,7 @@
       <AdditionalDependencies>LASlib.lib</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -113,7 +117,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProjetGIT\LAStools-master\LASzip\src;E:\ProjetGIT\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\ProjetGIT\Octhread\Octhread\e57;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\time_conversion;C:\Program Files\E57RefImpl-1.1.unknown-AMD64_64-windows\include\e57;E:\ProgramTierce\LAStools-master\LASzip\src;E:\ProgramTierce\LAStools-master\LASlib\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -123,7 +127,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>LASlibD.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\ProjetGIT\Octhread\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -150,6 +154,7 @@
     <ClInclude Include="SaveFactor.hpp" />
     <ClInclude Include="SaveLAS.h" />
     <ClInclude Include="SavePTS.h" />
+    <ClInclude Include="SavePTX.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Octhreade57\E57Simple.cpp" />
@@ -159,6 +164,7 @@
     <ClCompile Include="SaveE57.cpp" />
     <ClCompile Include="SaveLAS.cpp" />
     <ClCompile Include="SavePTS.cpp" />
+    <ClCompile Include="SavePTX.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

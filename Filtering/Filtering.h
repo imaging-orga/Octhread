@@ -2,85 +2,101 @@
 #include "Filtre.hpp"
 #include "../FinishOcthread/SaveFactor.hpp"
 #include "FiltersParam.hpp"
-/*!
- * Class Filtering
- * \brief La classe qui va faire le lien entres tous les projets, 
- * et qui va actuellement permettre de filtrer un nuage de points en format Octhread
- */
+
+
+namespace F {
+	/// <summary>
+	/// Une fonction "externe" qui va être utilisée en test pour filtrer des vecteurs plutôt que des fichier
+	/// Utilisé pour le Multi Scan
+	/// </summary>
+	/// <param name="pts"></param>
+	/// <param name="params"></param>
+	void filterParticularVector(std::vector<mypt3d>& pts, PARAMS::filter_params & params);
+}
+
+ 
+/// <summary>
+/// Class Filtering
+/// La classe qui va faire le lien entres tous les projets, et qui va actuellement permettre de filtrer un nuage de points en format Octhread
+/// </summary>
 class Filtering
 {
 public:
 	Filtering(std::string _foldername, std::string _savename);
 
 	~Filtering() = default;
-	/*!
-	 * \brief Filtre un fichier particulier de l'octhread avec des paramètres prédéfinis(debug)
-	 * \param _filename le nom du fichier
-	 */
+
+	/// <summary>
+	/// Filtre un fichier particulier de l'octhread avec des paramètres prédéfinis(debug)
+	/// </summary>
+	/// <param name="_filename"></param>
 	void filterParticularFile(std::string _filename);
-	/*!
-	 * \brief Filtre un fichier particulier de l'octhread avec les paramètres de \params
-	 * \param _filename le nom du fichiers
-	 * \param params : Les paramètres à utiliser pour filtrer
-	 */
+
+	/// <summary>
+	/// Filtre un fichier particulier de l'octhread avec les paramètres de \params
+	/// </summary>
+	/// <param name="_filename"></param>
+	/// <param name="params"> Les paramètres à utiliser pour filtrer</param>
 	void filterParticularFile(std::string _filename, PARAMS::filter_params& params);
 
-	/*!
-	 * \brief Filtre tous les fichiers de l'Octhread un par un, avec les paramètres de \filterParticularFile
-	 */
+	/// <summary>
+	/// Filtre tous les fichiers de l'Octhread un par un, avec les paramètres de \filterParticularFile
+	/// </summary>
 	void filter();
 
-	/*!
-	 * \brief Filtre tous les fichiers de l'Octhread un par un, avec les paramètres de \params 
-	 * 
-	 * \param params : Les paramètres à utiliser pour filtrer
-	 */
+	/// <summary>
+	/// Filtre tous les fichiers de l'Octhread un par un, avec les paramètres de \params 
+	/// </summary>
+	/// <param name="params">Les paramètres à utiliser pour filtrer</param>
 	void filter(PARAMS::filter_params& params);
 
-	/*!
-	 * \brief Enleve tous les points de m_actualPts qui sont a 0,0,0. Ils ont été néttoyés mais pas enlevé
-	 */
+	/// <summary>
+	/// Enleve tous les points de m_actualPts qui sont a 0,0,0. Ils ont été néttoyés mais pas enlevé
+	/// </summary>
 	void clean();
 	
-	/*!
-	 * \brief Sauvegarde les poits de m_actualPTS dans \save
-	 */
+	/// <summary>
+	/// Sauvegarde les poits de m_actualPTS dans \save
+	/// </summary>
 	void addPoints();
 
-	/*!
-	 * \brief Fini la sauvegarde de Save. A Appeler une fois que tous les fichiers ont été filtrés
-	 */
+	/// <summary>
+	/// Fini la sauvegarde de Save. A Appeler une fois que tous les fichiers ont été filtrés
+	/// </summary>
 	void finish();
-private:
-	/*!
-	 * \brief Transforme \pts en m_actualPTS
-	 * \param pts : Un vector de points
-	 */
-	void convert(std::vector<mypt3d>& pts);
 
-	/*!
-	 * \brief Transforme m_actualPTS en un vector de points
-	 * \return m_actualPTS transformé en vector de points
-	 */
+private:
+
+	/// <summary>
+	/// Transforme pts en m_actualPTS
+	/// </summary>
+	/// <param name="pts"></param>
+	void convert(std::vector<mypt3d>& pts);
+	
+	/// <summary>
+	/// Transforme m_actualPTS en un vector de points
+	/// </summary>
+	/// <returns>m_actualPTS transformé en vector de points</returns>
 	std::vector<mypt3d> convertBack();
 
-
-	/*!
-	 * Le nom du dossier dans lequel est sauvegardé l'Octhread
-	 */
+	/// <summary>
+	/// Le nom du dossier dans lequel est sauvegardé l'Octhread
+	/// </summary>
 	std::string m_folderName;
-	/*!
-	 * Le nom sous lequel il faudra sauvegarder le fichier unifié
-	 */
+
+	/// <summary>
+	/// Le nom sous lequel il faudra sauvegarder le fichier unifié
+	/// </summary>
 	std::string m_saveName;
-	/*!
-	 * Class pour sauvegarder un fichier
-	 */
+
+	/// <summary>
+	/// Class pour sauvegarder un fichier
+	/// </summary>
 	SavableFile* save;
-	/*!
-	 * Le nuage de point au format pcl (todo : Faire les changements pour ne plus avoir a copier
-	 * le vector<mypt3d> en ce format à chaque fois qu'on veut travailler dessus => gain de temps? (minime peut-être?)
-	 */
+
+	/// <summary>
+	/// Le nuage de point au format pcl
+	/// </summary>
 	pcl::PointCloud<mypt3d>::Ptr m_actualPTS;
 };
 

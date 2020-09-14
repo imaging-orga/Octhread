@@ -6,11 +6,9 @@
 #include "LASfile.h"
 #include "boost/filesystem.hpp"
 #include <boost/algorithm/string.hpp>
-/*!
- * Class OpenFactor
- * \brief Factor des Openables File. Récuperer l'extension du fichier, pour savoir ce qu'on va read
- * 
- */
+/// <summary>
+/// Factor des Openables File. Récuperer l'extension du fichier, pour savoir ce qu'on va read
+/// </summary>
 class OpenFactor {
 public:
 	static OpenableFile* get(std::string _filename, long MAXNUMPERNODE) {

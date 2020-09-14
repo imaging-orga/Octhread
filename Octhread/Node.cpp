@@ -19,6 +19,10 @@ void Node::Destroy() {
 	m_numPoints = 0;
 	remove(m_name.c_str());
 }
+
+
+
+
 void Node::addPoint(std::vector<mypt3d>& pts ){
 
 	if (m_isLeaf){

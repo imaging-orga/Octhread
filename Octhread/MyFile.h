@@ -5,10 +5,10 @@
 
 #include <fstream>
 #include <boost/ptr_container/ptr_vector.hpp>
-/*!
- * Class MyFile
- *	\brief Fonctions pour manipuler un fichier binaire
- */
+
+/// <summary>
+/// class MyFile : Fonctions pour manipuler un fichier binaire
+/// </summary>
 class MyFile
 {
 public:
@@ -16,27 +16,28 @@ public:
 	MyFile(std::string filename);
 	~MyFile();
 
-	/*!
-	 * \brief Creer le fichier si il n'existe pas encore
-	 */
+
+	/// <summary>
+	/// Creer le fichier si il n'existe pas déjà
+	/// </summary>
 	void createFile();
-	
-	/*!
-	 * \brief Lit les points d'un fichier et rempli un vector de points
-	 * \param numPoints
-	 * \return 
-	 */
+
+	/// <summary>
+	///  Lit les points d'un fichier et rempli un vector de points
+	/// </summary>
+	/// <param name="numPoints"></param>
+	/// <returns>Le nombre de points</returns>
 	std::vector<mypt3d> readFromFile(int numPoints);
 
-	/*!
-	 * \brief Ecrit les points dans un fichier
-	 * \param pts Les points à écrire
-	 */
+	/// <summary>
+	/// Ecrit les points dans un fichier
+	/// </summary>
+	/// <param name="pts">Les points à écrire</param>
 	void writeToFile(std::vector<mypt3d>& pts);
 
-	/*!
-	 * \brief Mets le fichier a 0 et le supprime
-	 */
+	/// <summary>
+	///  Mets le fichier a 0 et le supprime
+	/// </summary>
 	void emptyFile();
 
 private:
